@@ -47,12 +47,20 @@ class HomeController extends GetxController {
     );
   }
 
-  void sendMessage() {
+  void sendMessage() async {
     if (!formKey.currentState!.validate()) return;
-    WhatsappBotFlutter.sendMessage(
-      countryCode: countryCode.text,
-      phone: phoneNumber.text,
-      message: message.text,
-    );
+    try {
+      await WhatsappBotFlutter.sendMessage(
+        countryCode: countryCode.text,
+        phone: phoneNumber.text,
+        message: message.text,
+        progress: (int prg) {
+          progress.value = prg;
+          Get.log(prg.toString());
+        },
+      );
+    } catch (e) {
+      Get.log("Error : $e");
+    }
   }
 }
