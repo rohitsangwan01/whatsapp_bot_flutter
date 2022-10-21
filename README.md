@@ -1,5 +1,5 @@
-# whatsapp_bot
-[![win_ble version](https://img.shields.io/pub/v/win_ble?label=win_ble)](https://pub.dev/packages/win_ble)
+# Whatsapp bot flutter
+
 Whatsapp bot using whatsapp web scrapping
 
 ## Getting Started
