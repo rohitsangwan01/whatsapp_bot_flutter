@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp_bot/whatsapp_bot.dart';
+import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 
 class HomeController extends GetxController {
   RxString qrCode = "".obs;
@@ -26,7 +26,7 @@ class HomeController extends GetxController {
   void initConnection() {
     connected.value = false;
     error.value = "";
-    WhatsappBot.connect(
+    WhatsappBotFlutter.connect(
       onQrCode: (String qr) {
         qrCode.value = qr;
       },
@@ -49,7 +49,7 @@ class HomeController extends GetxController {
 
   void sendMessage() {
     if (!formKey.currentState!.validate()) return;
-    WhatsappBot.sendMessage(
+    WhatsappBotFlutter.sendMessage(
       countryCode: countryCode.text,
       phone: phoneNumber.text,
       message: message.text,
