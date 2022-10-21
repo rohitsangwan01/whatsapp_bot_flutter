@@ -42,6 +42,16 @@ WhatsappBotFlutter.connect(
 );
 ```
 
+To convert qrCode String to QrCode image use [pretty_qr_code](https://pub.dev/packages/pretty_qr_code)
+
+```dart
+PrettyQr(
+  size: 300,
+  data: qrCodeString,
+  roundEdges: true,
+),
+```
+
 After connection ,use `sendMessage` to send Whatsapp Messages ,
 
 ```dart
