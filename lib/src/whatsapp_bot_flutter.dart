@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print
 
-import 'package:whatsapp_bot/src/helper/puppeteer_service.dart';
+import 'helper/puppeteer_service.dart';
 
-class WhatsappBot {
+class WhatsappBotFlutter {
   static final _puppeteerService = PuppeteerService();
 
   /// `connect` will call onSuccess callback , or QrCode on getting QrCode to Scan
