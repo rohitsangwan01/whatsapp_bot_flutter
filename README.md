@@ -42,7 +42,7 @@ WhatsappBotFlutter.connect(
 );
 ```
 
-To convert qrCode String to QrCode image use [pretty_qr_code](https://pub.dev/packages/pretty_qr_code)
+To convert qrCode String to QrCode widget for scanning use [pretty_qr_code](https://pub.dev/packages/pretty_qr_code)
 
 ```dart
 PrettyQr(
