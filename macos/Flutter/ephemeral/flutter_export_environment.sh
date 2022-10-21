@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/rohitsangwan/fvm/versions/stable"
-export "FLUTTER_APPLICATION_PATH=/Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot"
+export "FLUTTER_ROOT=C:\Users\rohit\flutter"
+export "FLUTTER_APPLICATION_PATH=D:\Development\Flutter\whatsapp_bot_flutter"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=0.0.1"

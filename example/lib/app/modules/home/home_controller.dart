@@ -10,13 +10,22 @@ class HomeController extends GetxController {
   RxInt progress = 0.obs;
   RxBool connected = false.obs;
 
+  var message = TextEditingController();
+  var countryCode = TextEditingController();
+  var phoneNumber = TextEditingController();
+  var formKey = GlobalKey<FormState>();
+
   @override
   void onInit() {
+    countryCode.text = "91";
+    phoneNumber.text = "";
+    message.text = "Testing Whatsapp Bot";
     super.onInit();
   }
 
   void initConnection() {
     connected.value = false;
+    error.value = "";
     WhatsappBot.connect(
       onQrCode: (String qr) {
         qrCode.value = qr;
@@ -24,11 +33,13 @@ class HomeController extends GetxController {
       onError: (String er) {
         error.value = er;
         qrCode.value = "";
+        progress.value = 0;
       },
       onSuccess: () {
-        Get.log("Connected");
         error.value = "";
         connected.value = true;
+        qrCode.value = "";
+        progress.value = 0;
       },
       progress: (int prg) {
         progress.value = prg;
@@ -36,12 +47,12 @@ class HomeController extends GetxController {
     );
   }
 
-  void sendMessage(BuildContext context) {
-    // Enter Phone Numbers
-    WhatsappBot.sendMessage(countryCode: "91", phone: "", message: "Message 1");
-  }
-
-  void sendMessage2(BuildContext context) {
-    WhatsappBot.sendMessage(countryCode: "91", phone: "", message: "Message 2");
+  void sendMessage() {
+    if (!formKey.currentState!.validate()) return;
+    WhatsappBot.sendMessage(
+      countryCode: countryCode.text,
+      phone: phoneNumber.text,
+      message: message.text,
+    );
   }
 }
