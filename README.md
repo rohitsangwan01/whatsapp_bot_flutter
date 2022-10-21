@@ -1,12 +1,12 @@
 # whatsapp_bot
-
+[![win_ble version](https://img.shields.io/pub/v/win_ble?label=win_ble)](https://pub.dev/packages/win_ble)
 Whatsapp bot using whatsapp web scrapping
 
 ## Getting Started
 
 First launch will take some time
-it will download chromium files locally
-using `puppeteer` for whatsapp web and scarping data
+
+it will download chromium files locally, using [puppeteer](https://pub.dev/packages/puppeteer) for whatsapp web and scarping data
 
 ### Macos setup
 
