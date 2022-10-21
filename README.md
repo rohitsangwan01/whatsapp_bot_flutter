@@ -1,5 +1,7 @@
 # Whatsapp bot flutter
 
+[![whatsapp_bot_flutter version](https://img.shields.io/pub/v/whatsapp_bot_flutter?label=whatsapp_bot_flutter)](https://pub.dev/packages/whatsapp_bot_flutter)
+
 Whatsapp bot using whatsapp web scrapping
 
 ## Getting Started
@@ -16,6 +18,38 @@ and also disable sandbox mode comment this out in macos/Runner/\*.entitlements:
 ```
 <key>com.apple.security.app-sandbox</key>
 <true/>
+```
+
+## Usage
+
+First connect with whatsapp using ` WhatsappBotFlutter.connect` method , we can get qrcode from `onQrCode` callback
+if we got `onSuccess` ,this means we are connected and ready to send messages
+
+```dart
+WhatsappBotFlutter.connect(
+  onQrCode: (String qr) {
+    // there we will get QrCode string use any library to convert string to qrcode and scan
+  },
+  onError: (String er) {
+    // listen for errors
+  },
+  onSuccess: () {
+    // if we received this callback , it means we are connected to whatsapp
+  },
+  progress: (int prg) {
+    // we can listen for progress update
+  },
+);
+```
+
+After connection ,use `sendMessage` to send Whatsapp Messages ,
+
+```dart
+WhatsappBotFlutter.sendMessage(
+    countryCode: "91",
+    phone: "------",
+    message: "Test Message",
+);
 ```
 
 ## Note
