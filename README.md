@@ -1,5 +1,7 @@
 # Whatsapp bot flutter
 
+![](whatsapp_bot_flutter.png)
+
 [![whatsapp_bot_flutter version](https://img.shields.io/pub/v/whatsapp_bot_flutter?label=whatsapp_bot_flutter)](https://pub.dev/packages/whatsapp_bot_flutter)
 
 Whatsapp bot using whatsapp web scrapping

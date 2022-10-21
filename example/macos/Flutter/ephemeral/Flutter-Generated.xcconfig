@@ -1,11 +1,13 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=C:\Users\rohit\flutter
-FLUTTER_APPLICATION_PATH=D:\Development\Flutter\whatsapp_bot_flutter\example
+FLUTTER_ROOT=/Users/rohitsangwan/fvm/versions/stable
+FLUTTER_APPLICATION_PATH=/Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot/example
 COCOAPODS_PARALLEL_CODE_SIGN=true
+FLUTTER_TARGET=/Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot/example/lib/main.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1
+DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ==
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
-PACKAGE_CONFIG=.dart_tool/package_config.json
+PACKAGE_CONFIG=/Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot/example/.dart_tool/package_config.json
