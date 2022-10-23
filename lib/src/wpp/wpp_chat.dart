@@ -70,8 +70,8 @@ class WppChat {
         return "image/jpeg";
       case WhatsappFileType.audio:
         return "audio/mp3";
-      case WhatsappFileType.video:
-        return "video/mp4";
+      // case WhatsappFileType.video:
+      //   return "video/mp4";
     }
   }
 }

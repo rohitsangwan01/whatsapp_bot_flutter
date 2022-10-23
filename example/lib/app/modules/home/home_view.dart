@@ -11,10 +11,11 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Whatsapp Message Sender'),
-          centerTitle: true,
+          centerTitle: false,
           actions: [
             Row(
               children: [
+                const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () => controller.disconnect(),
                   child: const Text("Disconnect"),
@@ -122,8 +123,14 @@ class HomeView extends GetView<HomeController> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
-                        onPressed: () => controller.testMethod(),
-                        child: const Text("Test Button")),
+                        onPressed: () => controller.sendImage(),
+                        child: const Text("Send Image")),
+                    ElevatedButton(
+                        onPressed: () => controller.sendAudio(),
+                        child: const Text("Send Audio")),
+                    ElevatedButton(
+                        onPressed: () => controller.sendDocument(),
+                        child: const Text("Send Document")),
                     Obx(() => Text(
                           "ConnectionEvent : ${controller.connectionEvent.value?.name}",
                         )),

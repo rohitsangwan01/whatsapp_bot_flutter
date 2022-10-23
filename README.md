@@ -27,6 +27,8 @@ and also disable sandbox mode comment this out in macos/Runner/\*.entitlements:
 First connect with whatsapp using ` WhatsappBotFlutter.connect` method , we can get qrcode from `onQrCode` callback
 if we got `onSuccess` ,this means we are connected and ready to send messages
 
+To convert qrCode String to QrCode widget for scanning use [pretty_qr_code](https://pub.dev/packages/pretty_qr_code) , check example for more details
+
 ```dart
 WhatsappBotFlutter.connect(
   onQrCode: (String qr) {
@@ -44,25 +46,61 @@ WhatsappBotFlutter.connect(
 );
 ```
 
-To convert qrCode String to QrCode widget for scanning use [pretty_qr_code](https://pub.dev/packages/pretty_qr_code)
+## Features
+
+Supported Whatsapp features are :
+
+- Login with QR
+- Logout
+- Keep session
+- Send text message
+- Send image, audio & document
+- Listen to New Messages
+- Listen to Connection Events
+
+## Basic usage
+
+Use `sendTextMessage` to send a text message
 
 ```dart
-PrettyQr(
-  size: 300,
-  data: qrCodeString,
-  roundEdges: true,
-),
-```
-
-After connection ,use `sendMessage` to send Whatsapp Messages ,
-
-```dart
-WhatsappBotFlutter.sendMessage(
+WhatsappBotFlutter.sendTextMessage(
     countryCode: "91",
     phone: "------",
     message: "Test Message",
 );
 ```
+
+Use `sendFileMessage` to send a File
+
+```dart
+await WhatsappBotFlutter.sendFileMessage(
+    countryCode: "91",
+    phone: "------",
+    fileBytes: imageBytes, // Pass a Uint8List file bytes
+    caption: "Test Message", // Optional
+    fileType: fileType, // document, image, audio
+  ;
+```
+
+To get new Messages , subscribe to `WhatsappBotFlutter.messageEvents`
+
+```dart
+WhatsappBotFlutter.messageEvents.listen((Message message) {
+  // Got whatsapp messages ...
+});
+```
+
+To get whatsapp connection Events , subscribe to `WhatsappBotFlutter.connectionEventStream`
+
+```dart
+WhatsappBotFlutter.connectionEventStream.listen((event) {
+  // Got Connection Events ...
+});
+```
+
+## Resources
+
+Thanks to [wa-js](https://github.com/wppconnect-team/wa-js) for exporting functions from WhatsApp Web
 
 ## Note
 

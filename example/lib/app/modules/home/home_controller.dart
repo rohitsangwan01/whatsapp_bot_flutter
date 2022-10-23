@@ -65,14 +65,6 @@ class HomeController extends GetxController {
     connected.value = false;
   }
 
-  void testMethod() async {
-    try {
-      sendFileMessage();
-    } catch (e) {
-      Get.log(e.toString());
-    }
-  }
-
   void sendMessage() async {
     if (!formKey.currentState!.validate()) return;
     try {
@@ -86,23 +78,45 @@ class HomeController extends GetxController {
     }
   }
 
-  void sendFileMessage() async {
+  void sendImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+    String? path = result?.files.first.path;
+    await sendFileMessage(path, WhatsappFileType.image);
+  }
+
+  void sendDocument() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.any,
+    );
+    String? path = result?.files.first.path;
+    await sendFileMessage(path, WhatsappFileType.document);
+  }
+
+  void sendAudio() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.audio,
+    );
+    String? path = result?.files.first.path;
+    await sendFileMessage(path, WhatsappFileType.audio);
+  }
+
+  Future<void> sendFileMessage(
+    String? filePath,
+    WhatsappFileType fileType,
+  ) async {
     if (!formKey.currentState!.validate()) return;
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-      );
-      String? path = result?.files.first.path;
-      if (path == null) return;
-      File file = File(path);
+      if (filePath == null) return;
+      File file = File(filePath);
       Uint8List imageBytes = Uint8List.fromList(file.readAsBytesSync());
-
       await WhatsappBotFlutter.sendFileMessage(
         countryCode: countryCode.text,
         phone: phoneNumber.text,
         fileBytes: imageBytes,
         caption: message.text,
-        fileType: WhatsappFileType.image,
+        fileType: fileType,
       );
     } catch (e) {
       Get.log("Error : $e");
