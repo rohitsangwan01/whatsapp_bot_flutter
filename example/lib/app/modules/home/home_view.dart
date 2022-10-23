@@ -10,11 +10,16 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Whatsapp Bot'),
+          title: const Text('Whatsapp Message Sender'),
           centerTitle: true,
           actions: [
             Row(
               children: [
+                ElevatedButton(
+                  onPressed: () => controller.disconnect(),
+                  child: const Text("Disconnect"),
+                ),
+                const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () => controller.initConnection(),
                   child: const Text("Connect"),
@@ -110,6 +115,18 @@ class HomeView extends GetView<HomeController> {
                         ),
                       ),
                     ),
+                  ],
+                ),
+                // Mid Widget
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () => controller.testMethod(),
+                        child: const Text("Test Button")),
+                    Obx(() => Text(
+                          "ConnectionEvent : ${controller.connectionEvent.value?.name}",
+                        )),
                   ],
                 ),
 
