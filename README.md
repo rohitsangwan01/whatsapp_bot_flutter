@@ -22,6 +22,18 @@ and also disable sandbox mode comment this out in macos/Runner/\*.entitlements:
 <true/>
 ```
 
+## Features
+
+Supported Whatsapp features are :
+
+- Login with QR
+- Logout
+- Keep session
+- Send text message
+- Send image, audio & document
+- Listen to New Messages
+- Listen to Connection Events
+
 ## Usage
 
 First connect with whatsapp using ` WhatsappBotFlutter.connect` method , we can get qrcode from `onQrCode` callback
@@ -45,20 +57,6 @@ WhatsappBotFlutter.connect(
   },
 );
 ```
-
-## Features
-
-Supported Whatsapp features are :
-
-- Login with QR
-- Logout
-- Keep session
-- Send text message
-- Send image, audio & document
-- Listen to New Messages
-- Listen to Connection Events
-
-## Basic usage
 
 Use `sendTextMessage` to send a text message
 
