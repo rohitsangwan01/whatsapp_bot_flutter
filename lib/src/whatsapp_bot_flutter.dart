@@ -5,6 +5,7 @@ import 'package:whatsapp_bot_flutter/src/model/message.dart';
 import 'package:whatsapp_bot_flutter/src/model/whatsapp_file_type.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
 import 'puppeteer_service.dart';
+import 'package:zxing2/qrcode.dart';
 
 class WhatsappBotFlutter {
   static final _puppeteerService = PuppeteerService();
@@ -88,6 +89,33 @@ class WhatsappBotFlutter {
       name: name,
       url: url,
     );
+  }
+
+  /// [convertStringToQrCode] will convert a Text into a qrCode , which we can print in Terminal
+  /// used in scanning code from terminal if we are using this in pure Dart project
+  /// make sure to run dart project in terminal , not in DebugConsole for proper Qr representation
+  static String convertStringToQrCode(String text) {
+    var qrcode = Encoder.encode(text, ErrorCorrectionLevel.l);
+    var matrix = qrcode.matrix!;
+    var stringBuffer = StringBuffer();
+    for (var y = 0; y < matrix.height; y += 2) {
+      for (var x = 0; x < matrix.width; x++) {
+        final y1 = matrix.get(x, y) == 1;
+        final y2 = (y + 1 < matrix.height) ? matrix.get(x, y + 1) == 1 : false;
+
+        if (y1 && y2) {
+          stringBuffer.write('█');
+        } else if (y1) {
+          stringBuffer.write('▀');
+        } else if (y2) {
+          stringBuffer.write('▄');
+        } else {
+          stringBuffer.write(' ');
+        }
+      }
+      stringBuffer.writeln();
+    }
+    return stringBuffer.toString();
   }
 
   /// [connectionEventStream] will give update of Connection Events
