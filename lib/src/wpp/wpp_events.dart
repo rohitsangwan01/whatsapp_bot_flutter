@@ -64,7 +64,6 @@ class WppEvents {
   }
 
   static void _onConnectionEvent(event) {
-    print("onConnectionEvent : $event");
     ConnectionEvent? connectionEvent;
     switch (event) {
       case "authenticated":

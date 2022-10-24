@@ -5,6 +5,7 @@
     "rxnol",
     "setuid",
     "testid",
-    "typeof"
+    "typeof",
+    "zxing"
   ]
 }

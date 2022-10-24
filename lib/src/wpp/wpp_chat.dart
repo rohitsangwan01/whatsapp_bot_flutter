@@ -1,10 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:puppeteer/puppeteer.dart';
-
 import '../model/whatsapp_file_type.dart';
 
 class WppChat {
@@ -43,7 +40,7 @@ class WppChat {
   Future<void> sendFileMessage(
     Page page,
     String phoneNumber,
-    Uint8List fileBytes,
+    List<int> fileBytes,
     WhatsappFileType fileType, {
     String? caption,
     String? mimetype,

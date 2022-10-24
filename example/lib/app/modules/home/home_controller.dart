@@ -3,7 +3,6 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
@@ -30,7 +29,7 @@ class HomeController extends GetxController {
 
     WhatsappBotFlutter.messageEvents.listen((Message message) {
       if (!(message.id?.fromMe ?? true)) {
-        Get.log(message.toJson().toString());
+        Get.log(message.body.toString());
       }
     });
     super.onInit();
@@ -110,7 +109,7 @@ class HomeController extends GetxController {
     try {
       if (filePath == null) return;
       File file = File(filePath);
-      Uint8List imageBytes = Uint8List.fromList(file.readAsBytesSync());
+      List<int> imageBytes = file.readAsBytesSync();
       await WhatsappBotFlutter.sendFileMessage(
         countryCode: countryCode.text,
         phone: phoneNumber.text,

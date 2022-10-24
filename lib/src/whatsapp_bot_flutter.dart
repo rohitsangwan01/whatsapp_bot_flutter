@@ -1,11 +1,9 @@
 // ignore_for_file: avoid_print
 
-import 'package:flutter/foundation.dart';
 import 'package:whatsapp_bot_flutter/src/model/connection_event.dart';
 import 'package:whatsapp_bot_flutter/src/model/message.dart';
 import 'package:whatsapp_bot_flutter/src/model/whatsapp_file_type.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
-
 import 'puppeteer_service.dart';
 
 class WhatsappBotFlutter {
@@ -57,7 +55,7 @@ class WhatsappBotFlutter {
   static Future<void> sendFileMessage({
     required String phone,
     required String countryCode,
-    required Uint8List fileBytes,
+    required List<int> fileBytes,
     required WhatsappFileType fileType,
     String? caption,
     String? mimetype,

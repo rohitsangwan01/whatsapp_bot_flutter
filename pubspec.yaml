@@ -1,23 +1,15 @@
 name: whatsapp_bot_flutter
-description: Whatsapp bot using whatsapp web scrapping
-version: 0.0.3
+description: Whatsapp bot using whatsapp web scraping
+version: 0.0.4
 homepage: https://github.com/rohitsangwan01/whatsapp_bot_flutter
 
 environment:
   sdk: ">=2.18.2 <3.0.0"
-  flutter: ">=2.5.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
   puppeteer: ^2.14.0
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_lints: ^2.0.0
 
 flutter:
-  uses-material-design: true
-  assets:
-    - packages/whatsapp_bot_flutter/assets/wpp.js

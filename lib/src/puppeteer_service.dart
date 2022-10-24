@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print, empty_catches
 
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/model/whatsapp_exception.dart';
@@ -9,7 +8,6 @@ import 'package:whatsapp_bot_flutter/src/wpp/wpp_auth.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_chat.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_service.dart';
-
 import 'model/whatsapp_file_type.dart';
 
 /// [PuppeteerService] for maintaining a single  `Browser` and `Page` instance
@@ -147,7 +145,7 @@ class PuppeteerService {
     required String countryCode,
     required String phone,
     required WhatsappFileType fileType,
-    required Uint8List fileBytes,
+    required List<int> fileBytes,
     String? caption,
     String? mimetype,
   }) async {

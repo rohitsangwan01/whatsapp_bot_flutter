@@ -1,16 +1,14 @@
 // Thanks to https://github.com/wppconnect-team/wa-js
 // ignore_for_file: avoid_print
 
-import 'package:flutter/services.dart';
 import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
+import 'package:whatsapp_bot_flutter/src/wpp/wpp_js_content.dart';
 
 class Wpp {
   /// make sure to call [init] to Initialize Wpp
   Future init(Page page) async {
-    // add js file from Assets
-    String wppPath = "packages/whatsapp_bot_flutter/assets/wpp.js";
-    String content = await rootBundle.loadString(wppPath);
+    String content = wppJsContent.trim();
     await page.addScriptTag(content: content, type: "module");
     // wait for the Module to get Ready
     await isReady(page);
@@ -25,8 +23,6 @@ class Wpp {
 
     // Add listeners if required
     WppEvents.addEventListeners(page);
-
-    print("Wpp Initialized");
   }
 
   /// call [isReady] to check if `Wpp` js Loaded Successfully

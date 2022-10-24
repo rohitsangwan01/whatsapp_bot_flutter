@@ -30,4 +30,5 @@ migrate_working_dir/
 build/
 /cache
 /example/.local-chromium
+/example_dart/.local-chromium
 /whatsapp_sender
