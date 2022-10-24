@@ -76,7 +76,7 @@ Use `sendFileMessage` to send a File
 await WhatsappBotFlutter.sendFileMessage(
     countryCode: "91",
     phone: "------",
-    fileBytes: imageBytes, // Pass a Uint8List file bytes
+    fileBytes: imageBytes, // Pass file bytes
     caption: "Test Message", // Optional
     fileType: fileType, // document, image, audio
   ;

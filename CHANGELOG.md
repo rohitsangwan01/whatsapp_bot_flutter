@@ -1,10 +1,9 @@
-## 0.0.1
+## 0.0.4
 
-- Initial version
-
-## 0.0.2
-
-- minor fixes
+- remove flutter dependency
+- add pureDart support
+- add method to convert string to QRCodeText to print in terminal
+- minor bug fixes
 
 ## 0.0.3
 
@@ -12,3 +11,11 @@
 - added option to share files
 - added option to share location
 - added option to get messages stream
+
+## 0.0.2
+
+- minor fixes
+
+## 0.0.1
+
+- Initial version
