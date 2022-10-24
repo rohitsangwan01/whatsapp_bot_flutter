@@ -364,7 +364,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.4"
   yaml:
     dependency: transitive
     description:
@@ -373,7 +373,7 @@ packages:
     source: hosted
     version: "3.1.1"
   zxing2:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: zxing2
       url: "https://pub.dartlang.org"
@@ -381,4 +381,3 @@ packages:
     version: "0.1.1"
 sdks:
   dart: ">=2.18.2 <3.0.0"
-  flutter: ">=2.5.0"

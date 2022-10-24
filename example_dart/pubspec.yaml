@@ -7,7 +7,6 @@ environment:
   sdk: ">=2.18.2 <3.0.0"
 
 dependencies:
-  zxing2: ^0.1.1
   whatsapp_bot_flutter:
     path: ../
 
