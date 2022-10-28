@@ -21,6 +21,8 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
+    WhatsappBotFlutter.enableLogs(true);
+    
     countryCode.text = "91";
     phoneNumber.text = "";
     message.text = "Testing Whatsapp Bot";
