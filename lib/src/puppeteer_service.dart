@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print, empty_catches
-
 import 'dart:async';
 import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
@@ -8,6 +6,7 @@ import 'package:whatsapp_bot_flutter/src/wpp/wpp_auth.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_chat.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_service.dart';
+import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 import 'model/whatsapp_file_type.dart';
 
 /// [PuppeteerService] for maintaining a single  `Browser` and `Page` instance
@@ -36,18 +35,34 @@ class PuppeteerService {
     Function(int)? progress,
   }) async {
     try {
+      // Setup a logger if you want to see the raw chrome protocol
       mainCardTimer?.cancel();
       int currentProgress = 0;
+
+      WhatsappLogger.log("checking/downloading chromium");
+
+      currentProgress = currentProgress + 2;
       progress?.call(currentProgress);
+      RevisionInfo revisionInfo = await downloadChrome(
+        cachePath: "./.local-chromium",
+      );
+
+      WhatsappLogger.log("Got Chromium , opening browser");
+
+      String executablePath = revisionInfo.executablePath;
+      currentProgress = currentProgress + 3;
+      progress?.call(currentProgress);
+
       _browser = await puppeteer.launch(
         headless: headless,
+        executablePath: executablePath,
         noSandboxFlag: true,
         args: ['--start-maximized', '--disable-setuid-sandbox'],
         userDataDir: sessionDirectory,
       );
 
       // Load Whatsapp in Chrome
-      currentProgress = currentProgress + 10;
+      currentProgress = currentProgress + 5;
       progress?.call(currentProgress);
       _page = await _browser?.newPage();
       await _page?.setUserAgent(WhatsAppMetadata.userAgent);
@@ -55,6 +70,7 @@ class PuppeteerService {
       currentProgress = currentProgress + 10;
       progress?.call(currentProgress);
 
+      WhatsappLogger.log("Opening Whatsapp page");
       await _page?.goto(WhatsAppMetadata.whatsAppURL);
 
       currentProgress = currentProgress + 10;
@@ -65,6 +81,7 @@ class PuppeteerService {
       // initialize wpp first
       await _wpp.init(_page!);
 
+      WhatsappLogger.log("Checking for qrCode");
       String? qrCode = await getQrCode(
           page: page,
           progress: (int prg) {
@@ -85,6 +102,8 @@ class PuppeteerService {
         progress?.call(currentProgress.toInt());
       });
 
+      WhatsappLogger.log("waiting for opening main whatsapp dashboard");
+
       ElementHandle? mainPanel = await _page?.waitForSelector(
         WhatsAppMetadata.mainPanel,
         timeout: connectionTimeout ?? const Duration(seconds: 20),
@@ -98,6 +117,7 @@ class PuppeteerService {
       } else {
         onSuccess?.call();
       }
+      WhatsappLogger.log("Connected to whatsapp successfully");
       progress?.call(100);
 
       await _wpp.init(_page!);
@@ -122,7 +142,7 @@ class PuppeteerService {
       _browser = null;
       _page = null;
     } catch (e) {
-      print(e.toString());
+      WhatsappLogger.log(e.toString());
     }
   }
 
@@ -198,12 +218,12 @@ class PuppeteerService {
           exceptionType: WhatsappExceptionType.unAuthorized);
     }
 
-    bool isValid = await _wpp.isValidContact(page, phoneNum);
-    if (!isValid) {
-      throw WhatsappException(
-          message: "Invalid contact number",
-          exceptionType: WhatsappExceptionType.inValidContact);
-    }
+    // bool isValid = await _wpp.isValidContact(page, phoneNum);
+    // if (!isValid) {
+    //   throw WhatsappException(
+    //       message: "Invalid contact number",
+    //       exceptionType: WhatsappExceptionType.inValidContact);
+    // }
     return page;
   }
 }

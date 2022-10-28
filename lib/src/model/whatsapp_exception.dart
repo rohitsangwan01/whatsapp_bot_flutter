@@ -13,4 +13,9 @@ class WhatsappException implements Exception {
     this.message = "Something went wrong",
     this.exceptionType = WhatsappExceptionType.unknown,
   });
+
+  @override
+  String toString() {
+    return "[ WhatsappException  type : $exceptionType , message : $message ]";
+  }
 }

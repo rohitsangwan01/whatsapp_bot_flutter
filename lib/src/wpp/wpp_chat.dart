@@ -1,7 +1,6 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 import 'package:puppeteer/puppeteer.dart';
+import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import '../model/whatsapp_file_type.dart';
 
 class WppChat {
@@ -10,7 +9,7 @@ class WppChat {
     var sendResult = await page.evaluate(
       '''() => WPP.chat.sendTextMessage("$phoneNumber", "$message");''',
     );
-    print("SendResult : $sendResult");
+    WhatsappLogger.log("SendResult : $sendResult");
   }
 
   /// To send a Location Message
@@ -33,7 +32,7 @@ class WppChat {
             });
             ''',
         args: [phoneNumber, lat, long, address, name, url]);
-    print("SendResult : $sendResult");
+    WhatsappLogger.log("SendResult : $sendResult");
   }
 
   /// To send a File message
@@ -55,7 +54,7 @@ class WppChat {
           type: 'image',
           caption: caption
         });''', args: [phoneNumber, imgData, caption]);
-    print("SendResult : $sendResult");
+    WhatsappLogger.log("SendResult : $sendResult");
   }
 
   /// [_getMimeType] returns default mimeType

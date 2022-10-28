@@ -1,8 +1,6 @@
-// ignore_for_file: avoid_print
-
 import 'dart:async';
-
 import 'package:puppeteer/puppeteer.dart';
+import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/model/connection_event.dart';
 import 'package:whatsapp_bot_flutter/src/model/message.dart';
 
@@ -59,7 +57,7 @@ class WppEvents {
       Message message = Message.fromJson(msg);
       messageEventStreamController.add(message);
     } catch (e) {
-      print("onMessageError : $e");
+      WhatsappLogger.log("onMessageError : $e");
     }
   }
 
@@ -88,7 +86,7 @@ class WppEvents {
         connectionEvent = ConnectionEvent.requireAuth;
         break;
       default:
-        print("Unknown Event : $event");
+        WhatsappLogger.log("Unknown Event : $event");
     }
     if (connectionEvent == null) return;
     connectionEventStreamController.add(connectionEvent);

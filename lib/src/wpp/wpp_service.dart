@@ -1,7 +1,7 @@
 // Thanks to https://github.com/wppconnect-team/wa-js
-// ignore_for_file: avoid_print
 
 import 'package:puppeteer/puppeteer.dart';
+import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_js_content.dart';
 
@@ -33,6 +33,7 @@ class Wpp {
     } ''', timeout: const Duration(seconds: 6));
       return true;
     } catch (e) {
+      WhatsappLogger.log(e);
       return false;
     }
   }
@@ -41,10 +42,12 @@ class Wpp {
   Future<bool> isValidContact(Page page, String phoneNumber) async {
     try {
       await page.evaluate(
-        '''() => WPP.contact.queryExists('$phoneNumber');''',
+        '''(phone) => WPP.contact.queryExists(phone);''',
+        args: [phoneNumber],
       );
       return true;
     } catch (e) {
+      WhatsappLogger.log(e);
       return false;
     }
   }

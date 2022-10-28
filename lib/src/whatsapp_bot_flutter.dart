@@ -1,5 +1,4 @@
-// ignore_for_file: avoid_print
-
+import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/model/connection_event.dart';
 import 'package:whatsapp_bot_flutter/src/model/message.dart';
 import 'package:whatsapp_bot_flutter/src/model/whatsapp_file_type.dart';
@@ -116,6 +115,13 @@ class WhatsappBotFlutter {
       stringBuffer.writeln();
     }
     return stringBuffer.toString();
+  }
+
+  /// To print logs from this library
+  /// set `enableLogs(true)`
+  /// by default its false
+  static enableLogs(bool enable) {
+    WhatsappLogger.enableLogger = enable;
   }
 
   /// [connectionEventStream] will give update of Connection Events

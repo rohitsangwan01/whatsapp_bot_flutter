@@ -1,6 +1,7 @@
 // get QrCode
 import 'dart:async';
 import 'package:puppeteer/puppeteer.dart';
+import 'dart:developer' as developer;
 
 ///[getQrCode] will look for QrCode on Loop , in given time interval
 Future<String?> getQrCode({
@@ -37,4 +38,13 @@ Future<String?> getQrCode({
     }
   });
   return completer.future;
+}
+
+class WhatsappLogger {
+  static bool enableLogger = false;
+
+  static void log(log) {
+    if (!enableLogger) return;
+    developer.log(log.toString(), name: 'WhatsappBotFlutter');
+  }
 }

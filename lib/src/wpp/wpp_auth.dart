@@ -1,6 +1,5 @@
-// ignore_for_file: avoid_print
-
 import 'package:puppeteer/puppeteer.dart';
+import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 
 class WppAuth {
   ///Check is User is Authenticated
@@ -9,7 +8,7 @@ class WppAuth {
       var result = await page.evaluate('''() => WPP.conn.isAuthenticated();''');
       return result;
     } catch (e) {
-      print(e.toString());
+      WhatsappLogger.log(e.toString());
       return false;
     }
   }
@@ -19,7 +18,7 @@ class WppAuth {
       var code = await page.evaluate('''() => WPP.conn.getAuthCode();''');
       return code;
     } catch (e) {
-      print(e.toString());
+      WhatsappLogger.log(e.toString());
       rethrow;
     }
   }
@@ -29,7 +28,7 @@ class WppAuth {
       var result = await page.evaluate('''() => WPP.conn.isMainReady();''');
       return result;
     } catch (e) {
-      print(e.toString());
+      WhatsappLogger.log(e.toString());
       return false;
     }
   }
@@ -39,7 +38,7 @@ class WppAuth {
       var result = await page.evaluate('''() =>WPP.conn.isMainLoaded();''');
       return result;
     } catch (e) {
-      print(e.toString());
+      WhatsappLogger.log(e.toString());
       return false;
     }
   }
@@ -47,9 +46,9 @@ class WppAuth {
   Future refreshQR(Page page) async {
     try {
       var result = await page.evaluate('''() => WPP.conn.refreshQR();''');
-      print(result.toString());
+      WhatsappLogger.log(result.toString());
     } catch (e) {
-      print(e.toString());
+      WhatsappLogger.log(e.toString());
       // ignore crash for now
     }
   }
