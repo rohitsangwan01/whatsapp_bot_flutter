@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   zxing2: ^0.1.1
-  puppeteer: ^2.14.0
+  puppeteer: ^2.17.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

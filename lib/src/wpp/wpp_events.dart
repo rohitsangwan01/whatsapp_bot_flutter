@@ -67,7 +67,7 @@ class WppEvents {
     ConnectionEvent? connectionEvent;
     switch (event) {
       case "authenticated":
-        connectionEvent = ConnectionEvent.authCodeChange;
+        connectionEvent = ConnectionEvent.authenticated;
         break;
       case "logout":
         connectionEvent = ConnectionEvent.logout;
