@@ -14,16 +14,6 @@ First launch will take some time
 
 it will download chromium files locally, using [puppeteer](https://pub.dev/packages/puppeteer) for whatsapp web and scarping data
 
-### Macos setup
-
-Enable outgoing and incoming connections for macos
-and also disable sandbox mode comment this out in macos/Runner/\*.entitlements:
-
-```
-<key>com.apple.security.app-sandbox</key>
-<true/>
-```
-
 ## Features
 
 Supported Whatsapp features are :
@@ -35,6 +25,30 @@ Supported Whatsapp features are :
 - Send image, audio & document
 - Listen to New Messages
 - Listen to Connection Events
+
+### Macos setup
+
+Enable outgoing and incoming connections for macos
+and also disable sandbox mode comment this out in macos/Runner/\*.entitlements:
+
+```
+<key>com.apple.security.app-sandbox</key>
+<true/>
+```
+
+### Web setup
+
+To run on web , we have to run a chrome server somewhere using [puppeteer](https://pub.dev/packages/puppeteer), and get `browserWsEndpoint` from there and pass into the connect method
+
+checkout [this](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/example/puppeteer_server/main.dart) example of running a chrome server using puppeteer
+
+then pass this `browserWsEndpoint` in connect method like this
+
+```dart
+WhatsappBotFlutter.connect( browserWsEndpoint: "BROWSER_WS_ENDPOINT_URL",);
+```
+
+We can use this on desktop platforms as well , to connect to a chrome server hosted somewhere else
 
 ## Usage
 

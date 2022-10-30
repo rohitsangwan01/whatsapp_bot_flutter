@@ -25,9 +25,10 @@ class PuppeteerService {
   /// [connectAndLogin] method will open WhatsappWeb in headless webView and connect to the whatsapp
   /// and pass QrCode in `onQrCode` callback
   /// Scan this code , and on successful connection we will get onSuccessCallback
-  Future<void> connectAndLogin({
+  Future<void> connect({
     String? sessionDirectory,
     bool? headless = true,
+    String? browserWsEndpoint,
     Function(String)? onQrCode,
     Function(String)? onError,
     Function()? onSuccess,
@@ -38,28 +39,40 @@ class PuppeteerService {
       // Setup a logger if you want to see the raw chrome protocol
       mainCardTimer?.cancel();
       int currentProgress = 0;
-
       WhatsappLogger.log("checking/downloading chromium");
 
-      currentProgress = currentProgress + 2;
-      progress?.call(currentProgress);
-      RevisionInfo revisionInfo = await downloadChrome(
-        cachePath: "./.local-chromium",
-      );
+      // connect through browserWsEndpoint if available
+      if (browserWsEndpoint != null) {
+        currentProgress = currentProgress + 5;
+        progress?.call(currentProgress);
 
-      WhatsappLogger.log("Got Chromium , opening browser");
+        _browser = await puppeteer.connect(
+          browserWsEndpoint: browserWsEndpoint,
+        );
+      }
+      // if noEndPoint given , connect through chrome launch ,
+      // this will not work on Web
+      else {
+        currentProgress = currentProgress + 2;
+        progress?.call(currentProgress);
+        RevisionInfo revisionInfo = await downloadChrome(
+          cachePath: "./.local-chromium",
+        );
+        String executablePath = revisionInfo.executablePath;
 
-      String executablePath = revisionInfo.executablePath;
-      currentProgress = currentProgress + 3;
-      progress?.call(currentProgress);
+        WhatsappLogger.log("Got Chromium , opening browser");
 
-      _browser = await puppeteer.launch(
-        headless: headless,
-        executablePath: executablePath,
-        noSandboxFlag: true,
-        args: ['--start-maximized', '--disable-setuid-sandbox'],
-        userDataDir: sessionDirectory,
-      );
+        currentProgress = currentProgress + 3;
+        progress?.call(currentProgress);
+
+        _browser = await puppeteer.launch(
+          headless: headless,
+          executablePath: executablePath,
+          noSandboxFlag: true,
+          args: ['--start-maximized', '--disable-setuid-sandbox'],
+          userDataDir: sessionDirectory,
+        );
+      }
 
       // Load Whatsapp in Chrome
       currentProgress = currentProgress + 5;

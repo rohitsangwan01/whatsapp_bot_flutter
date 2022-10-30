@@ -10,9 +10,12 @@ class WhatsappBotFlutter {
   static final _puppeteerService = PuppeteerService();
 
   /// [connect] will call onSuccess callback , or QrCode on getting QrCode to Scan
+  /// Scan this code , and on successful connection we will get onSuccessCallback
+  /// To run on web , pass `browserWsEndpoint` parameter
   static Future<void> connect({
     String? sessionDirectory,
     bool? headless,
+    String? browserWsEndpoint,
     Function(String)? onQrCode,
     Function(String)? onError,
     Function()? onSuccess,
@@ -22,8 +25,9 @@ class WhatsappBotFlutter {
     // dispose any pending tasks first
     disconnect();
     // Try to connect and login again
-    await _puppeteerService.connectAndLogin(
+    await _puppeteerService.connect(
       sessionDirectory: sessionDirectory,
+      browserWsEndpoint: browserWsEndpoint,
       headless: headless,
       onError: onError,
       onQrCode: onQrCode,

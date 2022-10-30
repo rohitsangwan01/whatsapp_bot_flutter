@@ -1,3 +1,8 @@
+## 0.0.5
+
+- added web support
+- minor bug fixes
+
 ## 0.0.4
 
 - remove flutter dependency
