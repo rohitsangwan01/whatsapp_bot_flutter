@@ -6,8 +6,9 @@ import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_js_content.dart';
 
 class Wpp {
+  
   /// make sure to call [init] to Initialize Wpp
-  Future init(Page page) async {
+ static Future init(Page page) async {
     String content = wppJsContent.trim();
     await page.addScriptTag(content: content, type: "module");
     // wait for the Module to get Ready
@@ -26,7 +27,7 @@ class Wpp {
   }
 
   /// call [isReady] to check if `Wpp` js Loaded Successfully
-  Future<bool> isReady(Page page) async {
+ static Future<bool> isReady(Page page) async {
     try {
       await page.waitForFunction('''() => {
         return typeof window.WPP !== 'undefined' && window.WPP.isReady;

@@ -3,7 +3,7 @@ import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 
 class WppAuth {
   ///Check is User is Authenticated
-  Future<bool> isAuthenticated(Page page) async {
+  static Future<bool> isAuthenticated(Page page) async {
     try {
       var result = await page.evaluate('''() => WPP.conn.isAuthenticated();''');
       return result;
@@ -13,7 +13,7 @@ class WppAuth {
     }
   }
 
-  Future<String?> getAuthCode(Page page) async {
+  static Future<String?> getAuthCode(Page page) async {
     try {
       var code = await page.evaluate('''() => WPP.conn.getAuthCode();''');
       return code;
@@ -23,7 +23,7 @@ class WppAuth {
     }
   }
 
-  Future<bool> isMainReady(Page page) async {
+  static Future<bool> isMainReady(Page page) async {
     try {
       var result = await page.evaluate('''() => WPP.conn.isMainReady();''');
       return result;
@@ -33,7 +33,7 @@ class WppAuth {
     }
   }
 
-  Future<bool> isMainLoaded(Page page) async {
+  static Future<bool> isMainLoaded(Page page) async {
     try {
       var result = await page.evaluate('''() =>WPP.conn.isMainLoaded();''');
       return result;
@@ -43,7 +43,7 @@ class WppAuth {
     }
   }
 
-  Future refreshQR(Page page) async {
+  static Future refreshQR(Page page) async {
     try {
       var result = await page.evaluate('''() => WPP.conn.refreshQR();''');
       WhatsappLogger.log(result.toString());
@@ -54,7 +54,7 @@ class WppAuth {
   }
 
   /// To Logout
-  Future logout(Page page) async {
+  static Future logout(Page page) async {
     try {
       return await page.evaluate('''() => WPP.conn.logout();''');
     } catch (e) {

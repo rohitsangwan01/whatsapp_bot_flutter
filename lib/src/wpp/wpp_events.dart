@@ -74,13 +74,10 @@ class WppEvents {
         connectionEvent = ConnectionEvent.authCodeChange;
         break;
       case "main_loaded":
-        connectionEvent = ConnectionEvent.mainLoaded;
+        connectionEvent = ConnectionEvent.connecting;
         break;
       case "main_ready":
-        connectionEvent = ConnectionEvent.mainReady;
-        break;
-      case "qrcode_idle":
-        connectionEvent = ConnectionEvent.qrcodeIdle;
+        connectionEvent = ConnectionEvent.connected;
         break;
       case "require_auth":
         connectionEvent = ConnectionEvent.requireAuth;

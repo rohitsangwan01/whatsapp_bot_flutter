@@ -2,8 +2,7 @@ enum ConnectionEvent {
   authenticated,
   logout,
   authCodeChange,
-  mainLoaded,
-  mainReady,
-  qrcodeIdle,
+  connecting,
+  connected,
   requireAuth
 }

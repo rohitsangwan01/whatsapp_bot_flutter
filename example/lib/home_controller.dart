@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_overrides
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     WhatsappBotFlutter.enableLogs(true);
-    
+
     countryCode.text = "91";
     phoneNumber.text = "";
     message.text = "Testing Whatsapp Bot";
@@ -41,7 +42,9 @@ class HomeController extends GetxController {
     connected.value = false;
     error.value = "";
     WhatsappBotFlutter.connect(
-      onQrCode: (String qr) {
+      //sessionDirectory: "../cache",
+      headless: true,
+      onQrCode: (String qr, Uint8List? imageBytes) {
         qrCode.value = qr;
       },
       onError: (String er) {
@@ -55,14 +58,11 @@ class HomeController extends GetxController {
         qrCode.value = "";
         progress.value = 0;
       },
-      progress: (int prg) {
-        progress.value = prg;
-      },
     );
   }
 
   void disconnect() async {
-    await WhatsappBotFlutter.disconnect();
+    await WhatsappBotFlutter.disconnect(tryLogout: true);
     connected.value = false;
   }
 

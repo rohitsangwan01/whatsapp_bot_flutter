@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 
 // Make sure to run in terminal using
@@ -15,17 +18,13 @@ void main(List<String> args) async {
     onSuccess: () {
       print("Connected Successfully");
     },
-    onQrCode: (String qr) {
+    onQrCode: (String qr, Uint8List? imageBytes) {
       // print qrCode in Terminal
       String qrText = WhatsappBotFlutter.convertStringToQrCode(qr);
       print(qrText);
     },
     onError: (String er) {
       print(er);
-    },
-    progress: (int prg) {
-      // we can print progress here
-      print("Progress : $prg");
     },
   );
 

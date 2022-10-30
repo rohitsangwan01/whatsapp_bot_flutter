@@ -1,77 +1,165 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:puppeteer/puppeteer.dart';
+import 'package:whatsapp_bot_flutter/src/helper/login_helper.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
-import 'package:whatsapp_bot_flutter/src/model/connection_event.dart';
-import 'package:whatsapp_bot_flutter/src/model/message.dart';
-import 'package:whatsapp_bot_flutter/src/model/whatsapp_file_type.dart';
+import 'package:whatsapp_bot_flutter/src/model/qr_code_image.dart';
+import 'package:whatsapp_bot_flutter/src/model/whatsapp_exception.dart';
+import 'package:whatsapp_bot_flutter/src/wpp/wpp_auth.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
-import 'puppeteer_service.dart';
+import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 import 'package:zxing2/qrcode.dart';
 
+/// [WhatsappBotFlutter] for maintaining a single  `Browser` and `Page` instance
+/// with methods like connect and send
 class WhatsappBotFlutter {
-  static final _puppeteerService = PuppeteerService();
+  static Page? _page;
+  static Browser? _browser;
 
-  /// [connect] will call onSuccess callback , or QrCode on getting QrCode to Scan
+  /// [connectionEventStream] will give update of Connection Events
+  static Stream<ConnectionEvent> connectionEventStream =
+      WppEvents.connectionEventStreamController.stream;
+
+  ///[messageEvents] will give update of all new messages
+  static Stream<Message> messageEvents =
+      WppEvents.messageEventStreamController.stream;
+
+  /// [connect] method will open WhatsappWeb in headless webView and connect to the whatsapp
+  /// and pass QrCode in `onQrCode` callback
   /// Scan this code , and on successful connection we will get onSuccessCallback
-  /// To run on web , pass `browserWsEndpoint` parameter
   static Future<void> connect({
     String? sessionDirectory,
-    bool? headless,
+    String? chromiumDownDirectory,
+    bool? headless = true,
     String? browserWsEndpoint,
-    Function(String)? onQrCode,
+    int qrCodeWaitDurationSeconds = 60,
+    Function(String qrCodeUrl, Uint8List? qrCodeImage)? onQrCode,
     Function(String)? onError,
     Function()? onSuccess,
-    Function(int)? progress,
-    Duration? connectionTimeout,
+    Duration? connectionTimeout = const Duration(seconds: 20),
   }) async {
-    // dispose any pending tasks first
-    disconnect();
-    // Try to connect and login again
-    await _puppeteerService.connect(
-      sessionDirectory: sessionDirectory,
-      browserWsEndpoint: browserWsEndpoint,
-      headless: headless,
-      onError: onError,
-      onQrCode: onQrCode,
-      onSuccess: onSuccess,
-      connectionTimeout: connectionTimeout,
-      progress: progress,
-    );
+    try {
+      if (browserWsEndpoint != null) {
+        _browser = await puppeteer.connect(
+          browserWsEndpoint: browserWsEndpoint,
+        );
+      } else {
+        RevisionInfo revisionInfo = await downloadChrome(
+          cachePath: chromiumDownDirectory ?? "./.local-chromium",
+        );
+        String executablePath = revisionInfo.executablePath;
+        _browser = await puppeteer.launch(
+          headless: headless,
+          executablePath: executablePath,
+          noSandboxFlag: true,
+          args: ['--start-maximized', '--disable-setuid-sandbox'],
+          userDataDir: sessionDirectory,
+        );
+      }
+
+      _page = await _browser?.newPage();
+      if (_page == null) {
+        onError?.call("Something went wrong !");
+        return;
+      }
+
+      Page page = _page!;
+
+      await page.setUserAgent(WhatsAppMetadata.userAgent);
+      await page.goto(WhatsAppMetadata.whatsAppURL);
+
+      await waitForLogin(
+        page,
+        (QrCodeImage qrCodeImage, int attempt) {
+          if (qrCodeImage.base64Image != null && qrCodeImage.urlCode != null) {
+            Uint8List? imageBytes;
+            try {
+              String? base64Image = qrCodeImage.base64Image
+                  ?.replaceFirst("data:image/png;base64,", "");
+              imageBytes = base64Decode(base64Image!);
+            } catch (e) {
+              WhatsappLogger.log(e);
+            }
+            onQrCode?.call(qrCodeImage.urlCode!, imageBytes);
+          }
+        },
+        waitDurationSeconds: qrCodeWaitDurationSeconds,
+      );
+
+      onSuccess?.call();
+    } catch (e) {
+      WhatsappLogger.log(e.toString());
+      onError?.call(e.toString());
+      disconnect();
+    }
   }
 
-  /// call [disconnect] to dispose browse and close all resources
-  static disconnect() {
-    _puppeteerService.dispose();
+  /// [disconnect] will close the browser instance and set values to null
+  static Future<void> disconnect({
+    bool tryLogout = false,
+  }) async {
+    try {
+      if (tryLogout) await logout();
+      _browser?.close();
+      _browser = null;
+      _page = null;
+    } catch (e) {
+      WhatsappLogger.log(e);
+    }
   }
 
-  /// [sendMessage] to send messages to the given phone number
-  /// listen for progress updates by `progress` callback
+  ///[logout] will try to logout only if We are connected and already logged in
+  static Future<void> logout() async {
+    try {
+      if (_page != null && await WppAuth.isAuthenticated(_page!)) {
+        await WppAuth.logout(_page!);
+      }
+    } catch (e) {
+      WhatsappLogger.log(e);
+    }
+  }
+
+  /// open Whatsapp and send message
+  /// [sendMessage] may throw errors if contents not loaded on time
+  /// or if this method completed without any issue , they probably message sent successfully
+  /// `progress` callback will give update for the message sending progress
   static Future<void> sendTextMessage({
-    required String phone,
     required String countryCode,
+    required String phone,
     required String message,
   }) async {
-    await _puppeteerService.sendTextMessage(
-      countryCode: countryCode,
-      phone: phone,
-      message: message,
+    Page page = await _validateMessage(countryCode, phone);
+    countryCode = countryCode.replaceAll("+", "");
+    String phoneNum = "$countryCode$phone@c.us";
+    var sendResult = await page.evaluate(
+      '''() => WPP.chat.sendTextMessage("$phoneNum", "$message");''',
     );
+    WhatsappLogger.log("SendResult : $sendResult");
   }
 
   static Future<void> sendFileMessage({
-    required String phone,
     required String countryCode,
-    required List<int> fileBytes,
+    required String phone,
     required WhatsappFileType fileType,
+    required List<int> fileBytes,
     String? caption,
     String? mimetype,
   }) async {
-    await _puppeteerService.sendFileMessage(
-      countryCode: countryCode,
-      phone: phone,
-      caption: caption,
-      fileBytes: fileBytes,
-      fileType: fileType,
-      mimetype: mimetype,
-    );
+    Page page = await _validateMessage(countryCode, phone);
+    countryCode = countryCode.replaceAll("+", "");
+    String phoneNum = "$countryCode$phone@c.us";
+    String base64Image = base64Encode(fileBytes);
+    String mimeType = mimetype ?? _getMimeType(fileType);
+    String imgData = "data:$mimeType;base64,$base64Image";
+    var sendResult = await page
+        .evaluate('''(phone,imgData,caption) => WPP.chat.sendFileMessage(
+        phone,imgData,
+        {
+          type: 'image',
+          caption: caption
+        });''', args: [phoneNum, imgData, caption]);
+    WhatsappLogger.log("SendResult : $sendResult");
   }
 
   static Future<void> sendLocationMessage({
@@ -83,15 +171,48 @@ class WhatsappBotFlutter {
     String? address,
     String? url,
   }) async {
-    await _puppeteerService.sendLocationMessage(
-      countryCode: countryCode,
-      phone: phone,
-      lat: lat,
-      long: long,
-      address: address,
-      name: name,
-      url: url,
-    );
+    Page page = await _validateMessage(countryCode, phone);
+    countryCode = countryCode.replaceAll("+", "");
+    String phoneNum = "$countryCode$phone@c.us";
+    var sendResult = await page.evaluate(
+        '''(phone,lat,long,address,name,url) => WPP.chat.sendLocationMessage(phone, {
+              lat: lat,
+              lng: long,
+              name: name, 
+              address: address,
+              url: url 
+            });
+            ''',
+        args: [phoneNum, lat, long, address, name, url]);
+    WhatsappLogger.log("SendResult : $sendResult");
+  }
+
+  /// [validateMessage] will verify if data passed is correct or not
+  static Future<Page> _validateMessage(countryCode, String phone) async {
+    Page? page = _page;
+    if (page == null) {
+      throw WhatsappException(
+          message: "Whatsapp not connected yet , please connect first",
+          exceptionType: WhatsappExceptionType.clientNotConnected);
+    }
+
+    countryCode = countryCode.replaceAll("+", "");
+
+    bool isAuthenticated = await WppAuth.isAuthenticated(page);
+    if (!isAuthenticated) {
+      throw WhatsappException(
+          message: "Please login first",
+          exceptionType: WhatsappExceptionType.unAuthorized);
+    }
+
+    // String phoneNum = "$countryCode$phone@c.us";
+    // bool isValid = await _wpp.isValidContact(page, phoneNum);
+    // if (!isValid) {
+    //   throw WhatsappException(
+    //       message: "Invalid contact number",
+    //       exceptionType: WhatsappExceptionType.inValidContact);
+    // }
+    return page;
   }
 
   /// [convertStringToQrCode] will convert a Text into a qrCode , which we can print in Terminal
@@ -128,10 +249,17 @@ class WhatsappBotFlutter {
     WhatsappLogger.enableLogger = enable;
   }
 
-  /// [connectionEventStream] will give update of Connection Events
-  static Stream<ConnectionEvent> connectionEventStream =
-      WppEvents.connectionEventStreamController.stream;
-
-  static Stream<Message> messageEvents =
-      WppEvents.messageEventStreamController.stream;
+  /// [_getMimeType] returns default mimeType
+  static String _getMimeType(WhatsappFileType fileType) {
+    switch (fileType) {
+      case WhatsappFileType.document:
+        return "application/msword";
+      case WhatsappFileType.image:
+        return "image/jpeg";
+      case WhatsappFileType.audio:
+        return "audio/mp3";
+      // case WhatsappFileType.video:
+      //   return "video/mp4";
+    }
+  }
 }
