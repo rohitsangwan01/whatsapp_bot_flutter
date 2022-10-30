@@ -30,7 +30,7 @@ class WhatsappBotFlutter {
   /// Scan this code , and on successful connection we will get onSuccessCallback
   static Future<void> connect({
     String? sessionDirectory,
-    String? chromiumDownDirectory,
+    String? chromiumDownloadDirectory,
     bool? headless = true,
     String? browserWsEndpoint,
     int qrCodeWaitDurationSeconds = 60,
@@ -46,7 +46,7 @@ class WhatsappBotFlutter {
         );
       } else {
         RevisionInfo revisionInfo = await downloadChrome(
-          cachePath: chromiumDownDirectory ?? "./.local-chromium",
+          cachePath: chromiumDownloadDirectory ?? "./.local-chromium",
         );
         String executablePath = revisionInfo.executablePath;
         _browser = await puppeteer.launch(

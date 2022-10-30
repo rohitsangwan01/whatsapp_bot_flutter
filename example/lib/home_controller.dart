@@ -43,6 +43,7 @@ class HomeController extends GetxController {
     error.value = "";
     WhatsappBotFlutter.connect(
       //sessionDirectory: "../cache",
+      chromiumDownloadDirectory: "../.local-chromium", // change this path
       headless: true,
       onQrCode: (String qr, Uint8List? imageBytes) {
         qrCode.value = qr;

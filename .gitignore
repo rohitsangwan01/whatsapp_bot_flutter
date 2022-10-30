@@ -29,6 +29,5 @@ migrate_working_dir/
 .packages
 build/
 /cache
-/example/.local-chromium
-/example_dart/.local-chromium
+/*.local-chromium
 /whatsapp_sender

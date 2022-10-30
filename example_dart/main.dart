@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
@@ -15,6 +14,7 @@ void main(List<String> args) async {
 
   // Connect with Whatsapp First
   await WhatsappBotFlutter.connect(
+    chromiumDownloadDirectory: "../.local-chromium",
     onSuccess: () {
       print("Connected Successfully");
     },
