@@ -62,15 +62,15 @@ First we have to get `WhatsappClient` using `WhatsappBotFlutter.connect` method 
 and to print qrCode in terminal use `WhatsappBotFlutter.convertStringToQrCode(qrString)`
 
 ```dart
-  WhatsappClient? whatsappClient = await WhatsappBotFlutter.connect(
-    onConnectionEvent: (ConnectionEvent event) {
-      print(event.toString());
-    },
-    onQrCode: (String qr, Uint8List? imageBytes) {
-      // use imageBytes to display in flutter : Image.memory(imageBytes)
-      print(WhatsappBotFlutter.convertStringToQrCode(qr));
-    },
-  );
+WhatsappClient? whatsappClient = await WhatsappBotFlutter.connect(
+  onConnectionEvent: (ConnectionEvent event) {
+    print(event.toString());
+  },
+  onQrCode: (String qr, Uint8List? imageBytes) {
+    // use imageBytes to display in flutter : Image.memory(imageBytes)
+    print(WhatsappBotFlutter.convertStringToQrCode(qr));
+  },
+);
 ```
 
 Use `sendTextMessage` to send a text message
@@ -92,7 +92,7 @@ await whatsappClient.sendFileMessage(
     fileBytes: fileBytes, // Pass file bytes
     caption: "Test Message", // Optional
     fileType: fileType, // document, image, audio
-  ;
+);
 ```
 
 To get new Messages , subscribe to `whatsappClient.messageEvents`
