@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
+import 'package:whatsapp_bot_flutter/src/model/call_event.dart';
 import 'package:whatsapp_bot_flutter/src/model/connection_event.dart';
 import 'package:whatsapp_bot_flutter/src/model/message.dart';
 
@@ -11,6 +12,10 @@ class WppEvents {
   final StreamController<Message> messageEventStreamController =
       StreamController.broadcast();
 
+  // To get update of all Calls
+  final StreamController<CallEvent> callEventStreamController =
+      StreamController.broadcast();
+
   // To get update of all Connections
   final StreamController<ConnectionEvent> connectionEventStreamController =
       StreamController.broadcast();
@@ -18,7 +23,6 @@ class WppEvents {
   WppEvents(this.page);
 
   Future<void> init() async {
-    WhatsappLogger.log("initializing wppEvent");
     await _addEventListeners();
   }
 
@@ -71,6 +75,15 @@ class WppEvents {
     }
   }
 
+  void _onCallEvent(call) {
+    try {
+      CallEvent callEvent = CallEvent.fromJson(call);
+      callEventStreamController.add(callEvent);
+    } catch (e) {
+      WhatsappLogger.log("onCallEvent : $e");
+    }
+  }
+
   void _onConnectionEvent(event) {
     ConnectionEvent? connectionEvent;
     switch (event) {
@@ -99,14 +112,9 @@ class WppEvents {
     connectionEventStreamController.add(connectionEvent);
   }
 
-  void _onCallEvent(call) {
-    WhatsappLogger.log(call);
-  }
-
   // make sure to call this method to expose this `onCustomEvent` function in JS
   Future<void> _exposeListener() async {
     await page.exposeFunction("onCustomEvent", (type, data) {
-      WhatsappLogger.log("Type: $type : data : $data");
       switch (type.toString()) {
         case "messageEvent":
           _onNewMessage(data);

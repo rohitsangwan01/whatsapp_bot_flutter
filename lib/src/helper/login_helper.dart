@@ -5,12 +5,14 @@ import 'package:whatsapp_bot_flutter/src/helper/qr_code_helper.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_auth.dart';
 
+import '../../whatsapp_bot_flutter.dart';
 import '../model/qr_code_image.dart';
 
 Future waitForLogin(
   Page page,
   Function(QrCodeImage, int)? onCatchQR, {
   int waitDurationSeconds = 60,
+  Function(ConnectionEvent)? onConnectionEvent,
 }) async {
   WhatsappLogger.log('Waiting page load');
 
@@ -20,6 +22,8 @@ Future waitForLogin(
   bool authenticated = await wppAuth.isAuthenticated();
 
   if (!authenticated) {
+    onConnectionEvent?.call(ConnectionEvent.waitingForQrScan);
+
     WhatsappLogger.log('Waiting for QRCode Scan...');
 
     await waitForQrCodeScan(
@@ -35,9 +39,12 @@ Future waitForLogin(
     authenticated = await wppAuth.isAuthenticated();
 
     if (authenticated) {
+      onConnectionEvent?.call(ConnectionEvent.authenticated);
+
       await Future.delayed(const Duration(milliseconds: 200));
       WhatsappLogger.log('Checking phone is connected...');
 
+      onConnectionEvent?.call(ConnectionEvent.connecting);
       bool inChat = await waitForInChat(page);
       if (!inChat) {
         WhatsappLogger.log('Phone not connected');
@@ -45,13 +52,23 @@ Future waitForLogin(
       }
 
       WhatsappLogger.log('Connected successfully');
-
-      return true;
+      onConnectionEvent?.call(ConnectionEvent.connected);
     } else {
       throw 'Login Failed';
     }
   } else {
+    await Future.delayed(const Duration(milliseconds: 200));
+    WhatsappLogger.log('Checking phone is connected...');
+
+    onConnectionEvent?.call(ConnectionEvent.connecting);
+    bool inChat = await waitForInChat(page);
+    if (!inChat) {
+      WhatsappLogger.log('Phone not connected');
+      throw 'Phone not connected';
+    }
+
     WhatsappLogger.log('Connected successfully');
+    onConnectionEvent?.call(ConnectionEvent.connected);
   }
 }
 
