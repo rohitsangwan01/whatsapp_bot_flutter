@@ -5,7 +5,7 @@ class WppAuth {
   Page page;
   WppAuth(this.page);
 
-  ///Check is User is Authenticated
+  /// check if User is Authenticated on current opened Page
   Future<bool> isAuthenticated() async {
     try {
       var result = await page.evaluate('''() => WPP.conn.isAuthenticated();''');
@@ -16,6 +16,7 @@ class WppAuth {
     }
   }
 
+  /// to check if ChatScreen is loaded on the page
   Future<bool> isMainReady() async {
     try {
       var result = await page.evaluate('''() => WPP.conn.isMainReady();''');

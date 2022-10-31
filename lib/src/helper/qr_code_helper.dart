@@ -32,7 +32,7 @@ Future<void> waitForQrCodeScan({
       break;
     }
 
-    QrCodeImage? result = await getQrCodeImage(page);
+    QrCodeImage? result = await _getQrCodeImage(page);
     String? code = result?.urlCode;
 
     if (result != null && code != null && code != urlCode) {
@@ -47,8 +47,9 @@ Future<void> waitForQrCodeScan({
   await completer.future;
 }
 
-Future<QrCodeImage?> getQrCodeImage(Page page) async {
-  bool click = await page.evaluate('''() => {
+Future<QrCodeImage?> _getQrCodeImage(Page page) async {
+  try {
+    bool click = await page.evaluate('''() => {
       const selectorImg = document.querySelector('canvas');
       const selectorUrl = selectorImg.closest('[data-ref]');
       const buttonReload = selectorUrl.querySelector('button');
@@ -59,15 +60,15 @@ Future<QrCodeImage?> getQrCodeImage(Page page) async {
       return false;
     }''') ?? false;
 
-  if (click) {
-    await page.waitForFunction('''() => {
+    if (click) {
+      await page.waitForFunction('''() => {
       const selectorImg = document.querySelector('canvas');
       const selectorUrl = selectorImg.closest('[data-ref]');
       return selectorUrl.getAttribute('data-ref');
     }''');
-  }
+    }
 
-  var result = await page.evaluate('''() => {
+    var result = await page.evaluate('''() => {
       const selectorImg = document.querySelector('canvas');
       const selectorUrl = selectorImg.closest('[data-ref]');
       if (selectorImg != null && selectorUrl != null) {
@@ -78,7 +79,11 @@ Future<QrCodeImage?> getQrCodeImage(Page page) async {
         return data;
       }
     }''');
-  String? urlCode = result?['urlCode'];
-  String? base64Image = result?['base64Image'];
-  return QrCodeImage(base64Image: base64Image, urlCode: urlCode);
+    String? urlCode = result?['urlCode'];
+    String? base64Image = result?['base64Image'];
+    return QrCodeImage(base64Image: base64Image, urlCode: urlCode);
+  } catch (e) {
+    WhatsappLogger.log("QrCodeFetchingError: $e");
+    return null;
+  }
 }

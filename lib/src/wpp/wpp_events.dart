@@ -7,6 +7,7 @@ import 'package:whatsapp_bot_flutter/src/model/message.dart';
 
 class WppEvents {
   Page page;
+  WppEvents(this.page);
 
   // To get update of all messages
   final StreamController<Message> messageEventStreamController =
@@ -20,8 +21,8 @@ class WppEvents {
   final StreamController<ConnectionEvent> connectionEventStreamController =
       StreamController.broadcast();
 
-  WppEvents(this.page);
-
+  /// call init() once on a page
+  /// to add eventListeners
   Future<void> init() async {
     await _addEventListeners();
   }
@@ -112,7 +113,6 @@ class WppEvents {
     connectionEventStreamController.add(connectionEvent);
   }
 
-  // make sure to call this method to expose this `onCustomEvent` function in JS
   Future<void> _exposeListener() async {
     await page.exposeFunction("onCustomEvent", (type, data) {
       switch (type.toString()) {
@@ -128,7 +128,7 @@ class WppEvents {
     });
   }
 
-  Future<void> removeEventListeners() async {
+  Future<void> _removeEventListeners() async {
     // TODO : remove all Event Listeners
   }
 }

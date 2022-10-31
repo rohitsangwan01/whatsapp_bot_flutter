@@ -15,7 +15,6 @@ class WhatsappClient {
   Page page;
   Browser browser;
   late WppEvents wppEvents;
-
   late Wpp wpp;
   late WppAuth wppAuth;
 
@@ -85,6 +84,10 @@ class WhatsappClient {
     WhatsappLogger.log("SendResult : $sendResult");
   }
 
+  ///send file messages using [sendFileMessage]
+  /// make sure to send fileType , we can also pass optional mimeType
+  /// `replyMessageId` will send a quote message to the given messageId
+  /// add `caption` to attach a text with the file
   Future<void> sendFileMessage({
     required String phone,
     required WhatsappFileType fileType,
@@ -115,6 +118,7 @@ class WhatsappClient {
     WhatsappLogger.log("SendResult : $sendResult");
   }
 
+  ///send a locationMessage using [sendLocationMessage]
   Future<void> sendLocationMessage({
     required String phone,
     required String lat,
