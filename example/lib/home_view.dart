@@ -63,12 +63,12 @@ class HomeView extends GetView<HomeController> {
                             controller: controller.phoneNumber,
                             validator: (value) {
                               if (value?.isEmpty ?? true) {
-                                return "Please type a phone number";
+                                return "Enter phone number with country code";
                               }
                               return null;
                             },
                             decoration: const InputDecoration(
-                              hintText: "Enter Phone Number",
+                              hintText: "Enter phone number with country code",
                             ),
                           ),
                         ),

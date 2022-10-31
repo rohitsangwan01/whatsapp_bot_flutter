@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -83,13 +82,22 @@ class HomeController extends GetxController {
     // listen to CallEvent Stream
     client.callEvents.listen((event) {
       callEvents.value = event;
+      client.rejectCall(callId: event.id);
     });
     // listen to messageEventStream
     client.messageEvents.listen((Message message) {
       if (!(message.id?.fromMe ?? true)) {
         Get.log(message.body.toString());
         messageEvents.value = message;
-        // client.sendTextMessage(phone: message.from, message: "Hey !");
+
+        // auto reply if message == test
+        if (message.body == "test") {
+          client.sendTextMessage(
+            phone: message.from,
+            message: "Hey !",
+            replyMessageId: message.id,
+          );
+        }
       }
     });
   }
@@ -105,6 +113,27 @@ class HomeController extends GetxController {
       await client?.sendTextMessage(
         phone: phoneNumber.text,
         message: message.text,
+      );
+    } catch (e) {
+      Get.log("Error : $e");
+    }
+  }
+
+  Future<void> sendFileMessage(
+    String? filePath,
+    WhatsappFileType fileType,
+  ) async {
+    if (!formKey.currentState!.validate()) return;
+    try {
+      if (filePath == null) return;
+      File file = File(filePath);
+      List<int> imageBytes = file.readAsBytesSync();
+
+      await client?.sendFileMessage(
+        phone: phoneNumber.text,
+        fileBytes: imageBytes,
+        caption: message.text,
+        fileType: fileType,
       );
     } catch (e) {
       Get.log("Error : $e");
@@ -133,25 +162,5 @@ class HomeController extends GetxController {
     );
     String? path = result?.files.first.path;
     await sendFileMessage(path, WhatsappFileType.audio);
-  }
-
-  Future<void> sendFileMessage(
-    String? filePath,
-    WhatsappFileType fileType,
-  ) async {
-    if (!formKey.currentState!.validate()) return;
-    try {
-      if (filePath == null) return;
-      File file = File(filePath);
-      List<int> imageBytes = file.readAsBytesSync();
-      await client?.sendFileMessage(
-        phone: phoneNumber.text,
-        fileBytes: imageBytes,
-        caption: message.text,
-        fileType: fileType,
-      );
-    } catch (e) {
-      Get.log("Error : $e");
-    }
   }
 }

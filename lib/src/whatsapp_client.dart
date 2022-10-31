@@ -66,20 +66,22 @@ class WhatsappClient {
     }
   }
 
-  /// open Whatsapp and send message
-  /// [sendMessage] may throw errors if contents not loaded on time
-  /// or if this method completed without any issue , they probably message sent successfully
-  /// `progress` callback will give update for the message sending progress
+  /// [sendMessage] may throw errors if passed an invalid contact
+  /// or if this method completed without any issue , then probably message sent successfully
+  /// add `replyMessageId` to quote message
   Future<void> sendTextMessage({
     required String phone,
     required String message,
+    MessageId? replyMessageId,
   }) async {
     await _validateConnection();
     String phoneNum = _parsePhone(phone);
 
     var sendResult = await page.evaluate(
-      '''() => WPP.chat.sendTextMessage("$phoneNum", "$message");''',
-    );
+        '''(phone,message,replyId) => WPP.chat.sendTextMessage(phone, message, {
+            quotedMsg: replyId
+          });''',
+        args: [phoneNum, message, replyMessageId?.serialized]);
     WhatsappLogger.log("SendResult : $sendResult");
   }
 
@@ -89,20 +91,27 @@ class WhatsappClient {
     required List<int> fileBytes,
     String? caption,
     String? mimetype,
+    MessageId? replyMessageId,
   }) async {
     await _validateConnection();
     String phoneNum = _parsePhone(phone);
 
     String base64Image = base64Encode(fileBytes);
     String mimeType = mimetype ?? _getMimeType(fileType);
-    String imgData = "data:$mimeType;base64,$base64Image";
-    var sendResult = await page
-        .evaluate('''(phone,imgData,caption) => WPP.chat.sendFileMessage(
-        phone,imgData,
-        {
-          type: 'image',
-          caption: caption
-        });''', args: [phoneNum, imgData, caption]);
+    String fileData = "data:$mimeType;base64,$base64Image";
+    String fileTypeName = "image";
+    if (mimeType.split("/").length > 1) {
+      fileTypeName = mimeType.split("/").first;
+    }
+
+    var sendResult = await page.evaluate(
+        '''(phone,fileData,caption,fileType,replyId) => WPP.chat.sendFileMessage(
+            phone,fileData,{
+              type: fileType,
+              caption: caption,
+              quotedMsg: replyId
+            });''',
+        args: [phoneNum, fileData, caption, fileTypeName, replyMessageId?.serialized]);
     WhatsappLogger.log("SendResult : $sendResult");
   }
 
@@ -128,6 +137,14 @@ class WhatsappClient {
             ''',
         args: [phoneNum, lat, long, address, name, url]);
     WhatsappLogger.log("SendResult : $sendResult");
+  }
+
+  /// [rejectCall] will reject incoming call
+  Future<void> rejectCall({String? callId}) async {
+    var result = await page.evaluate(
+        '''(callId) => WPP.call.rejectCall(callId);;''',
+        args: [callId]);
+    WhatsappLogger.log("RejectCallResult : $result");
   }
 
   /// [validateMessage] will verify if data passed is correct or not

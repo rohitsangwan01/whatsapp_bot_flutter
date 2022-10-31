@@ -4,7 +4,6 @@
 
 import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
-import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
 import 'package:http/http.dart' as http;
 
 class Wpp {
@@ -13,12 +12,12 @@ class Wpp {
 
   /// make sure to call [init] to Initialize Wpp
   Future init() async {
-    String latestBuildsUrl =
+    String latestBuildUrl =
         "https://github.com/wppconnect-team/wa-js/releases/latest/download/wppconnect-wa.js";
     String nightlyBuildUrl =
         "https://github.com/wppconnect-team/wa-js/releases/download/nightly/wppconnect-wa.js";
 
-    String content = await http.read(Uri.parse(latestBuildsUrl));
+    String content = await http.read(Uri.parse(latestBuildUrl));
 
     await page.addScriptTag(content: content, type: "module");
 
