@@ -8,30 +8,33 @@ void main(List<String> args) async {
   print("Trying Connecting ...");
 
   // subscribe to connection events
-  WhatsappBotFlutter.connectionEventStream.listen((event) {
-    print("ConnectionEvent : $event");
-  });
-
-  // Connect with Whatsapp First
-  await WhatsappBotFlutter.connect(
-    chromiumDownloadDirectory: "../.local-chromium",
-    onSuccess: () {
-      print("Connected Successfully");
+  WhatsappClient? client = await WhatsappBotFlutter.connect(
+    //sessionDirectory: "../cache",
+    chromiumDownloadDirectory: "../.local-chromium", // change this path
+    headless: true,
+    onConnectionEvent: (ConnectionEvent event) {
+      print(event.toString());
     },
     onQrCode: (String qr, Uint8List? imageBytes) {
-      // print qrCode in Terminal
       String qrText = WhatsappBotFlutter.convertStringToQrCode(qr);
       print(qrText);
     },
-    onError: (String er) {
-      print(er);
-    },
   );
+  client?.connectionEventStream.listen((event) {
+    print("ConnectionEvent : $event");
+  });
 
   // subscribe to Message Events
-  WhatsappBotFlutter.messageEvents.listen((Message message) {
+  client?.messageEvents.listen((Message message) {
     if (!(message.id?.fromMe ?? true)) {
-      print(message.toJson().toString());
+      print(message.body.toString());
+      if (message.body == "hii") {
+        client.sendTextMessage(phone: message.from, message: "Hey !");
+      }
     }
+  });
+
+  client?.callEvents.listen((CallEvent callEvent) {
+    print(callEvent.toJson());
   });
 }
