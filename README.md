@@ -58,9 +58,7 @@ We can use this on desktop platforms as well , to connect to a chrome server hos
 
 ## Usage
 
-First we have to get `WhatsappClient` using `WhatsappBotFlutter.connect` method , we can get qrcode from `onQrCode` callback,
-
-`onQrCode` callback will return a qrString and ImageByte , we can use ImageBytes to show qr as Image widget , or we can convert qrCode String to QrCode widget by any library,
+First we have to get `WhatsappClient` using `WhatsappBotFlutter.connect` method , we can get qrcode from `onQrCode` callback, this will return a qrString and ImageByte , we can use ImageBytes to show qr as Image widget , or we can convert qrCode String to QrCode widget by any library,
 and to print qrCode in terminal use `WhatsappBotFlutter.convertStringToQrCode(qrString)`
 
 ```dart
