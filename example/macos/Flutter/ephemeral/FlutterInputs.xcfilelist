@@ -1003,11 +1003,11 @@
 /Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/lib/src/model/whatsapp_exception.dart
 /Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/lib/src/model/whatsapp_file_type.dart
 /Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/lib/src/whatsapp_bot_flutter.dart
+/Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/lib/src/whatsapp_client.dart
+/Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/lib/src/wpp/wpp.dart
 /Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/lib/src/wpp/wpp_auth.dart
-/Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/lib/src/wpp/wpp_chat.dart
 /Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/lib/src/wpp/wpp_events.dart
 /Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/lib/src/wpp/wpp_js_content.dart
-/Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/lib/src/wpp/wpp_service.dart
 /Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/lib/whatsapp_bot_flutter.dart
 /Users/rohitsangwan/fvm/versions/stable/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf
 /Users/rohitsangwan/fvm/versions/stable/bin/cache/pkg/sky_engine/LICENSE

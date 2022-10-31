@@ -25,7 +25,7 @@ Future<void> waitForQrCodeScan({
 
   while (true) {
     if (closeLoop) break;
-    bool connected = await WppAuth.isAuthenticated(page);
+    bool connected = await WppAuth(page).isAuthenticated();
     if (connected) {
       timer.cancel();
       if (!completer.isCompleted) completer.complete();
