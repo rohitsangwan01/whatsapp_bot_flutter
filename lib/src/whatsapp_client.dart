@@ -30,6 +30,12 @@ class WhatsappClient {
   /// [isConnected] is to check if we are still connected to the WhatsappPage
   bool get isConnected => browser.isConnected && !page.isClosed;
 
+  /// [isAuthenticated] is to check if we are loggedIn
+  Future<bool> get isAuthenticated => wppAuth.isAuthenticated();
+
+  /// [isReadyToChat] is to check if whatsapp chat Page opened
+  Future<bool> get isReadyToChat => wppAuth.isMainReady();
+
   /// [connectionEventStream] will give update of Connection Events
   Stream<ConnectionEvent> get connectionEventStream =>
       wppEvents.connectionEventStreamController.stream;

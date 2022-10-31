@@ -18,13 +18,19 @@ it will download chromium files locally, using [puppeteer](https://pub.dev/packa
 
 Supported Whatsapp features are :
 
+- create multiple whatsapp clients
 - Login with QR
+- Auto refresh QrCode
 - Logout
 - Keep session
 - Send text message
 - Send image, audio & document
+- Send location message
+- Reply to a message
 - Listen to New Messages
 - Listen to Connection Events
+- Listen to calls
+- Reject calls
 
 ### Macos setup
 
@@ -45,40 +51,36 @@ checkout [this](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main
 then pass this `browserWsEndpoint` in connect method like this
 
 ```dart
-WhatsappBotFlutter.connect( browserWsEndpoint: "BROWSER_WS_ENDPOINT_URL",);
+WhatsappClient? whatsappClient = await WhatsappBotFlutter.connect( browserWsEndpoint: "BROWSER_WS_ENDPOINT_URL",);
 ```
 
 We can use this on desktop platforms as well , to connect to a chrome server hosted somewhere else
 
 ## Usage
 
-First connect with whatsapp using ` WhatsappBotFlutter.connect` method , we can get qrcode from `onQrCode` callback
-if we got `onSuccess` ,this means we are connected and ready to send messages
+First we have to get `WhatsappClient` using `WhatsappBotFlutter.connect` method , we can get qrcode from `onQrCode` callback,
 
-To convert qrCode String to QrCode widget for scanning use [pretty_qr_code](https://pub.dev/packages/pretty_qr_code) , check example for more details
+`onQrCode` callback will return a qrString and ImageByte , we can use ImageBytes to show qr as Image widget , or we can convert qrCode String to QrCode widget by any library,
+and to print qrCode in terminal use `WhatsappBotFlutter.convertStringToQrCode(qrString)`
 
 ```dart
-WhatsappBotFlutter.connect(
-  onQrCode: (String qr) {
-    // there we will get QrCode string use any library to convert string to qrcode and scan
-  },
-  onError: (String er) {
-    // listen for errors
-  },
-  onSuccess: () {
-    // if we received this callback , it means we are connected to whatsapp
-  },
-  progress: (int prg) {
-    // we can listen for progress update
-  },
-);
+  WhatsappClient? whatsappClient = await WhatsappBotFlutter.connect(
+    onConnectionEvent: (ConnectionEvent event) {
+      print(event.toString());
+    },
+    onQrCode: (String qr, Uint8List? imageBytes) {
+      // use imageBytes to display in flutter : Image.memory(imageBytes)
+      print(WhatsappBotFlutter.convertStringToQrCode(qr));
+    },
+  );
 ```
 
 Use `sendTextMessage` to send a text message
 
+phone parameter can be of this format : `countryCode+phoneNumber` , eg : `91xxxxxxxxxx` , or we can get phone from messageEvents in this format : `countryCode+phone+"@c.us"`
+
 ```dart
-WhatsappBotFlutter.sendTextMessage(
-    countryCode: "91",
+await whatsappClient.sendTextMessage(
     phone: "------",
     message: "Test Message",
 );
@@ -87,28 +89,41 @@ WhatsappBotFlutter.sendTextMessage(
 Use `sendFileMessage` to send a File
 
 ```dart
-await WhatsappBotFlutter.sendFileMessage(
-    countryCode: "91",
+await whatsappClient.sendFileMessage(
     phone: "------",
-    fileBytes: imageBytes, // Pass file bytes
+    fileBytes: fileBytes, // Pass file bytes
     caption: "Test Message", // Optional
     fileType: fileType, // document, image, audio
   ;
 ```
 
-To get new Messages , subscribe to `WhatsappBotFlutter.messageEvents`
+To get new Messages , subscribe to `whatsappClient.messageEvents`
 
 ```dart
-WhatsappBotFlutter.messageEvents.listen((Message message) {
-  // Got whatsapp messages ...
+whatsappClient.messageEvents.listen((Message message) {
+    // replyMessageId  is optional , add this to send a reply message
+    client.sendTextMessage(
+      phone: message.from,
+      message: "Hey !",
+      replyMessageId: message.id,
+    );
 });
 ```
 
-To get whatsapp connection Events , subscribe to `WhatsappBotFlutter.connectionEventStream`
+To get whatsapp connection Events , subscribe to `whatsappClient.connectionEventStream`
 
 ```dart
-WhatsappBotFlutter.connectionEventStream.listen((event) {
-  // Got Connection Events ...
+whatsappClient.connectionEventStream.listen((event) {
+  // Connection Events : authenticated,logout,connected.....
+});
+```
+
+To get whatsapp calls Events , subscribe to `whatsappClient.callEvents`
+
+```dart
+whatsappClient.callEvents.listen((event) {
+  // To reject call
+  whatsappClient.rejectCall(callId: event.id);
 });
 ```
 
