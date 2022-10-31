@@ -1,9 +1,11 @@
 // Thanks to https://github.com/wppconnect-team/wa-js
 
+// ignore_for_file: unused_local_variable
+
 import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
-import 'package:whatsapp_bot_flutter/src/wpp/wpp_js_content.dart';
+import 'package:http/http.dart' as http;
 
 class Wpp {
   Page page;
@@ -11,8 +13,15 @@ class Wpp {
 
   /// make sure to call [init] to Initialize Wpp
   Future init() async {
-    String content = wppJsContent.trim();
+    String latestBuildsUrl =
+        "https://github.com/wppconnect-team/wa-js/releases/latest/download/wppconnect-wa.js";
+    String nightlyBuildUrl =
+        "https://github.com/wppconnect-team/wa-js/releases/download/nightly/wppconnect-wa.js";
+
+    String content = await http.read(Uri.parse(latestBuildsUrl));
+
     await page.addScriptTag(content: content, type: "module");
+
     // wait for the Module to get Ready
     try {
       await page.waitForFunction('''() => {
@@ -30,9 +39,6 @@ class Wpp {
       }
     ''',
     );
-
-    // Add listeners if required
-    await WppEvents(page).init();
   }
 
   /// check if the given Phone number is a valid phone number

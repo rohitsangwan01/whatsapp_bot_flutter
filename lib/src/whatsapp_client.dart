@@ -8,7 +8,6 @@ import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
 import 'package:whatsapp_bot_flutter/src/model/whatsapp_exception.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_auth.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
-import 'package:zxing2/qrcode.dart';
 
 /// get [WhatsappClient] from `WhatsappBotFlutter.connect()`
 /// please do not try to create on your own
@@ -40,6 +39,10 @@ class WhatsappClient {
   Stream<Message> get messageEvents =>
       wppEvents.messageEventStreamController.stream;
 
+  ///[callEvents] will give update of all calls
+  Stream<CallEvent> get callEvents =>
+      wppEvents.callEventStreamController.stream;
+
   /// [disconnect] will close the browser instance and set values to null
   Future<void> disconnect({
     bool tryLogout = false,
@@ -68,13 +71,12 @@ class WhatsappClient {
   /// or if this method completed without any issue , they probably message sent successfully
   /// `progress` callback will give update for the message sending progress
   Future<void> sendTextMessage({
-    required String countryCode,
     required String phone,
     required String message,
   }) async {
-    Page page = await _validateMessage(countryCode, phone);
-    countryCode = countryCode.replaceAll("+", "");
-    String phoneNum = "$countryCode$phone@c.us";
+    await _validateConnection();
+    String phoneNum = _parsePhone(phone);
+
     var sendResult = await page.evaluate(
       '''() => WPP.chat.sendTextMessage("$phoneNum", "$message");''',
     );
@@ -82,16 +84,15 @@ class WhatsappClient {
   }
 
   Future<void> sendFileMessage({
-    required String countryCode,
     required String phone,
     required WhatsappFileType fileType,
     required List<int> fileBytes,
     String? caption,
     String? mimetype,
   }) async {
-    Page page = await _validateMessage(countryCode, phone);
-    countryCode = countryCode.replaceAll("+", "");
-    String phoneNum = "$countryCode$phone@c.us";
+    await _validateConnection();
+    String phoneNum = _parsePhone(phone);
+
     String base64Image = base64Encode(fileBytes);
     String mimeType = mimetype ?? _getMimeType(fileType);
     String imgData = "data:$mimeType;base64,$base64Image";
@@ -107,16 +108,15 @@ class WhatsappClient {
 
   Future<void> sendLocationMessage({
     required String phone,
-    required String countryCode,
     required String lat,
     required String long,
     String? name,
     String? address,
     String? url,
   }) async {
-    Page page = await _validateMessage(countryCode, phone);
-    countryCode = countryCode.replaceAll("+", "");
-    String phoneNum = "$countryCode$phone@c.us";
+    await _validateConnection();
+    String phoneNum = _parsePhone(phone);
+
     var sendResult = await page.evaluate(
         '''(phone,lat,long,address,name,url) => WPP.chat.sendLocationMessage(phone, {
               lat: lat,
@@ -131,14 +131,12 @@ class WhatsappClient {
   }
 
   /// [validateMessage] will verify if data passed is correct or not
-  Future<Page> _validateMessage(countryCode, String phone) async {
+  Future _validateConnection() async {
     if (!isConnected) {
       throw WhatsappException(
           message: "WhatsappClient no connected , please reconnect",
           exceptionType: WhatsappExceptionType.clientNotConnected);
     }
-
-    countryCode = countryCode.replaceAll("+", "");
 
     bool isAuthenticated = await wppAuth.isAuthenticated();
     if (!isAuthenticated) {
@@ -146,42 +144,16 @@ class WhatsappClient {
           message: "Please login first",
           exceptionType: WhatsappExceptionType.unAuthorized);
     }
-
-    // String phoneNum = "$countryCode$phone@c.us";
-    // bool isValid = await _wpp.isValidContact(page, phoneNum);
-    // if (!isValid) {
-    //   throw WhatsappException(
-    //       message: "Invalid contact number",
-    //       exceptionType: WhatsappExceptionType.inValidContact);
-    // }
-    return page;
   }
 
-  /// [convertStringToQrCode] will convert a Text into a qrCode , which we can print in Terminal
-  /// used in scanning code from terminal if we are using this in pure Dart project
-  /// make sure to run dart project in terminal , not in DebugConsole for proper Qr representation
-  String convertStringToQrCode(String text) {
-    var qrcode = Encoder.encode(text, ErrorCorrectionLevel.l);
-    var matrix = qrcode.matrix!;
-    var stringBuffer = StringBuffer();
-    for (var y = 0; y < matrix.height; y += 2) {
-      for (var x = 0; x < matrix.width; x++) {
-        final y1 = matrix.get(x, y) == 1;
-        final y2 = (y + 1 < matrix.height) ? matrix.get(x, y + 1) == 1 : false;
-
-        if (y1 && y2) {
-          stringBuffer.write('█');
-        } else if (y1) {
-          stringBuffer.write('▀');
-        } else if (y2) {
-          stringBuffer.write('▄');
-        } else {
-          stringBuffer.write(' ');
-        }
-      }
-      stringBuffer.writeln();
+  /// [_parsePhone] will try to convert phone number in required format
+  String _parsePhone(String phone) {
+    String suffix = "@c.us";
+    String phoneNum = phone.replaceAll("+", "");
+    if (!phone.contains(suffix)) {
+      phoneNum = "$phoneNum$suffix";
     }
-    return stringBuffer.toString();
+    return phoneNum;
   }
 
   /// [_getMimeType] returns default mimeType

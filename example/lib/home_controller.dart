@@ -10,30 +10,26 @@ import 'package:get/get.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 
 class HomeController extends GetxController {
-  RxString qrCode = "".obs;
   RxString error = "".obs;
   RxInt progress = 0.obs;
   RxBool connected = false.obs;
 
   var message = TextEditingController();
-  var countryCode = TextEditingController();
   var phoneNumber = TextEditingController();
   var formKey = GlobalKey<FormState>();
+
+  /// reactive variables from Getx
   Rx<ConnectionEvent?> connectionEvent = Rxn<ConnectionEvent>();
+  Rx<Message?> messageEvents = Rxn<Message>();
+  Rx<CallEvent?> callEvents = Rxn<CallEvent>();
 
   WhatsappClient? client;
-  WhatsappClient? client2;
-
-  StreamSubscription? messagesSubscription;
 
   @override
   void onInit() {
     WhatsappBotFlutter.enableLogs(true);
-
-    countryCode.text = "91";
     phoneNumber.text = "";
     message.text = "Testing Whatsapp Bot";
-
     super.onInit();
   }
 
@@ -45,8 +41,17 @@ class HomeController extends GetxController {
         //sessionDirectory: "../cache",
         chromiumDownloadDirectory: "../.local-chromium", // change this path
         headless: true,
+        onConnectionEvent: (ConnectionEvent event) {
+          connectionEvent(event);
+          if (event == ConnectionEvent.connected) {
+            _closeQrCodeDialog();
+          }
+        },
         onQrCode: (String qr, Uint8List? imageBytes) {
-          qrCode.value = qr;
+          if (imageBytes != null) {
+            _closeQrCodeDialog();
+            _showQrCodeDialog(imageBytes);
+          }
         },
       );
       connected.value = true;
@@ -56,15 +61,35 @@ class HomeController extends GetxController {
     }
   }
 
+  void _closeQrCodeDialog() {
+    if (Get.isDialogOpen ?? false) {
+      Get.back();
+    }
+  }
+
+  void _showQrCodeDialog(Uint8List bytes) {
+    Get.defaultDialog(
+      title: "Scan QrCode",
+      content: Image.memory(bytes),
+      onCancel: () {},
+    );
+  }
+
   void initStreams(WhatsappClient client) async {
     // listen to ConnectionEvent Stream
     client.connectionEventStream.listen((event) {
       connectionEvent.value = event;
     });
+    // listen to CallEvent Stream
+    client.callEvents.listen((event) {
+      callEvents.value = event;
+    });
     // listen to messageEventStream
     client.messageEvents.listen((Message message) {
       if (!(message.id?.fromMe ?? true)) {
         Get.log(message.body.toString());
+        messageEvents.value = message;
+        // client.sendTextMessage(phone: message.from, message: "Hey !");
       }
     });
   }
@@ -78,7 +103,6 @@ class HomeController extends GetxController {
     if (!formKey.currentState!.validate()) return;
     try {
       await client?.sendTextMessage(
-        countryCode: countryCode.text,
         phone: phoneNumber.text,
         message: message.text,
       );
@@ -121,7 +145,6 @@ class HomeController extends GetxController {
       File file = File(filePath);
       List<int> imageBytes = file.readAsBytesSync();
       await client?.sendFileMessage(
-        countryCode: countryCode.text,
         phone: phoneNumber.text,
         fileBytes: imageBytes,
         caption: message.text,
