@@ -1,6 +1,5 @@
 // ignore_for_file: unnecessary_overrides
 
-import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -21,11 +20,6 @@ class HomeController extends GetxController {
   var formKey = GlobalKey<FormState>();
   Rx<ConnectionEvent?> connectionEvent = Rxn<ConnectionEvent>();
 
-  WhatsappClient? client;
-  WhatsappClient? client2;
-
-  StreamSubscription? messagesSubscription;
-
   @override
   void onInit() {
     WhatsappBotFlutter.enableLogs(true);
@@ -34,50 +28,49 @@ class HomeController extends GetxController {
     phoneNumber.text = "";
     message.text = "Testing Whatsapp Bot";
 
-    super.onInit();
-  }
+    connectionEvent.bindStream(WhatsappBotFlutter.connectionEventStream);
 
-  void initConnection() async {
-    error.value = "";
-    connected.value = false;
-    try {
-      client = await WhatsappBotFlutter.connect(
-        //sessionDirectory: "../cache",
-        chromiumDownloadDirectory: "../.local-chromium", // change this path
-        headless: true,
-        onQrCode: (String qr, Uint8List? imageBytes) {
-          qrCode.value = qr;
-        },
-      );
-      connected.value = true;
-      if (client != null) initStreams(client!);
-    } catch (er) {
-      error.value = er.toString();
-    }
-  }
-
-  void initStreams(WhatsappClient client) async {
-    // listen to ConnectionEvent Stream
-    client.connectionEventStream.listen((event) {
-      connectionEvent.value = event;
-    });
-    // listen to messageEventStream
-    client.messageEvents.listen((Message message) {
+    WhatsappBotFlutter.messageEvents.listen((Message message) {
       if (!(message.id?.fromMe ?? true)) {
         Get.log(message.body.toString());
       }
     });
+    super.onInit();
+  }
+
+  void initConnection() {
+    connected.value = false;
+    error.value = "";
+    WhatsappBotFlutter.connect(
+      //sessionDirectory: "../cache",
+      chromiumDownloadDirectory: "../.local-chromium", // change this path
+      headless: true,
+      onQrCode: (String qr, Uint8List? imageBytes) {
+        qrCode.value = qr;
+      },
+      onError: (String er) {
+        error.value = er;
+        qrCode.value = "";
+        progress.value = 0;
+      },
+      onSuccess: () {
+        error.value = "";
+        connected.value = true;
+        qrCode.value = "";
+        progress.value = 0;
+      },
+    );
   }
 
   void disconnect() async {
-    await client?.disconnect(tryLogout: true);
+    await WhatsappBotFlutter.disconnect(tryLogout: true);
     connected.value = false;
   }
 
   void sendMessage() async {
     if (!formKey.currentState!.validate()) return;
     try {
-      await client?.sendTextMessage(
+      await WhatsappBotFlutter.sendTextMessage(
         countryCode: countryCode.text,
         phone: phoneNumber.text,
         message: message.text,
@@ -120,7 +113,7 @@ class HomeController extends GetxController {
       if (filePath == null) return;
       File file = File(filePath);
       List<int> imageBytes = file.readAsBytesSync();
-      await client?.sendFileMessage(
+      await WhatsappBotFlutter.sendFileMessage(
         countryCode: countryCode.text,
         phone: phoneNumber.text,
         fileBytes: imageBytes,

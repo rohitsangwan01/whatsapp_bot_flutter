@@ -6,22 +6,13 @@ import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_js_content.dart';
 
 class Wpp {
-  Page page;
-  Wpp(this.page);
-
+  
   /// make sure to call [init] to Initialize Wpp
-  Future init() async {
+ static Future init(Page page) async {
     String content = wppJsContent.trim();
     await page.addScriptTag(content: content, type: "module");
     // wait for the Module to get Ready
-    try {
-      await page.waitForFunction('''() => {
-        return typeof window.WPP !== 'undefined' && window.WPP.isReady;
-    } ''', timeout: const Duration(seconds: 10));
-    } catch (e) {
-      WhatsappLogger.log(e);
-    }
-
+    await isReady(page);
     await page.evaluate(
       '''() => {
         WPP.chat.defaultSendMessageOptions.createChat = true;
@@ -32,7 +23,20 @@ class Wpp {
     );
 
     // Add listeners if required
-    await WppEvents(page).init();
+    WppEvents.addEventListeners(page);
+  }
+
+  /// call [isReady] to check if `Wpp` js Loaded Successfully
+ static Future<bool> isReady(Page page) async {
+    try {
+      await page.waitForFunction('''() => {
+        return typeof window.WPP !== 'undefined' && window.WPP.isReady;
+    } ''', timeout: const Duration(seconds: 6));
+      return true;
+    } catch (e) {
+      WhatsappLogger.log(e);
+      return false;
+    }
   }
 
   /// check if the given Phone number is a valid phone number

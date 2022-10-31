@@ -5,36 +5,24 @@ import 'package:whatsapp_bot_flutter/src/model/connection_event.dart';
 import 'package:whatsapp_bot_flutter/src/model/message.dart';
 
 class WppEvents {
-  Page page;
-
   // To get update of all messages
-  final StreamController<Message> messageEventStreamController =
+  static final StreamController<Message> messageEventStreamController =
       StreamController.broadcast();
 
   // To get update of all Connections
-  final StreamController<ConnectionEvent> connectionEventStreamController =
-      StreamController.broadcast();
+  static final StreamController<ConnectionEvent>
+      connectionEventStreamController = StreamController.broadcast();
 
-  WppEvents(this.page);
-
-  Future<void> init() async {
-    WhatsappLogger.log("initializing wppEvent");
-    await _addEventListeners();
-  }
-
-  Future<void> _addEventListeners() async {
+  static Future<void> addEventListeners(Page page) async {
     try {
       // Add Dart side method
-      await _exposeListener();
+      await _exposeListener(page);
 
       // Add all listeners
       await page.evaluate(
         '''()=>{
             WPP.on('chat.new_message', (msg) => {
               window.onCustomEvent("messageEvent",msg);
-            });
-            WPP.on('call.incoming_call', (call) => {
-              window.onCustomEvent("callEvent",call);
             });
             WPP.on('conn.authenticated', () => {
               window.onCustomEvent("connectionEvent","authenticated");
@@ -51,6 +39,9 @@ class WppEvents {
             WPP.on('conn.main_ready', () => {
               window.onCustomEvent("connectionEvent","main_ready");
             });
+             WPP.on('conn.qrcode_idle', () => {
+              window.onCustomEvent("connectionEvent","qrcode_idle");
+            });
             WPP.on('conn.require_auth', () => {
               window.onCustomEvent("connectionEvent","require_auth");
             });
@@ -58,11 +49,10 @@ class WppEvents {
       );
     } catch (e) {
       // Ignore for now
-      WhatsappLogger.log(e);
     }
   }
 
-  void _onNewMessage(msg) {
+  static void _onNewMessage(msg) {
     try {
       Message message = Message.fromJson(msg);
       messageEventStreamController.add(message);
@@ -71,7 +61,7 @@ class WppEvents {
     }
   }
 
-  void _onConnectionEvent(event) {
+  static void _onConnectionEvent(event) {
     ConnectionEvent? connectionEvent;
     switch (event) {
       case "authenticated":
@@ -99,28 +89,20 @@ class WppEvents {
     connectionEventStreamController.add(connectionEvent);
   }
 
-  void _onCallEvent(call) {
-    WhatsappLogger.log(call);
-  }
-
   // make sure to call this method to expose this `onCustomEvent` function in JS
-  Future<void> _exposeListener() async {
+  static Future<void> _exposeListener(Page page) async {
     await page.exposeFunction("onCustomEvent", (type, data) {
-      WhatsappLogger.log("Type: $type : data : $data");
       switch (type.toString()) {
         case "messageEvent":
           _onNewMessage(data);
           break;
         case "connectionEvent":
           _onConnectionEvent(data);
-          break;
-        case "callEvent":
-          _onCallEvent(data);
       }
     });
   }
 
-  Future<void> removeEventListeners() async {
+  static Future<void> removeEventListeners(Page page) async {
     // TODO : remove all Event Listeners
   }
 }
