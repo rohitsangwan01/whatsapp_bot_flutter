@@ -136,4 +136,5 @@ This project is not affiliated, associated, authorized, endorsed by, or in any w
 ## Note
 
 Its just initial version , under heavy development
+
 I can't guarantee you will not be blocked by using this method, try to avoid primary whatsapp numbers. WhatsApp does not allow bots or unofficial clients on their platform, so this shouldn't be considered totally safe.
