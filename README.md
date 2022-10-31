@@ -51,7 +51,7 @@ checkout [this](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main
 then pass this `browserWsEndpoint` in connect method like this
 
 ```dart
-WhatsappClient? whatsappClient = await WhatsappBotFlutter.connect( browserWsEndpoint: "BROWSER_WS_ENDPOINT_URL",);
+await WhatsappBotFlutter.connect( browserWsEndpoint: "BROWSER_WS_ENDPOINT_URL",);
 ```
 
 We can use this on desktop platforms as well , to connect to a chrome server hosted somewhere else
