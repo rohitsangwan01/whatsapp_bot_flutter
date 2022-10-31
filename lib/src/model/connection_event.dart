@@ -1,9 +1,14 @@
 enum ConnectionEvent {
+  initializing,
+  downloadingChrome,
+  connectingChrome,
+  waitingForLogin,
+  waitingForQrScan,
+
   authenticated,
   logout,
   authCodeChange,
-  mainLoaded,
-  mainReady,
-  qrcodeIdle,
+  connecting,
+  connected,
   requireAuth
 }

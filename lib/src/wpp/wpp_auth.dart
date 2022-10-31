@@ -2,8 +2,11 @@ import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 
 class WppAuth {
-  ///Check is User is Authenticated
-  Future<bool> isAuthenticated(Page page) async {
+  Page page;
+  WppAuth(this.page);
+
+  /// check if User is Authenticated on current opened Page
+  Future<bool> isAuthenticated() async {
     try {
       var result = await page.evaluate('''() => WPP.conn.isAuthenticated();''');
       return result;
@@ -13,17 +16,8 @@ class WppAuth {
     }
   }
 
-  Future<String?> getAuthCode(Page page) async {
-    try {
-      var code = await page.evaluate('''() => WPP.conn.getAuthCode();''');
-      return code;
-    } catch (e) {
-      WhatsappLogger.log(e.toString());
-      rethrow;
-    }
-  }
-
-  Future<bool> isMainReady(Page page) async {
+  /// to check if ChatScreen is loaded on the page
+  Future<bool> isMainReady() async {
     try {
       var result = await page.evaluate('''() => WPP.conn.isMainReady();''');
       return result;
@@ -33,28 +27,8 @@ class WppAuth {
     }
   }
 
-  Future<bool> isMainLoaded(Page page) async {
-    try {
-      var result = await page.evaluate('''() =>WPP.conn.isMainLoaded();''');
-      return result;
-    } catch (e) {
-      WhatsappLogger.log(e.toString());
-      return false;
-    }
-  }
-
-  Future refreshQR(Page page) async {
-    try {
-      var result = await page.evaluate('''() => WPP.conn.refreshQR();''');
-      WhatsappLogger.log(result.toString());
-    } catch (e) {
-      WhatsappLogger.log(e.toString());
-      // ignore crash for now
-    }
-  }
-
   /// To Logout
-  Future logout(Page page) async {
+  Future logout() async {
     try {
       return await page.evaluate('''() => WPP.conn.logout();''');
     } catch (e) {

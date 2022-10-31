@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 
 // Make sure to run in terminal using
@@ -5,34 +7,40 @@ import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 void main(List<String> args) async {
   print("Trying Connecting ...");
 
-  // subscribe to connection events
-  WhatsappBotFlutter.connectionEventStream.listen((event) {
-    print("ConnectionEvent : $event");
-  });
-
-  // Connect with Whatsapp First
-  await WhatsappBotFlutter.connect(
-    onSuccess: () {
-      print("Connected Successfully");
+  WhatsappClient? client = await WhatsappBotFlutter.connect(
+    //sessionDirectory: "../cache",
+    chromiumDownloadDirectory: "../.local-chromium",
+    headless: true,
+    onConnectionEvent: (ConnectionEvent event) {
+      print(event.toString());
     },
-    onQrCode: (String qr) {
-      // print qrCode in Terminal
+    onQrCode: (String qr, Uint8List? imageBytes) {
       String qrText = WhatsappBotFlutter.convertStringToQrCode(qr);
       print(qrText);
     },
-    onError: (String er) {
-      print(er);
-    },
-    progress: (int prg) {
-      // we can print progress here
-      print("Progress : $prg");
-    },
   );
 
+  // subscribe to connection events
+  client?.connectionEventStream.listen((event) {
+    print("ConnectionEvent : $event");
+  });
+
   // subscribe to Message Events
-  WhatsappBotFlutter.messageEvents.listen((Message message) {
+  client?.messageEvents.listen((Message message) {
     if (!(message.id?.fromMe ?? true)) {
-      print(message.toJson().toString());
+      print(message.body.toString());
+      if (message.body == "hii") {
+        client.sendTextMessage(
+          phone: message.from,
+          message: "Hey !",
+          replyMessageId: message.id,
+        );
+      }
     }
+  });
+
+  // subscribe to call events
+  client?.callEvents.listen((CallEvent callEvent) {
+    print(callEvent.toJson());
   });
 }

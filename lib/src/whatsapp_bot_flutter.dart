@@ -1,97 +1,100 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:puppeteer/puppeteer.dart';
+import 'package:whatsapp_bot_flutter/src/helper/login_helper.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
-import 'package:whatsapp_bot_flutter/src/model/connection_event.dart';
-import 'package:whatsapp_bot_flutter/src/model/message.dart';
-import 'package:whatsapp_bot_flutter/src/model/whatsapp_file_type.dart';
-import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
-import 'puppeteer_service.dart';
+import 'package:whatsapp_bot_flutter/src/model/qr_code_image.dart';
+import 'package:whatsapp_bot_flutter/src/wpp/wpp.dart';
+import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 import 'package:zxing2/qrcode.dart';
 
+/// [WhatsappBotFlutter] for maintaining a single  `Browser` and `Page` instance
+/// with methods like connect and send
 class WhatsappBotFlutter {
-  static final _puppeteerService = PuppeteerService();
-
-  /// [connect] will call onSuccess callback , or QrCode on getting QrCode to Scan
+  /// [connect] method will open WhatsappWeb in headless webView and connect to the whatsapp
+  /// and pass QrCode in `onQrCode` callback
   /// Scan this code , and on successful connection we will get onSuccessCallback
-  /// To run on web , pass `browserWsEndpoint` parameter
-  static Future<void> connect({
+  /// We will get a WhatsappClient from here ,and we can use this client to work with whatsapp
+  /// can throw Errors
+  static Future<WhatsappClient?> connect({
     String? sessionDirectory,
-    bool? headless,
+    String? chromiumDownloadDirectory,
+    bool? headless = true,
     String? browserWsEndpoint,
-    Function(String)? onQrCode,
-    Function(String)? onError,
-    Function()? onSuccess,
-    Function(int)? progress,
-    Duration? connectionTimeout,
+    int qrCodeWaitDurationSeconds = 60,
+    Function(String qrCodeUrl, Uint8List? qrCodeImage)? onQrCode,
+    Function(ConnectionEvent)? onConnectionEvent,
+    Duration? connectionTimeout = const Duration(seconds: 20),
   }) async {
-    // dispose any pending tasks first
-    disconnect();
-    // Try to connect and login again
-    await _puppeteerService.connect(
-      sessionDirectory: sessionDirectory,
-      browserWsEndpoint: browserWsEndpoint,
-      headless: headless,
-      onError: onError,
-      onQrCode: onQrCode,
-      onSuccess: onSuccess,
-      connectionTimeout: connectionTimeout,
-      progress: progress,
-    );
+    Browser? browser;
+    Page? page;
+    try {
+      onConnectionEvent?.call(ConnectionEvent.initializing);
+
+      if (browserWsEndpoint != null) {
+        browser = await puppeteer.connect(
+          browserWsEndpoint: browserWsEndpoint,
+        );
+      } else {
+        onConnectionEvent?.call(ConnectionEvent.downloadingChrome);
+
+        RevisionInfo revisionInfo = await downloadChrome(
+          cachePath: chromiumDownloadDirectory ?? "./.local-chromium",
+        );
+        String executablePath = revisionInfo.executablePath;
+
+        onConnectionEvent?.call(ConnectionEvent.connectingChrome);
+        browser = await puppeteer.launch(
+          headless: headless,
+          executablePath: executablePath,
+          noSandboxFlag: true,
+          args: ['--start-maximized', '--disable-setuid-sandbox'],
+          userDataDir: sessionDirectory,
+        );
+      }
+
+      page = await browser.newPage();
+
+      await page.setUserAgent(WhatsAppMetadata.userAgent);
+      await page.goto(WhatsAppMetadata.whatsAppURL);
+
+      await Wpp(page).init();
+
+      onConnectionEvent?.call(ConnectionEvent.waitingForLogin);
+
+      await waitForLogin(
+        page,
+        onConnectionEvent: onConnectionEvent,
+        (QrCodeImage qrCodeImage, int attempt) {
+          if (qrCodeImage.base64Image != null && qrCodeImage.urlCode != null) {
+            Uint8List? imageBytes;
+            try {
+              String? base64Image = qrCodeImage.base64Image
+                  ?.replaceFirst("data:image/png;base64,", "");
+              imageBytes = base64Decode(base64Image!);
+            } catch (e) {
+              WhatsappLogger.log(e);
+            }
+            onQrCode?.call(qrCodeImage.urlCode!, imageBytes);
+          }
+        },
+        waitDurationSeconds: qrCodeWaitDurationSeconds,
+      );
+
+      return WhatsappClient(page: page, browser: browser);
+    } catch (e) {
+      WhatsappLogger.log(e.toString());
+      browser?.close();
+      rethrow;
+    }
   }
 
-  /// call [disconnect] to dispose browse and close all resources
-  static disconnect() {
-    _puppeteerService.dispose();
-  }
-
-  /// [sendMessage] to send messages to the given phone number
-  /// listen for progress updates by `progress` callback
-  static Future<void> sendTextMessage({
-    required String phone,
-    required String countryCode,
-    required String message,
-  }) async {
-    await _puppeteerService.sendTextMessage(
-      countryCode: countryCode,
-      phone: phone,
-      message: message,
-    );
-  }
-
-  static Future<void> sendFileMessage({
-    required String phone,
-    required String countryCode,
-    required List<int> fileBytes,
-    required WhatsappFileType fileType,
-    String? caption,
-    String? mimetype,
-  }) async {
-    await _puppeteerService.sendFileMessage(
-      countryCode: countryCode,
-      phone: phone,
-      caption: caption,
-      fileBytes: fileBytes,
-      fileType: fileType,
-      mimetype: mimetype,
-    );
-  }
-
-  static Future<void> sendLocationMessage({
-    required String phone,
-    required String countryCode,
-    required String lat,
-    required String long,
-    String? name,
-    String? address,
-    String? url,
-  }) async {
-    await _puppeteerService.sendLocationMessage(
-      countryCode: countryCode,
-      phone: phone,
-      lat: lat,
-      long: long,
-      address: address,
-      name: name,
-      url: url,
-    );
+  /// To print logs from this library
+  /// set `enableLogs(true)`
+  /// by default its false
+  static enableLogs(bool enable) {
+    WhatsappLogger.enableLogger = enable;
   }
 
   /// [convertStringToQrCode] will convert a Text into a qrCode , which we can print in Terminal
@@ -120,18 +123,4 @@ class WhatsappBotFlutter {
     }
     return stringBuffer.toString();
   }
-
-  /// To print logs from this library
-  /// set `enableLogs(true)`
-  /// by default its false
-  static enableLogs(bool enable) {
-    WhatsappLogger.enableLogger = enable;
-  }
-
-  /// [connectionEventStream] will give update of Connection Events
-  static Stream<ConnectionEvent> connectionEventStream =
-      WppEvents.connectionEventStreamController.stream;
-
-  static Stream<Message> messageEvents =
-      WppEvents.messageEventStreamController.stream;
 }

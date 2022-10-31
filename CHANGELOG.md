@@ -1,7 +1,12 @@
 ## 0.0.5
 
+- breaking changes
+- added multi Client support
+- added call events
+- added option to reject call
+- added option to reply to a message
 - added web support
-- minor bug fixes
+- and many other minor features
 
 ## 0.0.4
 

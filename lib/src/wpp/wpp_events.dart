@@ -1,28 +1,45 @@
 import 'dart:async';
 import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
+import 'package:whatsapp_bot_flutter/src/model/call_event.dart';
 import 'package:whatsapp_bot_flutter/src/model/connection_event.dart';
 import 'package:whatsapp_bot_flutter/src/model/message.dart';
 
 class WppEvents {
+  Page page;
+  WppEvents(this.page);
+
   // To get update of all messages
-  static final StreamController<Message> messageEventStreamController =
+  final StreamController<Message> messageEventStreamController =
+      StreamController.broadcast();
+
+  // To get update of all Calls
+  final StreamController<CallEvent> callEventStreamController =
       StreamController.broadcast();
 
   // To get update of all Connections
-  static final StreamController<ConnectionEvent>
-      connectionEventStreamController = StreamController.broadcast();
+  final StreamController<ConnectionEvent> connectionEventStreamController =
+      StreamController.broadcast();
 
-  static Future<void> addEventListeners(Page page) async {
+  /// call init() once on a page
+  /// to add eventListeners
+  Future<void> init() async {
+    await _addEventListeners();
+  }
+
+  Future<void> _addEventListeners() async {
     try {
       // Add Dart side method
-      await _exposeListener(page);
+      await _exposeListener();
 
       // Add all listeners
       await page.evaluate(
         '''()=>{
             WPP.on('chat.new_message', (msg) => {
               window.onCustomEvent("messageEvent",msg);
+            });
+            WPP.on('call.incoming_call', (call) => {
+              window.onCustomEvent("callEvent",call);
             });
             WPP.on('conn.authenticated', () => {
               window.onCustomEvent("connectionEvent","authenticated");
@@ -39,9 +56,6 @@ class WppEvents {
             WPP.on('conn.main_ready', () => {
               window.onCustomEvent("connectionEvent","main_ready");
             });
-             WPP.on('conn.qrcode_idle', () => {
-              window.onCustomEvent("connectionEvent","qrcode_idle");
-            });
             WPP.on('conn.require_auth', () => {
               window.onCustomEvent("connectionEvent","require_auth");
             });
@@ -49,10 +63,11 @@ class WppEvents {
       );
     } catch (e) {
       // Ignore for now
+      WhatsappLogger.log(e);
     }
   }
 
-  static void _onNewMessage(msg) {
+  void _onNewMessage(msg) {
     try {
       Message message = Message.fromJson(msg);
       messageEventStreamController.add(message);
@@ -61,7 +76,16 @@ class WppEvents {
     }
   }
 
-  static void _onConnectionEvent(event) {
+  void _onCallEvent(call) {
+    try {
+      CallEvent callEvent = CallEvent.fromJson(call);
+      callEventStreamController.add(callEvent);
+    } catch (e) {
+      WhatsappLogger.log("onCallEvent : $e");
+    }
+  }
+
+  void _onConnectionEvent(event) {
     ConnectionEvent? connectionEvent;
     switch (event) {
       case "authenticated":
@@ -74,13 +98,10 @@ class WppEvents {
         connectionEvent = ConnectionEvent.authCodeChange;
         break;
       case "main_loaded":
-        connectionEvent = ConnectionEvent.mainLoaded;
+        connectionEvent = ConnectionEvent.connecting;
         break;
       case "main_ready":
-        connectionEvent = ConnectionEvent.mainReady;
-        break;
-      case "qrcode_idle":
-        connectionEvent = ConnectionEvent.qrcodeIdle;
+        connectionEvent = ConnectionEvent.connected;
         break;
       case "require_auth":
         connectionEvent = ConnectionEvent.requireAuth;
@@ -92,8 +113,7 @@ class WppEvents {
     connectionEventStreamController.add(connectionEvent);
   }
 
-  // make sure to call this method to expose this `onCustomEvent` function in JS
-  static Future<void> _exposeListener(Page page) async {
+  Future<void> _exposeListener() async {
     await page.exposeFunction("onCustomEvent", (type, data) {
       switch (type.toString()) {
         case "messageEvent":
@@ -101,11 +121,14 @@ class WppEvents {
           break;
         case "connectionEvent":
           _onConnectionEvent(data);
+          break;
+        case "callEvent":
+          _onCallEvent(data);
       }
     });
   }
 
-  static Future<void> removeEventListeners(Page page) async {
+  Future<void> _removeEventListeners() async {
     // TODO : remove all Event Listeners
   }
 }

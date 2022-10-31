@@ -9,7 +9,6 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   get: ^4.6.5
-  pretty_qr_code: ^2.0.2
   flex_color_scheme: ^6.0.1
   file_picker: ^5.2.2
   whatsapp_bot_flutter:
