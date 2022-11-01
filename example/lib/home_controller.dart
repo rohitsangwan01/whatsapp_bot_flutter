@@ -119,27 +119,6 @@ class HomeController extends GetxController {
     }
   }
 
-  void archiveChat(bool archive) async {
-    if (!formKey.currentState!.validate()) return;
-    try {
-      await client?.chat.archive(phone: phoneNumber.text, archive: archive);
-    } catch (e) {
-      Get.log("Error : $e");
-    }
-  }
-
-  void test1() async {
-    if (!formKey.currentState!.validate()) return;
-    try {
-      var result = await client?.profile.isBusiness();
-      Get.log(result.toString());
-    } catch (e) {
-      Get.log("Error : $e");
-    }
-  }
-
-  void test2() async {}
-
   Future<void> sendFileMessage(
     String? filePath,
     WhatsappFileType fileType,
