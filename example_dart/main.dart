@@ -30,7 +30,7 @@ void main(List<String> args) async {
     if (!(message.id?.fromMe ?? true)) {
       print(message.body.toString());
       if (message.body == "hii") {
-        client.sendTextMessage(
+        client.chat.sendTextMessage(
           phone: message.from,
           message: "Hey !",
           replyMessageId: message.id,

@@ -39,18 +39,4 @@ class Wpp {
     ''',
     );
   }
-
-  /// check if the given Phone number is a valid phone number
-  Future<bool> isValidContact(Page page, String phoneNumber) async {
-    try {
-      await page.evaluate(
-        '''(phone) => WPP.contact.queryExists(phone);''',
-        args: [phoneNumber],
-      );
-      return true;
-    } catch (e) {
-      WhatsappLogger.log(e);
-      return false;
-    }
-  }
 }

@@ -1,3 +1,33 @@
+## 0.0.6
+
+- breakingChange: we have to use WhatsappClient.chat for accessing sendTextMessage/sendFilesMessages
+- Added WhatsappClient.chat With these Features
+  - Send Text/File/Location messages
+  - Added archive/unarchive chat
+  - canMute
+  - mute /unmute
+  - clearChat
+  - deleteChat
+  - getLastSeen
+  - getChats
+  - markAsSeen
+  - markAsUnread
+  - pin/unpin
+  - deleteMessages
+  - downloadMedia
+  - getMessages
+  - createPollInGroups
+  - sendContactCard
+- Added WhatsappClient.contact with these Features
+  - getProfilePicture
+  - getStatus
+  - getContacts
+- Added WhatsappClient.profile with these Features
+  - getMyStatus
+  - setMyStatus
+  - isBusiness
+  - setMyProfilePicture
+
 ## 0.0.5
 
 - breaking changes

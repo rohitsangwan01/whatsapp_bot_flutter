@@ -87,12 +87,12 @@ class HomeController extends GetxController {
     // listen to messageEventStream
     client.messageEvents.listen((Message message) {
       if (!(message.id?.fromMe ?? true)) {
-        Get.log(message.body.toString());
+        Get.log(message.toJson().toString());
         messageEvents.value = message;
 
         // auto reply if message == test
         if (message.body == "test") {
-          client.sendTextMessage(
+          client.chat.sendTextMessage(
             phone: message.from,
             message: "Hey !",
             replyMessageId: message.id,
@@ -110,7 +110,7 @@ class HomeController extends GetxController {
   void sendMessage() async {
     if (!formKey.currentState!.validate()) return;
     try {
-      await client?.sendTextMessage(
+      await client?.chat.sendTextMessage(
         phone: phoneNumber.text,
         message: message.text,
       );
@@ -118,6 +118,27 @@ class HomeController extends GetxController {
       Get.log("Error : $e");
     }
   }
+
+  void archiveChat(bool archive) async {
+    if (!formKey.currentState!.validate()) return;
+    try {
+      await client?.chat.archive(phone: phoneNumber.text, archive: archive);
+    } catch (e) {
+      Get.log("Error : $e");
+    }
+  }
+
+  void test1() async {
+    if (!formKey.currentState!.validate()) return;
+    try {
+      var result = await client?.profile.isBusiness();
+      Get.log(result.toString());
+    } catch (e) {
+      Get.log("Error : $e");
+    }
+  }
+
+  void test2() async {}
 
   Future<void> sendFileMessage(
     String? filePath,
@@ -129,7 +150,7 @@ class HomeController extends GetxController {
       File file = File(filePath);
       List<int> imageBytes = file.readAsBytesSync();
 
-      await client?.sendFileMessage(
+      await client?.chat.sendFileMessage(
         phone: phoneNumber.text,
         fileBytes: imageBytes,
         caption: message.text,

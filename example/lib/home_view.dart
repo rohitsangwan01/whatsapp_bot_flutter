@@ -113,6 +113,30 @@ class HomeView extends GetView<HomeController> {
                           child: const Text("Send Document")),
                     ],
                   ),
+
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Divider(),
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () => controller.archiveChat(true),
+                          child: const Text("Archive Chat")),
+                      ElevatedButton(
+                          onPressed: () => controller.archiveChat(false),
+                          child: const Text("Unarchive Chat")),
+                      ElevatedButton(
+                          onPressed: () => controller.test1(),
+                          child: const Text("Test 1")),
+                      ElevatedButton(
+                          onPressed: () => controller.test2(),
+                          child: const Text("Test 2")),
+                    ],
+                  ),
+
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Divider(),

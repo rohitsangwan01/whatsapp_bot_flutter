@@ -127,8 +127,4 @@ class WppEvents {
       }
     });
   }
-
-  Future<void> _removeEventListeners() async {
-    // TODO : remove all Event Listeners
-  }
 }

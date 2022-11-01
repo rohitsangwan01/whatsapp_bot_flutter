@@ -1,5 +1,11 @@
 import 'dart:developer' as developer;
 
+import 'package:puppeteer/puppeteer.dart';
+import 'package:whatsapp_bot_flutter/src/model/whatsapp_exception.dart';
+import 'package:whatsapp_bot_flutter/src/wpp/wpp_auth.dart';
+
+import '../../whatsapp_bot_flutter.dart';
+
 class WhatsappLogger {
   static bool enableLogger = false;
 
@@ -13,4 +19,47 @@ class WhatsAppMetadata {
   static String whatsAppURL = "https://web.whatsapp.com/";
   static String userAgent =
       'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.39 Safari/537.36';
+}
+
+/// [validateMessage] will verify if data passed is correct or not
+Future validateConnection(Page page) async {
+  bool isConnected = page.browser.isConnected && !page.isClosed;
+
+  if (!isConnected) {
+    throw WhatsappException(
+        message: "WhatsappClient no connected , please reconnect",
+        exceptionType: WhatsappExceptionType.clientNotConnected);
+  }
+
+  bool isAuthenticated = await WppAuth(page).isAuthenticated();
+  if (!isAuthenticated) {
+    throw WhatsappException(
+        message: "Please login first",
+        exceptionType: WhatsappExceptionType.unAuthorized);
+  }
+}
+
+/// [_parsePhone] will try to convert phone number in required format
+String parsePhone(String phone) {
+  String chatSuffix = "@c.us";
+  //String groupSuffix = "@g.us";
+  String phoneNum = phone.replaceAll("+", "");
+  if (!phone.contains(".us")) {
+    phoneNum = "$phoneNum$chatSuffix";
+  }
+  return phoneNum;
+}
+
+/// [getMimeType] returns default mimeType
+String getMimeType(WhatsappFileType fileType) {
+  switch (fileType) {
+    case WhatsappFileType.document:
+      return "application/msword";
+    case WhatsappFileType.image:
+      return "image/jpeg";
+    case WhatsappFileType.audio:
+      return "audio/mp3";
+    // case WhatsappFileType.video:
+    //   return "video/mp4";
+  }
 }

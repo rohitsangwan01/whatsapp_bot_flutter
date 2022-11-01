@@ -78,7 +78,7 @@ Use `sendTextMessage` to send a text message
 phone parameter can be of this format : `countryCode+phoneNumber` , eg : `91xxxxxxxxxx` , or we can get phone from messageEvents in this format : `countryCode+phone+"@c.us"`
 
 ```dart
-await whatsappClient.sendTextMessage(
+await whatsappClient.chat.sendTextMessage(
     phone: "------",
     message: "Test Message",
 );
@@ -87,7 +87,7 @@ await whatsappClient.sendTextMessage(
 Use `sendFileMessage` to send a File
 
 ```dart
-await whatsappClient.sendFileMessage(
+await whatsappClient.chat.sendFileMessage(
     phone: "------",
     fileBytes: fileBytes, // Pass file bytes
     caption: "Test Message", // Optional
@@ -100,7 +100,7 @@ To get new Messages , subscribe to `whatsappClient.messageEvents`
 ```dart
 whatsappClient.messageEvents.listen((Message message) {
     // replyMessageId  is optional , add this to send a reply message
-    client.sendTextMessage(
+    client.chat.sendTextMessage(
       phone: message.from,
       message: "Hey !",
       replyMessageId: message.id,
@@ -132,7 +132,6 @@ Thanks to [wa-js](https://github.com/wppconnect-team/wa-js) for exporting functi
 ## Disclaimer
 
 This project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp or any of its subsidiaries or its affiliates. The official WhatsApp website can be found at https://whatsapp.com. "WhatsApp" as well as related names, marks, emblems and images are registered trademarks of their respective owners.
-
 
 ## Note
 
