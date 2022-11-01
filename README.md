@@ -14,45 +14,6 @@ First launch will take some time
 
 it will download chromium files locally, using [puppeteer](https://pub.dev/packages/puppeteer) for whatsapp web and scarping data
 
-## Features
-
-Supported Whatsapp features are :
-
-- Create multiple whatsapp clients
-- Login with QR
-- Auto refresh QrCode
-- Logout
-- Keep session
-- Listen to New Messages
-- Listen to Connection Events
-- Listen to calls
-- Reject calls
-- Send text message
-- Send image, audio & document
-- Send location message
-- Send poll in groups
-- Send contact card
-- Reply to a message
-- Archive/Unarchive chats
-- Mute/Unmute chat
-- Clear chat
-- Delete chat
-- Get lastSeen
-- Get chats
-- Mark messages as seen
-- Mark message as unread
-- Pin/Unpin chat
-- Delete messages
-- Download media
-- Get messages
-- Get profile picture
-- Get status
-- Get contacts
-- Get status of loggedIn user
-- Set status
-- check if logged in user have business account
-- Set profile picture of logged in user
-
 ### Macos setup
 
 Enable outgoing and incoming connections for macos
@@ -153,6 +114,46 @@ whatsappClient.callEvents.listen((event) {
   whatsappClient.rejectCall(callId: event.id);
 });
 ```
+
+## Features
+
+Supported Whatsapp features :
+
+- Create multiple whatsapp clients
+- Login with QR
+- Auto refresh QrCode
+- Logout
+- Keep session
+- Listen to New Messages
+- Listen to Connection Events
+- Listen to calls
+- Reject calls
+- Send text message
+- Send image, audio & document
+- Send location message
+- Send poll in groups
+- Send contact card
+- Reply to a message
+- Archive/Unarchive chats
+- Mute/Unmute chat
+- Clear chat
+- Delete chat
+- Get lastSeen
+- Get chats
+- Mark messages as seen
+- Mark message as unread
+- Pin/Unpin chat
+- Delete messages
+- Download media
+- Get messages
+- Get profile picture
+- Get status
+- Get contacts
+- Get status of loggedIn user
+- Set status
+- check if logged in user have business account
+- Set profile picture of logged in user
+
 
 ## Resources
 
