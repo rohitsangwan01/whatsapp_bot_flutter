@@ -100,7 +100,7 @@ To get new Messages , subscribe to `whatsappClient.messageEvents`
 ```dart
 whatsappClient.messageEvents.listen((Message message) {
     // replyMessageId  is optional , add this to send a reply message
-    client.chat.sendTextMessage(
+    whatsappClient.chat.sendTextMessage(
       phone: message.from,
       message: "Hey !",
       replyMessageId: message.id,
