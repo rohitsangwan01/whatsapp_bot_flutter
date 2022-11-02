@@ -37,6 +37,7 @@ await WhatsappBotFlutter.connect( browserWsEndpoint: "BROWSER_WS_ENDPOINT_URL",)
 ```
 
 We can use this on desktop platforms as well , to connect to a chrome server hosted somewhere else
+
 If we have to access this webSocket url locally on Mobile or other platforms , we can use [ngrok](https://ngrok.com/) to expose our local Websocket url to internet
 
 ## Usage
