@@ -24,9 +24,9 @@ and also disable sandbox mode comment this out in macos/Runner/\*.entitlements:
 <true/>
 ```
 
-### Web setup
+### Android/IOS/Web setup
 
-To run on web , we have to run a chrome server somewhere using [puppeteer](https://pub.dev/packages/puppeteer), and get `browserWsEndpoint` from there and pass into the connect method
+To run on mobile and web platform, we have to run a chrome server somewhere using [puppeteer](https://pub.dev/packages/puppeteer), and get `browserWsEndpoint` from there and pass into the connect method
 
 checkout [this](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/example/puppeteer_server/main.dart) example of running a chrome server using puppeteer
 
@@ -37,6 +37,8 @@ await WhatsappBotFlutter.connect( browserWsEndpoint: "BROWSER_WS_ENDPOINT_URL",)
 ```
 
 We can use this on desktop platforms as well , to connect to a chrome server hosted somewhere else
+
+If we have to access this webSocket url locally on Mobile or other platforms , we can use [ngrok](https://ngrok.com/) to expose our local Websocket url to internet
 
 ## Usage
 
@@ -153,7 +155,6 @@ Supported Whatsapp features :
 - Set status
 - check if logged in user have business account
 - Set profile picture of logged in user
-
 
 ## Resources
 
