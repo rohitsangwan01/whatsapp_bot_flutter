@@ -1,3 +1,8 @@
+## 0.0.7
+
+- Added support for Android and Ios
+- update readme
+
 ## 0.0.6
 
 - breakingChange: we have to use WhatsappClient.chat for accessing sendTextMessage/sendFilesMessages

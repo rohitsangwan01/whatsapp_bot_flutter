@@ -15,12 +15,17 @@ class HomeController extends GetxController {
 
   var message = TextEditingController();
   var phoneNumber = TextEditingController();
+  var browserClientWebSocketUrl = TextEditingController();
+
   var formKey = GlobalKey<FormState>();
 
   /// reactive variables from Getx
   Rx<ConnectionEvent?> connectionEvent = Rxn<ConnectionEvent>();
   Rx<Message?> messageEvents = Rxn<Message>();
   Rx<CallEvent?> callEvents = Rxn<CallEvent>();
+
+  // Native chrome client supported only on desktop platforms
+  bool supportNativeChromeClient = !GetPlatform.isWeb && GetPlatform.isDesktop;
 
   WhatsappClient? client;
 
@@ -29,6 +34,9 @@ class HomeController extends GetxController {
     WhatsappBotFlutter.enableLogs(true);
     phoneNumber.text = "";
     message.text = "Testing Whatsapp Bot";
+
+    /// Enter WebSocket url here or manually using text field in Mobile/Web Platforms
+    browserClientWebSocketUrl.text = "";
     super.onInit();
   }
 
@@ -38,8 +46,11 @@ class HomeController extends GetxController {
     try {
       client = await WhatsappBotFlutter.connect(
         //sessionDirectory: "../cache",
-        chromiumDownloadDirectory: "../.local-chromium", // change this path
-        headless: true,
+        browserWsEndpoint: browserClientWebSocketUrl.text.isEmpty
+            ? null
+            : browserClientWebSocketUrl.text,
+        chromiumDownloadDirectory: "../.local-chromium",
+        headless: false,
         onConnectionEvent: (ConnectionEvent event) {
           connectionEvent(event);
           if (event == ConnectionEvent.connected) {
@@ -83,6 +94,10 @@ class HomeController extends GetxController {
     client.callEvents.listen((event) {
       callEvents.value = event;
       client.rejectCall(callId: event.id);
+      client.chat.sendTextMessage(
+        phone: event.sender,
+        message: "Hey, Call rejected by whatsapp bot",
+      );
     });
     // listen to messageEventStream
     client.messageEvents.listen((Message message) {
