@@ -45,12 +45,12 @@ class HomeController extends GetxController {
     connected.value = false;
     try {
       client = await WhatsappBotFlutter.connect(
-        //sessionDirectory: "../cache",
+        // sessionDirectory: "../cache",
         browserWsEndpoint: browserClientWebSocketUrl.text.isEmpty
             ? null
             : browserClientWebSocketUrl.text,
         chromiumDownloadDirectory: "../.local-chromium",
-        headless: false,
+        headless: true,
         onConnectionEvent: (ConnectionEvent event) {
           connectionEvent(event);
           if (event == ConnectionEvent.connected) {
