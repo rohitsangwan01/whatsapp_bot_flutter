@@ -26,19 +26,21 @@ class WpClient {
     //  await validateConnection(this);
 
     dynamic result;
+
     // For Puppeteer
     if (page != null) {
       result = await page?.evaluate(method);
     }
     // For mobile webView
     else if (webViewController != null) {
-      result = await webViewController?.evaluateJavascript(
-        source: method,
-      );
+      // TODO : fix : always returns empty result
+      result = await webViewController?.evaluateJavascript(source: method);
     } else {
       throw "Invalid WpClient";
     }
-    WhatsappLogger.log("${methodName}_Result : $result");
+    if (methodName.isNotEmpty) {
+      WhatsappLogger.log("${methodName}_Result : $result");
+    }
     return result;
   }
 }

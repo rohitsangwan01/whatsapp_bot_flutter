@@ -103,7 +103,7 @@ Future<QrCodeImage?> _getQrCodeImage(WpClient wpClient) async {
     String? base64Image = result?['base64Image'];
     return QrCodeImage(base64Image: base64Image, urlCode: urlCode);
   } catch (e) {
-    WhatsappLogger.log("QrCodeFetchingError: $e");
+    //WhatsappLogger.log("QrCodeFetchingError: $e");
     return null;
   }
 }

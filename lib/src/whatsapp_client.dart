@@ -91,7 +91,7 @@ class WhatsappClient {
   /// [rejectCall] will reject incoming call
   Future rejectCall({String? callId}) async {
     return await wpClient.evaluateJs(
-      '''WPP.call.rejectCall("$callId");''',
+      '''WPP.call.rejectCall(${callId.jsParse});''',
       methodName: "RejectCallResult",
     );
   }

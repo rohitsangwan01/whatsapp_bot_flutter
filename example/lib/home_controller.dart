@@ -10,7 +10,6 @@ import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 
 class HomeController extends GetxController {
   RxString error = "".obs;
-  RxInt progress = 0.obs;
   RxBool connected = false.obs;
 
   var message = TextEditingController();
@@ -25,7 +24,7 @@ class HomeController extends GetxController {
   Rx<CallEvent?> callEvents = Rxn<CallEvent>();
 
   // Native chrome client supported only on desktop platforms
-  bool supportNativeChromeClient = !GetPlatform.isWeb && GetPlatform.isDesktop;
+  bool supportNativeChromeClient = !GetPlatform.isWeb;
 
   WhatsappClient? client;
 
@@ -51,7 +50,8 @@ class HomeController extends GetxController {
             : browserClientWebSocketUrl.text,
         chromiumDownloadDirectory: "../.local-chromium",
         headless: true,
-        isRunningInMobile: !GetPlatform.isWeb && GetPlatform.isMobile,
+        isRunningOnMobile: !GetPlatform.isWeb && GetPlatform.isMobile,
+        keepMobileSession: true,
         onConnectionEvent: (ConnectionEvent event) {
           connectionEvent(event);
           if (event == ConnectionEvent.connected) {

@@ -18,6 +18,8 @@ class WhatsappLogger {
 
 class WhatsAppMetadata {
   static String whatsAppURL = "https://web.whatsapp.com/";
+  // "web.whatsapp.com/🌎/en/";
+  static String whatsAppURLForceDesktop = "web.whatsapp.com//";
   static String userAgent =
       'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.39 Safari/537.36';
 }
@@ -40,6 +42,25 @@ Future validateConnection(WpClient wpClient) async {
     throw WhatsappException(
         message: "Please login first",
         exceptionType: WhatsappExceptionType.unAuthorized);
+  }
+}
+
+/// Use [JsParse] extension on data we pass in Javascript string
+extension JsParser on dynamic {
+  dynamic get jsParse {
+    if (this == null) {
+      return null;
+    } else if (runtimeType == String) {
+      return '''"$this"''';
+    } else {
+      // return same for now
+      return this;
+    }
+  }
+
+  String get phoneParse {
+    // ignore: unnecessary_string_interpolations
+    return parsePhone(this).jsParse;
   }
 }
 

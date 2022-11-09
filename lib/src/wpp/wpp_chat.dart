@@ -16,17 +16,11 @@ class WppChat {
     MessageId? replyMessageId,
   }) async {
     String? replyText = replyMessageId?.serialized;
-    if (replyText != null) {
-      return await wpClient.evaluateJs(
-          '''WPP.chat.sendTextMessage('${parsePhone(phone)}', '$message', {
-            quotedMsg: "$replyText"
+    return await wpClient.evaluateJs(
+        '''WPP.chat.sendTextMessage(${phone.phoneParse}, ${message.jsParse}, {
+            quotedMsg: ${replyText.jsParse}
           });''',
-          methodName: "sendTextMessage");
-    } else {
-      return await wpClient.evaluateJs(
-          '''WPP.chat.sendTextMessage('${parsePhone(phone)}', '$message');''',
-          methodName: "sendTextMessage");
-    }
+        methodName: "sendTextMessage");
   }
 
   ///send file messages using [sendFileMessage]
@@ -41,7 +35,6 @@ class WppChat {
     String? mimetype,
     MessageId? replyMessageId,
   }) async {
-    String phoneNum = parsePhone(phone);
     String base64Image = base64Encode(fileBytes);
     String mimeType = mimetype ?? getMimeType(fileType);
     String fileData = "data:$mimeType;base64,$base64Image";
@@ -50,26 +43,12 @@ class WppChat {
       fileTypeName = mimeType.split("/").first;
     }
     String? replyTextId = replyMessageId?.serialized;
-    String source = '''WPP.chat.sendFileMessage("$phoneNum","$fileData",{
-                          type: "$fileTypeName",
-                      });''';
-    if (caption != null && replyTextId != null) {
-      source = '''WPP.chat.sendFileMessage("$phoneNum","$fileData",{
-                    type: "$fileTypeName",
-                    caption: "$caption",
-                    quotedMsg: "$replyTextId"
+    String source =
+        '''WPP.chat.sendFileMessage(${phone.phoneParse},${fileData.jsParse},{
+                    type: ${fileTypeName.jsParse},
+                    caption: ${caption.jsParse},
+                    quotedMsg: ${replyTextId.jsParse}
                   });''';
-    } else if (caption != null) {
-      source = '''WPP.chat.sendFileMessage("$phoneNum","$fileData",{
-                    type: "$fileTypeName",
-                    caption: "$caption",
-                  });''';
-    } else if (replyTextId != null) {
-      source = '''WPP.chat.sendFileMessage("$phoneNum","$fileData",{
-                    type: "$fileTypeName",
-                    quotedMsg: "$replyTextId"
-                  });''';
-    }
     var sendResult = await wpClient.evaluateJs(source);
     WhatsappLogger.log("SendResult : $sendResult");
     return sendResult;
@@ -80,12 +59,11 @@ class WppChat {
     required String contactPhone,
     required String contactName,
   }) async {
-    return await wpClient.evaluateJs(
-        '''WPP.chat.sendVCardContactMessage("${parsePhone(phone)}", {
-            id: "${parsePhone(contactPhone)}",
-            name: "$contactName"
-          });''',
-        methodName: "sendContactCard");
+    return await wpClient
+        .evaluateJs('''WPP.chat.sendVCardContactMessage(${phone.phoneParse}, {
+            id: ${contactPhone.phoneParse},
+            name: ${contactName.jsParse}
+          });''', methodName: "sendContactCard");
   }
 
   ///send a locationMessage using [sendLocationMessage]
