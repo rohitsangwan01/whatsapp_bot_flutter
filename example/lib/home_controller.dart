@@ -51,6 +51,7 @@ class HomeController extends GetxController {
             : browserClientWebSocketUrl.text,
         chromiumDownloadDirectory: "../.local-chromium",
         headless: true,
+        isRunningInMobile: !GetPlatform.isWeb && GetPlatform.isMobile,
         onConnectionEvent: (ConnectionEvent event) {
           connectionEvent(event);
           if (event == ConnectionEvent.connected) {

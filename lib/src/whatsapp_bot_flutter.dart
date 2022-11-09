@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/login_helper.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/model/qr_code_image.dart';
+import 'package:whatsapp_bot_flutter/src/model/wp_client.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 import 'package:zxing2/qrcode.dart';
@@ -20,6 +22,7 @@ class WhatsappBotFlutter {
   static Future<WhatsappClient?> connect({
     String? sessionDirectory,
     String? chromiumDownloadDirectory,
+    bool isRunningInMobile = false,
     bool? headless = true,
     String? browserWsEndpoint,
     int qrCodeWaitDurationSeconds = 60,
@@ -29,42 +32,59 @@ class WhatsappBotFlutter {
   }) async {
     Browser? browser;
     Page? page;
+    HeadlessInAppWebView? headlessInAppWebView;
     try {
       onConnectionEvent?.call(ConnectionEvent.initializing);
+      WpClient? wpClient;
 
-      if (browserWsEndpoint != null) {
-        browser = await puppeteer.connect(
-          browserWsEndpoint: browserWsEndpoint,
-        );
-      } else {
-        onConnectionEvent?.call(ConnectionEvent.downloadingChrome);
+      // Get Mobile Client
+      if (isRunningInMobile) {
+        var data = await _getHeadlessModeData();
+        InAppWebViewController controller = data[0];
+        headlessInAppWebView = data[1];
 
-        RevisionInfo revisionInfo = await downloadChrome(
-          cachePath: chromiumDownloadDirectory ?? "./.local-chromium",
-        );
-        String executablePath = revisionInfo.executablePath;
-
-        onConnectionEvent?.call(ConnectionEvent.connectingChrome);
-        browser = await puppeteer.launch(
-          headless: headless,
-          executablePath: executablePath,
-          noSandboxFlag: true,
-          args: ['--start-maximized', '--disable-setuid-sandbox'],
-          userDataDir: sessionDirectory,
+        wpClient = WpClient(
+          webViewController: controller,
+          headlessWebView: headlessInAppWebView,
         );
       }
+      // Get Desktop Client
+      else {
+        if (browserWsEndpoint != null) {
+          browser = await puppeteer.connect(
+            browserWsEndpoint: browserWsEndpoint,
+          );
+        } else {
+          onConnectionEvent?.call(ConnectionEvent.downloadingChrome);
 
-      page = await browser.newPage();
+          RevisionInfo revisionInfo = await downloadChrome(
+            cachePath: chromiumDownloadDirectory ?? "./.local-chromium",
+          );
+          String executablePath = revisionInfo.executablePath;
 
-      await page.setUserAgent(WhatsAppMetadata.userAgent);
-      await page.goto(WhatsAppMetadata.whatsAppURL);
+          onConnectionEvent?.call(ConnectionEvent.connectingChrome);
+          browser = await puppeteer.launch(
+            headless: headless,
+            executablePath: executablePath,
+            noSandboxFlag: true,
+            args: ['--start-maximized', '--disable-setuid-sandbox'],
+            userDataDir: sessionDirectory,
+          );
+        }
 
-      await Wpp(page).init();
+        page = await browser.newPage();
+        await page.setUserAgent(WhatsAppMetadata.userAgent);
+        await page.goto(WhatsAppMetadata.whatsAppURL);
+
+        wpClient = WpClient(page: page);
+      }
+
+      await Wpp(wpClient).init();
 
       onConnectionEvent?.call(ConnectionEvent.waitingForLogin);
 
       await waitForLogin(
-        page,
+        wpClient,
         onConnectionEvent: onConnectionEvent,
         (QrCodeImage qrCodeImage, int attempt) {
           if (qrCodeImage.base64Image != null && qrCodeImage.urlCode != null) {
@@ -82,12 +102,65 @@ class WhatsappBotFlutter {
         waitDurationSeconds: qrCodeWaitDurationSeconds,
       );
 
-      return WhatsappClient(page: page, browser: browser);
+      return WhatsappClient(wpClient: wpClient);
     } catch (e) {
       WhatsappLogger.log(e.toString());
       browser?.close();
+      headlessInAppWebView?.dispose();
       rethrow;
     }
+  }
+
+  /// to run webView in headless mode and connect with it
+  static Future _getHeadlessModeData() async {
+    WebView.debugLoggingSettings.enabled = true;
+    HeadlessInAppWebView webView = HeadlessInAppWebView(
+      initialUrlRequest:
+          URLRequest(url: WebUri.uri(Uri.parse("https://web.whatsapp.com/"))),
+      onConsoleMessage: (controller, consoleMessage) {
+        WhatsappLogger.log(consoleMessage.message);
+      },
+      onReceivedServerTrustAuthRequest: (controller, challenge) async {
+        return ServerTrustAuthResponse(
+          action: ServerTrustAuthResponseAction.PROCEED,
+        );
+      },
+      shouldOverrideUrlLoading: (controller, navigationAction) async {
+        return NavigationActionPolicy.ALLOW;
+      },
+      onNavigationResponse: (controller, navigationResponse) async {
+        return NavigationResponseAction.CANCEL;
+      },
+      initialSettings: InAppWebViewSettings(
+        preferredContentMode: UserPreferredContentMode.DESKTOP,
+        useShouldOverrideUrlLoading: true,
+        clearCache: true,
+        cacheEnabled: false,
+        mediaPlaybackRequiresUserGesture: false,
+        userAgent:
+            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/60.0',
+        javaScriptEnabled: true,
+      ),
+    );
+    await webView.run();
+    Completer<InAppWebViewController> completer = Completer();
+    webView.onLoadStop = (controller, url) async {
+      // check if whatsapp web redirected us to the wrong mobile version of whatsapp
+      if (!url.toString().contains("web.whatsapp.com")) {
+        if (!completer.isCompleted) {
+          completer.completeError(
+            "Failed to load WhatsappWeb , please try again or clear cache of application",
+          );
+        }
+      }
+      WhatsappLogger.log(url.toString());
+      if (!completer.isCompleted) completer.complete(controller);
+    };
+    webView.onReceivedError = (controller, request, error) {
+      if (!completer.isCompleted) completer.completeError(error.description);
+    };
+    InAppWebViewController controller = await completer.future;
+    return [controller, webView];
   }
 
   /// To print logs from this library

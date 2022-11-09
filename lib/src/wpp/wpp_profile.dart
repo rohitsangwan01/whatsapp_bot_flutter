@@ -1,11 +1,9 @@
 import 'dart:convert';
-
-import 'package:puppeteer/puppeteer.dart';
-import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
+import 'package:whatsapp_bot_flutter/src/model/wp_client.dart';
 
 class WppProfile {
-  Page page;
-  WppProfile(this.page);
+  WpClient wpClient;
+  WppProfile(this.wpClient);
 
   /// Get your current text status
   Future getMyStatus() async {
@@ -15,9 +13,8 @@ class WppProfile {
 
   /// Update your current text status
   Future setMyStatus({required String status}) async {
-    return await _executeMethod(
-        '''(status) =>WPP.profile.setMyStatus(status);''',
-        args: [status], methodName: "setMyStatus");
+    return await _executeMethod('''WPP.profile.setMyStatus("$status");''',
+        methodName: "setMyStatus");
   }
 
   /// Update your profile picture
@@ -27,25 +24,20 @@ class WppProfile {
     String base64Image = base64Encode(imageBytes);
     String imageData = 'data:image/jpeg;base64,$base64Image';
     return await _executeMethod(
-        '''(imageData) =>WPP.profile.setMyProfilePicture(imageData);''',
-        args: [imageData], methodName: "getMyStatus");
+        '''WPP.profile.setMyProfilePicture("$imageData");''',
+        methodName: "getMyStatus");
   }
 
   /// Return the current logged user is Business or not
   Future<bool> isBusiness() async {
-    return await _executeMethod('''() =>WPP.profile.isBusiness();''',
+    return await _executeMethod('''WPP.profile.isBusiness();''',
         methodName: "isBusiness");
   }
 
-  // common method to execute a task
+// common method to execute a task
   Future _executeMethod(
     String method, {
-    List<dynamic>? args,
     String methodName = "",
-  }) async {
-    await validateConnection(page);
-    var result = await page.evaluate(method, args: args);
-    WhatsappLogger.log("${methodName}Result : $result");
-    return result;
-  }
+  }) =>
+      wpClient.evaluateJs(method, methodName: method);
 }

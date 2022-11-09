@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
+import 'package:whatsapp_bot_flutter/src/model/wp_client.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_chat.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_contact.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
@@ -11,31 +13,38 @@ import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 /// get [WhatsappClient] from `WhatsappBotFlutter.connect()`
 /// please do not try to create on your own
 class WhatsappClient {
-  Page page;
-  Browser browser;
+  WpClient wpClient;
+
+  // Wpp Classes
+  late WppChat chat;
+  late WppContact contact;
+  late WppProfile profile;
   late WppEvents _wppEvents;
   late WppAuth _wppAuth;
 
-  // To access all chat features
-  late WppChat chat;
-  // To access all contact features
-  late WppContact contact;
-  // To access all profile features
-  late WppProfile profile;
-
-  WhatsappClient({required this.page, required this.browser}) {
-    chat = WppChat(page);
-    contact = WppContact(page);
-    profile = WppProfile(page);
-    _wppAuth = WppAuth(page);
-    _wppEvents = WppEvents(page);
+  WhatsappClient({required this.wpClient}) {
+    chat = WppChat(wpClient);
+    contact = WppContact(wpClient);
+    profile = WppProfile(wpClient);
+    _wppAuth = WppAuth(wpClient);
+    _wppEvents = WppEvents(wpClient);
     _wppEvents.init().then((value) {
       WhatsappLogger.log("_wppEvents initialized");
     });
   }
 
   /// [isConnected] is to check if we are still connected to the WhatsappPage
-  bool get isConnected => browser.isConnected && !page.isClosed;
+  bool get isConnected {
+    Page? page = wpClient.page;
+    if (page != null) {
+      return page.browser.isConnected && !page.isClosed;
+    }
+    InAppWebViewController? controller = wpClient.webViewController;
+    if (controller != null) {
+      // ignore for now
+    }
+    return false;
+  }
 
   /// [isAuthenticated] is to check if we are loggedIn
   Future<bool> get isAuthenticated => _wppAuth.isAuthenticated();
@@ -61,7 +70,8 @@ class WhatsappClient {
   }) async {
     try {
       if (tryLogout) await logout();
-      browser.close();
+      wpClient.page?.browser.close();
+      wpClient.headlessWebView?.dispose();
     } catch (e) {
       WhatsappLogger.log(e);
     }
@@ -79,10 +89,10 @@ class WhatsappClient {
   }
 
   /// [rejectCall] will reject incoming call
-  Future<void> rejectCall({String? callId}) async {
-    var result = await page.evaluate(
-        '''(callId) => WPP.call.rejectCall(callId);;''',
-        args: [callId]);
-    WhatsappLogger.log("RejectCallResult : $result");
+  Future rejectCall({String? callId}) async {
+    return await wpClient.evaluateJs(
+      '''WPP.call.rejectCall("$callId");''',
+      methodName: "RejectCallResult",
+    );
   }
 }

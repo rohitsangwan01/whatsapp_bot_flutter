@@ -1,15 +1,14 @@
-import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
+import 'package:whatsapp_bot_flutter/src/model/wp_client.dart';
 
 class WppAuth {
-  Page page;
-  WppAuth(this.page);
+  WpClient wpClient;
+  WppAuth(this.wpClient);
 
   /// check if User is Authenticated on current opened Page
   Future<bool> isAuthenticated() async {
     try {
-      var result = await page.evaluate('''() => WPP.conn.isAuthenticated();''');
-      return result;
+      return await wpClient.evaluateJs('''WPP.conn.isAuthenticated();''');
     } catch (e) {
       WhatsappLogger.log(e.toString());
       return false;
@@ -19,8 +18,7 @@ class WppAuth {
   /// to check if ChatScreen is loaded on the page
   Future<bool> isMainReady() async {
     try {
-      var result = await page.evaluate('''() => WPP.conn.isMainReady();''');
-      return result;
+      return await wpClient.evaluateJs('''WPP.conn.isMainReady();''');
     } catch (e) {
       WhatsappLogger.log(e.toString());
       return false;
@@ -30,7 +28,7 @@ class WppAuth {
   /// To Logout
   Future logout() async {
     try {
-      return await page.evaluate('''() => WPP.conn.logout();''');
+      await wpClient.evaluateJs('''WPP.conn.logout();''');
     } catch (e) {
       throw "Logout Failed";
     }

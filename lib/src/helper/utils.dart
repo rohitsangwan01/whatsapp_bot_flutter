@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/model/whatsapp_exception.dart';
+import 'package:whatsapp_bot_flutter/src/model/wp_client.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_auth.dart';
 
 import '../../whatsapp_bot_flutter.dart';
@@ -22,16 +23,19 @@ class WhatsAppMetadata {
 }
 
 /// [validateMessage] will verify if data passed is correct or not
-Future validateConnection(Page page) async {
-  bool isConnected = page.browser.isConnected && !page.isClosed;
+Future validateConnection(WpClient wpClient) async {
+  Page? page = wpClient.page;
+  if (page != null) {
+    bool isConnected = page.browser.isConnected && !page.isClosed;
 
-  if (!isConnected) {
-    throw WhatsappException(
-        message: "WhatsappClient no connected , please reconnect",
-        exceptionType: WhatsappExceptionType.clientNotConnected);
+    if (!isConnected) {
+      throw WhatsappException(
+          message: "WhatsappClient no connected , please reconnect",
+          exceptionType: WhatsappExceptionType.clientNotConnected);
+    }
   }
 
-  bool isAuthenticated = await WppAuth(page).isAuthenticated();
+  bool isAuthenticated = await WppAuth(wpClient).isAuthenticated();
   if (!isAuthenticated) {
     throw WhatsappException(
         message: "Please login first",

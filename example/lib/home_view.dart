@@ -97,12 +97,6 @@ class MiddleFormView extends GetView<HomeController> {
             ? const SizedBox()
             : TextFormField(
                 controller: controller.browserClientWebSocketUrl,
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return "Mobile and Web requires Chrome ws url";
-                  }
-                  return null;
-                },
                 decoration: const InputDecoration(
                   labelText: "Browser client websocket url",
                 ),

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/qr_code_helper.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
+import 'package:whatsapp_bot_flutter/src/model/wp_client.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_auth.dart';
 
 import '../../whatsapp_bot_flutter.dart';
@@ -13,7 +13,7 @@ import '../model/qr_code_image.dart';
 /// this method will automatically try to get the qrCode
 /// also it will make sure that we get the latest qrCode
 Future waitForLogin(
-  Page page,
+  WpClient wpClient,
   Function(QrCodeImage, int)? onCatchQR, {
   int waitDurationSeconds = 60,
   Function(ConnectionEvent)? onConnectionEvent,
@@ -21,7 +21,7 @@ Future waitForLogin(
   WhatsappLogger.log('Waiting page load');
 
   WhatsappLogger.log('Checking is logged...');
-  WppAuth wppAuth = WppAuth(page);
+  WppAuth wppAuth = WppAuth(wpClient);
 
   bool authenticated = await wppAuth.isAuthenticated();
 
@@ -31,7 +31,7 @@ Future waitForLogin(
     WhatsappLogger.log('Waiting for QRCode Scan...');
 
     await waitForQrCodeScan(
-      page: page,
+      wpClient: wpClient,
       onCatchQR: onCatchQR,
       waitDurationSeconds: waitDurationSeconds,
     );
@@ -49,7 +49,7 @@ Future waitForLogin(
       WhatsappLogger.log('Checking phone is connected...');
 
       onConnectionEvent?.call(ConnectionEvent.connecting);
-      bool inChat = await _waitForInChat(page);
+      bool inChat = await _waitForInChat(wpClient);
       if (!inChat) {
         WhatsappLogger.log('Phone not connected');
         throw 'Phone not connected';
@@ -65,7 +65,7 @@ Future waitForLogin(
     WhatsappLogger.log('Checking phone is connected...');
 
     onConnectionEvent?.call(ConnectionEvent.connecting);
-    bool inChat = await _waitForInChat(page);
+    bool inChat = await _waitForInChat(wpClient);
     if (!inChat) {
       WhatsappLogger.log('Phone not connected');
       throw 'Phone not connected';
@@ -75,12 +75,12 @@ Future waitForLogin(
   }
 }
 
-Future<bool> _waitForInChat(Page page) async {
-  var inChat = await WppAuth(page).isMainReady();
+Future<bool> _waitForInChat(WpClient wpClient) async {
+  var inChat = await WppAuth(wpClient).isMainReady();
   if (inChat) return true;
   Completer<bool> completer = Completer();
   late Timer timer;
-  WppAuth wppAuth = WppAuth(page);
+  WppAuth wppAuth = WppAuth(wpClient);
   timer = Timer.periodic(const Duration(milliseconds: 1000), (tim) async {
     if (tim.tick > 60) {
       timer.cancel();
