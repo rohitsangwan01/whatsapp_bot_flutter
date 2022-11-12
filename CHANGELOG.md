@@ -1,3 +1,10 @@
+## 0.0.8
+
+- Added support for native Android and Ios
+- Added WhatsappBotFlutterMobile.connect method to connect in native Mobile platforms
+- Minor bug fixes
+- Update readme
+
 ## 0.0.7
 
 - Added support for Android and Ios
