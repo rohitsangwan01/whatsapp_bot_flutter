@@ -10,37 +10,29 @@ import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter_mobile.dart';
 
 class HomeController extends GetxController {
-  RxString error = "".obs;
-  RxBool connected = false.obs;
+  var formKey = GlobalKey<FormState>();
 
   var message = TextEditingController();
   var phoneNumber = TextEditingController();
   var browserClientWebSocketUrl = TextEditingController();
-
-  String? get browserEndPoint => browserClientWebSocketUrl.text.isEmpty
-      ? null
-      : browserClientWebSocketUrl.text;
-
-  var formKey = GlobalKey<FormState>();
+  String? get browserEndPoint => browserClientWebSocketUrl.text.isNotEmpty
+      ? browserClientWebSocketUrl.text
+      : null;
 
   /// reactive variables from Getx
+  RxString error = "".obs;
+  RxBool connected = false.obs;
   Rx<ConnectionEvent?> connectionEvent = Rxn<ConnectionEvent>();
   Rx<Message?> messageEvents = Rxn<Message>();
   Rx<CallEvent?> callEvents = Rxn<CallEvent>();
 
-  // Native chrome client supported only on desktop platforms
-  bool supportNativeChromeClient = !GetPlatform.isWeb;
-
+  // Get whatsapp client first to perform other Tasks
   WhatsappClient? client;
 
   @override
   void onInit() {
     WhatsappBotFlutter.enableLogs(true);
-    phoneNumber.text = "";
     message.text = "Testing Whatsapp Bot";
-
-    /// Enter WebSocket url here or manually using text field in Mobile/Web Platforms
-    browserClientWebSocketUrl.text = "";
     super.onInit();
   }
 
@@ -50,7 +42,6 @@ class HomeController extends GetxController {
     try {
       if (!GetPlatform.isWeb && GetPlatform.isMobile) {
         // Initialize Mobile Client
-
         client = await WhatsappBotFlutterMobile.connect(
           saveSession: true,
           onConnectionEvent: _onConnectionEvent,
@@ -136,12 +127,21 @@ class HomeController extends GetxController {
     });
   }
 
-  void disconnect() async {
+  Future<void> disconnect() async {
     await client?.disconnect(tryLogout: true);
     connected.value = false;
   }
 
-  void sendMessage() async {
+  void test() async {
+    if (!formKey.currentState!.validate()) return;
+    try {
+      await client?.removeEventListener('call.incoming_call');
+    } catch (e) {
+      Get.log("Error : $e");
+    }
+  }
+
+  Future<void> sendMessage() async {
     if (!formKey.currentState!.validate()) return;
     try {
       await client?.chat.sendTextMessage(
@@ -153,7 +153,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> sendFileMessage(
+  Future<void> _sendFileMessage(
     String? filePath,
     WhatsappFileType fileType,
   ) async {
@@ -174,27 +174,21 @@ class HomeController extends GetxController {
     }
   }
 
-  void sendImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-    );
+  void pickFileAndSend(WhatsappFileType whatsappFileType) async {
+    FileType fileType = FileType.any;
+    switch (whatsappFileType) {
+      case WhatsappFileType.image:
+        fileType = FileType.image;
+        break;
+      case WhatsappFileType.audio:
+        fileType = FileType.audio;
+        break;
+      default:
+        break;
+    }
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: fileType);
     String? path = result?.files.first.path;
-    await sendFileMessage(path, WhatsappFileType.image);
-  }
-
-  void sendDocument() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.any,
-    );
-    String? path = result?.files.first.path;
-    await sendFileMessage(path, WhatsappFileType.document);
-  }
-
-  void sendAudio() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.audio,
-    );
-    String? path = result?.files.first.path;
-    await sendFileMessage(path, WhatsappFileType.audio);
+    await _sendFileMessage(path, whatsappFileType);
   }
 }

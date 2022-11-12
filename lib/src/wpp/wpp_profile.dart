@@ -9,7 +9,7 @@ class WppProfile {
   /// Get your current text status
   Future getMyStatus() async {
     return await wpClient.evaluateJs(
-      '''() =>WPP.profile.getMyStatus();''',
+      '''WPP.profile.getMyStatus();''',
       methodName: "getMyStatus",
     );
   }

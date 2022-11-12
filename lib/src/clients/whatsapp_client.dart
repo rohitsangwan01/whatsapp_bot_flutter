@@ -29,6 +29,9 @@ class WhatsappClient {
     _wppEvents.init();
   }
 
+  Future<void> removeEventListener(String event) =>
+      _wppEvents.removeAllListeners(event);
+
   /// [isConnected] is to check if we are still connected to the WhatsappPage
   bool get isConnected => wpClient.isConnected();
 

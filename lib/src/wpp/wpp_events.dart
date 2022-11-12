@@ -9,6 +9,21 @@ class WppEvents {
   WpClientInterface wpClient;
   WppEvents(this.wpClient);
 
+  Future removeAllListeners(String event) async {
+    await wpClient.evaluateJs("""WPP.removeAllListeners("$event")""",
+        methodName: "removeAllListeners", tryPromise: true);
+  }
+
+  Future getListeners(String event) async {
+    return await wpClient.evaluateJs("""WPP.listeners("$event")""",
+        methodName: "removeAllListeners");
+  }
+
+  Future haveListeners(String event) async {
+    return await wpClient.evaluateJs("""WPP.listeners("$event")""",
+        methodName: "removeAllListeners");
+  }
+
   // To get update of all messages
   final StreamController<Message> messageEventStreamController =
       StreamController.broadcast();
@@ -23,7 +38,9 @@ class WppEvents {
 
   /// call init() once on a page
   /// to add eventListeners
-  Future<void> init() async => wpClient.initializeEventListener(_onNewEvent);
+  Future<void> init() async {
+    await wpClient.initializeEventListener(_onNewEvent);
+  }
 
   void _onNewEvent(String eventName, dynamic eventData) {
     switch (eventName) {

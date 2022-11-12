@@ -23,32 +23,67 @@ class WpClientMobile implements WpClientInterface {
   }
 
   @override
-  Future evaluateJs(String source, {String? methodName}) async {
-    //  await validateConnection(this);
-    dynamic result = await controller?.evaluateJavascript(source: source);
-    if (methodName?.isNotEmpty == true) {
-      WhatsappLogger.log("${methodName}_Result : $result");
+  Future evaluateJs(
+    String source, {
+    String? methodName,
+    bool tryPromise = true,
+  }) async {
+    if (!tryPromise) {
+      var result = await controller?.evaluateJavascript(source: source);
+      if (methodName?.isNotEmpty == true) {
+        WhatsappLogger.log("${methodName}_Result : $result");
+      }
+      return result;
     }
-    return result;
+    final String functionBody = """  
+        var result = new Promise(async function (resolve, reject) {  
+          try{
+            var data = await $source;
+            resolve(data);
+          }catch(e){
+            reject(e)
+          }
+        });
+       return await result;  
+      """;
+    CallAsyncJavaScriptResult? result =
+        await controller?.callAsyncJavaScript(functionBody: functionBody);
+    if (methodName?.isNotEmpty == true) {
+      WhatsappLogger.log("${methodName}_Result : ${result?.value}");
+    }
+    String? error = result?.error;
+    if (error != null) {
+      WhatsappLogger.log("${methodName}_Result_Error : ${result?.error}");
+      throw error;
+    }
+
+    return result?.value;
   }
 
   @override
   Future<QrCodeImage?> getQrCode() async {
     try {
-      var result = await evaluateJs('''
-      function getQr()  {
-            const selectorImg = document.querySelector('canvas');
-            const selectorUrl = selectorImg.closest('[data-ref]');
-            if (selectorImg != null && selectorUrl != null) {
-              let data = {
-                base64Image: selectorImg.toDataURL(),
-                urlCode: selectorUrl.getAttribute('data-ref'),
-              };
-              return data;
+      var result = await evaluateJs(
+        '''
+          function getQr()  {
+            try{
+              const selectorImg = document.querySelector('canvas');
+              const selectorUrl = selectorImg.closest('[data-ref]');
+              if (selectorImg != null && selectorUrl != null) {
+                let data = {
+                  base64Image: selectorImg.toDataURL(),
+                  urlCode: selectorUrl.getAttribute('data-ref'),
+                };
+                return data;
+              }
+            }catch(e){
+              return null;
             }
           }
           getQr();
-    ''');
+        ''',
+        tryPromise: false,
+      );
       String? urlCode = result?['urlCode'];
       String? base64Image = result?['base64Image'];
       return QrCodeImage(base64Image: base64Image, urlCode: urlCode);
@@ -114,6 +149,4 @@ class WpClientMobile implements WpClientInterface {
   bool isConnected() {
     return controller != null && (headlessInAppWebView?.isRunning() == true);
   }
-
-
 }

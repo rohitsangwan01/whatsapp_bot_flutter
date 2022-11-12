@@ -1,6 +1,7 @@
 // Thanks to https://github.com/wppconnect-team/wa-js
 
 import 'package:http/http.dart' as http;
+import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
 import 'package:whatsapp_bot_flutter/src/model/whatsapp_exception.dart';
 
@@ -13,8 +14,12 @@ class WppConnect {
 
     await wpClient.injectJs(content);
 
+    WhatsappLogger.log("injected Wpp");
+
     var result = await wpClient.evaluateJs(
-        '''typeof window.WPP !== 'undefined' && window.WPP.isReady;''');
+      '''typeof window.WPP !== 'undefined' && window.WPP.isReady;''',
+      tryPromise: false,
+    );
 
     if (result == false) {
       throw WhatsappException(
@@ -23,9 +28,17 @@ class WppConnect {
       );
     }
 
-    await wpClient
-        .evaluateJs("WPP.chat.defaultSendMessageOptions.createChat = true;");
-    await wpClient.evaluateJs("WPP.conn.setKeepAlive(true);");
-    await wpClient.evaluateJs("WPP.config.poweredBy = 'Whatsapp-Bot-Flutter';");
+    await wpClient.evaluateJs(
+      "WPP.chat.defaultSendMessageOptions.createChat = true;",
+      tryPromise: false,
+    );
+    await wpClient.evaluateJs(
+      "WPP.conn.setKeepAlive(true);",
+      tryPromise: false,
+    );
+    await wpClient.evaluateJs(
+      "WPP.config.poweredBy = 'Whatsapp-Bot-Flutter';",
+      tryPromise: false,
+    );
   }
 }

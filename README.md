@@ -10,23 +10,28 @@ Whatsapp bot using whatsapp web scraping
 
 We can use this library in Flutter as well as Pure dart projects , checkout dart [example](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/example_dart/main.dart)
 
-First launch will take some time
+First launch on Desktop apps will take some time
 
 it will download chromium files locally, using [puppeteer](https://pub.dev/packages/puppeteer) for whatsapp web and scarping data
 
 ### Macos setup
 
 Enable outgoing and incoming connections for macos
-and also disable sandbox mode comment this out in macos/Runner/\*.entitlements:
+If getting sandbox issue , try disabling sandbox mode comment this out in macos/Runner/\*.entitlements:
 
 ```
 <key>com.apple.security.app-sandbox</key>
 <true/>
 ```
 
-### Android/IOS/Web setup
+### Android/IOS setup
 
-To run on mobile and web platform, we have to run a chrome server somewhere using [puppeteer](https://pub.dev/packages/puppeteer), and get `browserWsEndpoint` from there and pass into the connect method
+To setup on Android , make sure to checkout `flutter_inappwebview` documentation for [Android](https://inappwebview.dev/docs/intro#setup-android) and [IOS](https://inappwebview.dev/docs/intro#setup-ios) setup
+Android sdk:minSdkVersion cannot be smaller than version 19
+
+### Web setup
+
+To run on web platform, we have to run a chrome server somewhere using [puppeteer](https://pub.dev/packages/puppeteer), and get `browserWsEndpoint` from there and pass into the connect method
 
 checkout [this](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/example/puppeteer_server/main.dart) example of running a chrome server using puppeteer
 
@@ -36,16 +41,17 @@ then pass this `browserWsEndpoint` in connect method like this
 await WhatsappBotFlutter.connect( browserWsEndpoint: "BROWSER_WS_ENDPOINT_URL",);
 ```
 
-We can use this on desktop platforms as well , to connect to a chrome server hosted somewhere else
+We can use this on `Mobile` or `Desktop` platforms as well , to connect to a chrome server hosted somewhere else
 
 If we have to access this webSocket url locally on Mobile or other platforms , we can use [ngrok](https://ngrok.com/) to expose our local Websocket url to internet
 
 ## Usage
 
-First we have to get `WhatsappClient` using `WhatsappBotFlutter.connect` method , we can get qrcode from `onQrCode` callback, this will return a qrString and ImageByte , we can use ImageBytes to show qr as Image widget , or we can convert qrCode String to QrCode widget by any library,
+First we have to get `WhatsappClient` using `WhatsappBotFlutter.connect` method on desktop and `WhatsappBotFlutterMobile.connect` on Mobile, we can get qrcode from `onQrCode` callback, this will return a qrString and ImageByte , we can use ImageBytes to show qr as Image widget , or we can convert qrCode String to QrCode widget by any library,
 and to print qrCode in terminal use `WhatsappBotFlutter.convertStringToQrCode(qrString)`
 
 ```dart
+// use WhatsappBotFlutterMobile.connect for Mobile platforms
 WhatsappClient? whatsappClient = await WhatsappBotFlutter.connect(
   onConnectionEvent: (ConnectionEvent event) {
     print(event.toString());

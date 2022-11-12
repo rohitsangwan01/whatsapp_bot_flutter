@@ -84,7 +84,6 @@ class WhatsappBotFlutterMobile {
           );
         }
       }
-      WhatsappLogger.log(url.toString());
       if (!completer.isCompleted) completer.complete(controller);
     };
     headlessWebView.onReceivedError = (controller, request, error) {

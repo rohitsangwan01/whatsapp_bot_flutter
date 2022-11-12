@@ -15,7 +15,11 @@ class WpClientDesktop implements WpClientInterface {
   }
 
   @override
-  Future evaluateJs(String source, {String? methodName}) async {
+  Future evaluateJs(
+    String source, {
+    String? methodName,
+    bool tryPromise = true,
+  }) async {
     //  await validateConnection(this);
     dynamic result = await page?.evaluate(source);
     if (methodName?.isNotEmpty == true) {
