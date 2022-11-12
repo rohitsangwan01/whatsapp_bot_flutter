@@ -14,8 +14,7 @@ First launch on Desktop apps will take some time, it will download chromium file
 
 ## Usage
 
-First we have to get `WhatsappClient` using `WhatsappBotFlutter.connect` method on desktop and `WhatsappBotFlutterMobile.connect` on Mobile, we can get qrcode from `onQrCode` callback, this will return a qrString and ImageByte , we can use ImageBytes to show qr as Image widget , or we can convert qrCode String to QrCode widget by any library,
-and to print qrCode in terminal use `WhatsappBotFlutter.convertStringToQrCode(qrString)`
+Get `WhatsappClient` using connect method
 
 ```dart
 // use WhatsappBotFlutterMobile.connect for Mobile platforms
