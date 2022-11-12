@@ -10,40 +10,7 @@ Whatsapp bot using whatsapp web scraping
 
 We can use this library in Flutter as well as Pure dart projects , checkout dart [example](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/example_dart/main.dart)
 
-First launch on Desktop apps will take some time
-
-it will download chromium files locally, using [puppeteer](https://pub.dev/packages/puppeteer) for whatsapp web and scarping data
-
-### Macos setup
-
-Enable outgoing and incoming connections for macos
-If getting sandbox issue , try disabling sandbox mode comment this out in macos/Runner/\*.entitlements:
-
-```
-<key>com.apple.security.app-sandbox</key>
-<true/>
-```
-
-### Android/IOS setup
-
-To setup on Android , make sure to checkout `flutter_inappwebview` documentation for [Android](https://inappwebview.dev/docs/intro#setup-android) and [IOS](https://inappwebview.dev/docs/intro#setup-ios) setup
-Android sdk:minSdkVersion cannot be smaller than version 19
-
-### Web setup
-
-To run on web platform, we have to run a chrome server somewhere using [puppeteer](https://pub.dev/packages/puppeteer), and get `browserWsEndpoint` from there and pass into the connect method
-
-checkout [this](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/example/puppeteer_server/main.dart) example of running a chrome server using puppeteer
-
-then pass this `browserWsEndpoint` in connect method like this
-
-```dart
-await WhatsappBotFlutter.connect( browserWsEndpoint: "BROWSER_WS_ENDPOINT_URL",);
-```
-
-We can use this on `Mobile` or `Desktop` platforms as well , to connect to a chrome server hosted somewhere else
-
-If we have to access this webSocket url locally on Mobile or other platforms , we can use [ngrok](https://ngrok.com/) to expose our local Websocket url to internet
+First launch on Desktop apps will take some time, it will download chromium files locally, using [puppeteer](https://pub.dev/packages/puppeteer)
 
 ## Usage
 
@@ -161,6 +128,38 @@ Supported Whatsapp features :
 - Set status
 - check if logged in user have business account
 - Set profile picture of logged in user
+
+
+## Mobile Setup (Android/IOS)
+
+To setup on Android , make sure to checkout `flutter_inappwebview` documentation for [Android](https://inappwebview.dev/docs/intro#setup-android) and [IOS](https://inappwebview.dev/docs/intro#setup-ios) setup
+Android sdk:minSdkVersion cannot be smaller than version 19
+
+## Desktop setup (Windows/Mac/Linux)
+
+For Macos , Enable outgoing and incoming connections, If getting sandbox issue , try disabling sandbox mode comment this out in macos/Runner/\*.entitlements:
+
+```
+<key>com.apple.security.app-sandbox</key>
+<true/>
+```
+Should run out of the box in Windows and Linux
+
+## Web setup
+
+To run on web platform, we have to run a chrome server somewhere using [puppeteer](https://pub.dev/packages/puppeteer), and get `browserWsEndpoint` from there and pass into the connect method
+
+checkout [this](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/example/puppeteer_server/main.dart) example of running a chrome server using puppeteer
+
+then pass this `browserWsEndpoint` in connect method like this
+
+```dart
+await WhatsappBotFlutter.connect( browserWsEndpoint: "BROWSER_WS_ENDPOINT_URL",);
+```
+
+We can use this on `Mobile` or `Desktop` platforms as well , to connect to a chrome server hosted somewhere else
+
+If we have to access this webSocket url locally on Mobile or other platforms , we can use [ngrok](https://ngrok.com/) to expose our local Websocket url to internet
 
 ## Resources
 
