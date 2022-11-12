@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 import 'home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -47,20 +48,25 @@ class HomeView extends GetView<HomeController> {
                             child: const Text("Send Text")),
                         const SizedBox(width: 10),
                         ElevatedButton(
-                            onPressed: () => controller.sendImage(),
+                            onPressed: () => controller
+                                .pickFileAndSend(WhatsappFileType.image),
                             child: const Text("Send Image")),
                         const SizedBox(width: 10),
                         ElevatedButton(
-                            onPressed: () => controller.sendAudio(),
+                            onPressed: () => controller
+                                .pickFileAndSend(WhatsappFileType.audio),
                             child: const Text("Send Audio")),
                         const SizedBox(width: 10),
                         ElevatedButton(
-                            onPressed: () => controller.sendDocument(),
+                            onPressed: () => controller
+                                .pickFileAndSend(WhatsappFileType.document),
                             child: const Text("Send Document")),
                       ],
                     ),
                   ),
-
+                  // ElevatedButton(
+                  //     onPressed: () => controller.test(),
+                  //     child: const Text("Test")),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Divider(),
@@ -93,20 +99,14 @@ class MiddleFormView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        controller.supportNativeChromeClient
-            ? const SizedBox()
-            : TextFormField(
+        GetPlatform.isWeb
+            ? TextFormField(
                 controller: controller.browserClientWebSocketUrl,
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return "Mobile and Web requires Chrome ws url";
-                  }
-                  return null;
-                },
                 decoration: const InputDecoration(
                   labelText: "Browser client websocket url",
                 ),
-              ),
+              )
+            : const SizedBox(),
         Row(children: [
           Expanded(
             child: Padding(

@@ -1,0 +1,6 @@
+framework module flutter_inappwebview {
+  umbrella header "flutter_inappwebview-umbrella.h"
+
+  export *
+  module * { export * }
+}

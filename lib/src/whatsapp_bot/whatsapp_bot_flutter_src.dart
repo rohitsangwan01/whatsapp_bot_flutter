@@ -1,16 +1,18 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:typed_data';
 import 'package:puppeteer/puppeteer.dart';
-import 'package:whatsapp_bot_flutter/src/helper/login_helper.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
-import 'package:whatsapp_bot_flutter/src/model/qr_code_image.dart';
-import 'package:whatsapp_bot_flutter/src/wpp/wpp.dart';
+import 'package:whatsapp_bot_flutter/src/clients/wpclient_desktop.dart';
+import 'package:whatsapp_bot_flutter/src/wpp/wpp_connect.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
+import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
 import 'package:zxing2/qrcode.dart';
+
+import '../helper/login_helper.dart';
 
 /// [WhatsappBotFlutter] for maintaining a single  `Browser` and `Page` instance
 /// with methods like connect and send
+
 class WhatsappBotFlutter {
   /// [connect] method will open WhatsappWeb in headless webView and connect to the whatsapp
   /// and pass QrCode in `onQrCode` callback
@@ -27,10 +29,13 @@ class WhatsappBotFlutter {
     Function(ConnectionEvent)? onConnectionEvent,
     Duration? connectionTimeout = const Duration(seconds: 20),
   }) async {
-    Browser? browser;
-    Page? page;
+    WpClientInterface? wpClient;
+
     try {
       onConnectionEvent?.call(ConnectionEvent.initializing);
+
+      Browser? browser;
+      Page? page;
 
       if (browserWsEndpoint != null) {
         browser = await puppeteer.connect(
@@ -43,49 +48,35 @@ class WhatsappBotFlutter {
           cachePath: chromiumDownloadDirectory ?? "./.local-chromium",
         );
         String executablePath = revisionInfo.executablePath;
-
         onConnectionEvent?.call(ConnectionEvent.connectingChrome);
         browser = await puppeteer.launch(
           headless: headless,
           executablePath: executablePath,
-          noSandboxFlag: true,
-          args: ['--start-maximized', '--disable-setuid-sandbox'],
           userDataDir: sessionDirectory,
         );
+
+        page = await browser.newPage();
+        await page.setUserAgent(WhatsAppMetadata.userAgent);
+        await page.goto(WhatsAppMetadata.whatsAppURL);
       }
 
-      page = await browser.newPage();
+      wpClient = WpClientDesktop(page: page, browser: browser);
 
-      await page.setUserAgent(WhatsAppMetadata.userAgent);
-      await page.goto(WhatsAppMetadata.whatsAppURL);
-
-      await Wpp(page).init();
+      await WppConnect.init(wpClient);
 
       onConnectionEvent?.call(ConnectionEvent.waitingForLogin);
 
       await waitForLogin(
-        page,
+        wpClient,
         onConnectionEvent: onConnectionEvent,
-        (QrCodeImage qrCodeImage, int attempt) {
-          if (qrCodeImage.base64Image != null && qrCodeImage.urlCode != null) {
-            Uint8List? imageBytes;
-            try {
-              String? base64Image = qrCodeImage.base64Image
-                  ?.replaceFirst("data:image/png;base64,", "");
-              imageBytes = base64Decode(base64Image!);
-            } catch (e) {
-              WhatsappLogger.log(e);
-            }
-            onQrCode?.call(qrCodeImage.urlCode!, imageBytes);
-          }
-        },
+        onQrCode: onQrCode,
         waitDurationSeconds: qrCodeWaitDurationSeconds,
       );
 
-      return WhatsappClient(page: page, browser: browser);
+      return WhatsappClient(wpClient: wpClient);
     } catch (e) {
       WhatsappLogger.log(e.toString());
-      browser?.close();
+      wpClient?.dispose();
       rethrow;
     }
   }

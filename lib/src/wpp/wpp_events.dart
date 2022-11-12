@@ -1,13 +1,13 @@
 import 'dart:async';
-import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/model/call_event.dart';
 import 'package:whatsapp_bot_flutter/src/model/connection_event.dart';
 import 'package:whatsapp_bot_flutter/src/model/message.dart';
+import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
 
 class WppEvents {
-  Page page;
-  WppEvents(this.page);
+  WpClientInterface wpClient;
+  WppEvents(this.wpClient);
 
   // To get update of all messages
   final StreamController<Message> messageEventStreamController =
@@ -24,46 +24,19 @@ class WppEvents {
   /// call init() once on a page
   /// to add eventListeners
   Future<void> init() async {
-    await _addEventListeners();
+    await wpClient.initializeEventListener(_onNewEvent);
   }
 
-  Future<void> _addEventListeners() async {
-    try {
-      // Add Dart side method
-      await _exposeListener();
-
-      // Add all listeners
-      await page.evaluate(
-        '''()=>{
-            WPP.on('chat.new_message', (msg) => {
-              window.onCustomEvent("messageEvent",msg);
-            });
-            WPP.on('call.incoming_call', (call) => {
-              window.onCustomEvent("callEvent",call);
-            });
-            WPP.on('conn.authenticated', () => {
-              window.onCustomEvent("connectionEvent","authenticated");
-            });
-             WPP.on('conn.logout', () => {
-              window.onCustomEvent("connectionEvent","logout");
-            });
-            WPP.on('conn.auth_code_change', () => {
-              window.onCustomEvent("connectionEvent","auth_code_change");
-            });
-            WPP.on('conn.main_loaded', () => {
-              window.onCustomEvent("connectionEvent","main_loaded");
-            });
-            WPP.on('conn.main_ready', () => {
-              window.onCustomEvent("connectionEvent","main_ready");
-            });
-            WPP.on('conn.require_auth', () => {
-              window.onCustomEvent("connectionEvent","require_auth");
-            });
-        }''',
-      );
-    } catch (e) {
-      // Ignore for now
-      WhatsappLogger.log(e);
+  void _onNewEvent(String eventName, dynamic eventData) {
+    switch (eventName) {
+      case "messageEvent":
+        _onNewMessage(eventData);
+        break;
+      case "connectionEvent":
+        _onConnectionEvent(eventData);
+        break;
+      case "callEvent":
+        _onCallEvent(eventData);
     }
   }
 
@@ -113,18 +86,44 @@ class WppEvents {
     connectionEventStreamController.add(connectionEvent);
   }
 
-  Future<void> _exposeListener() async {
-    await page.exposeFunction("onCustomEvent", (type, data) {
-      switch (type.toString()) {
-        case "messageEvent":
-          _onNewMessage(data);
-          break;
-        case "connectionEvent":
-          _onConnectionEvent(data);
-          break;
-        case "callEvent":
-          _onCallEvent(data);
-      }
-    });
+  /// Implement `addListener` and `removeListeners` to save resources
+  Future addListener(String event) async {
+    if (await haveListeners(event)) {
+      WhatsappLogger.log("$event already have listener");
+      return;
+    }
+    await wpClient.evaluateJs(
+      '''WPP.addListener('$event', (data) => {
+              window.onCustomEvent(""$event",data);
+          });
+      ''',
+    );
+  }
+
+  Future removeListeners(String event) async {
+    return await wpClient.evaluateJs(
+      """
+          async function getListener(){
+            let listeners = WPP.listeners("$event");
+            for (let i = 0; i < listeners.length; i++) {
+              let listenerMethod = listeners[i];
+              WPP.removeListener("$event",listenerMethod);
+            }       
+          }
+          getListener(); 
+      """,
+      methodName: "removeListeners",
+      tryPromise: false,
+    );
+  }
+
+  Future getActiveEvents() async {
+    return await wpClient
+        .evaluateJs("""WPP.eventNames()""", methodName: "getEventNames");
+  }
+
+  Future haveListeners(String event) async {
+    return await wpClient.evaluateJs("""WPP.hasListeners(${event.jsParse})""",
+        methodName: "haveListeners");
   }
 }

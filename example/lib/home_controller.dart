@@ -7,36 +7,32 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
+import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter_mobile.dart';
 
 class HomeController extends GetxController {
-  RxString error = "".obs;
-  RxInt progress = 0.obs;
-  RxBool connected = false.obs;
+  var formKey = GlobalKey<FormState>();
 
   var message = TextEditingController();
   var phoneNumber = TextEditingController();
   var browserClientWebSocketUrl = TextEditingController();
-
-  var formKey = GlobalKey<FormState>();
+  String? get browserEndPoint => browserClientWebSocketUrl.text.isNotEmpty
+      ? browserClientWebSocketUrl.text
+      : null;
 
   /// reactive variables from Getx
+  RxString error = "".obs;
+  RxBool connected = false.obs;
   Rx<ConnectionEvent?> connectionEvent = Rxn<ConnectionEvent>();
   Rx<Message?> messageEvents = Rxn<Message>();
   Rx<CallEvent?> callEvents = Rxn<CallEvent>();
 
-  // Native chrome client supported only on desktop platforms
-  bool supportNativeChromeClient = !GetPlatform.isWeb && GetPlatform.isDesktop;
-
+  // Get whatsapp client first to perform other Tasks
   WhatsappClient? client;
 
   @override
   void onInit() {
     WhatsappBotFlutter.enableLogs(true);
-    phoneNumber.text = "";
     message.text = "Testing Whatsapp Bot";
-
-    /// Enter WebSocket url here or manually using text field in Mobile/Web Platforms
-    browserClientWebSocketUrl.text = "";
     super.onInit();
   }
 
@@ -44,30 +40,44 @@ class HomeController extends GetxController {
     error.value = "";
     connected.value = false;
     try {
-      client = await WhatsappBotFlutter.connect(
-        // sessionDirectory: "../cache",
-        browserWsEndpoint: browserClientWebSocketUrl.text.isEmpty
-            ? null
-            : browserClientWebSocketUrl.text,
-        chromiumDownloadDirectory: "../.local-chromium",
-        headless: true,
-        onConnectionEvent: (ConnectionEvent event) {
-          connectionEvent(event);
-          if (event == ConnectionEvent.connected) {
-            _closeQrCodeDialog();
-          }
-        },
-        onQrCode: (String qr, Uint8List? imageBytes) {
-          if (imageBytes != null) {
-            _closeQrCodeDialog();
-            _showQrCodeDialog(imageBytes);
-          }
-        },
-      );
-      connected.value = true;
-      if (client != null) initStreams(client!);
+      if (!GetPlatform.isWeb && GetPlatform.isMobile) {
+        // Initialize Mobile Client
+        client = await WhatsappBotFlutterMobile.connect(
+          saveSession: true,
+          onConnectionEvent: _onConnectionEvent,
+          onQrCode: _onQrCode,
+        );
+      } else {
+        // Initialize Desktop Client
+        client = await WhatsappBotFlutter.connect(
+          browserWsEndpoint: browserEndPoint,
+          chromiumDownloadDirectory: "../.local-chromium",
+          headless: true,
+          onConnectionEvent: _onConnectionEvent,
+          onQrCode: _onQrCode,
+        );
+      }
+
+      if (client != null) {
+        connected.value = true;
+        initStreams(client!);
+      }
     } catch (er) {
       error.value = er.toString();
+    }
+  }
+
+  void _onConnectionEvent(ConnectionEvent event) {
+    connectionEvent(event);
+    if (event == ConnectionEvent.connected) {
+      _closeQrCodeDialog();
+    }
+  }
+
+  void _onQrCode(String qr, Uint8List? imageBytes) {
+    if (imageBytes != null) {
+      _closeQrCodeDialog();
+      _showQrCodeDialog(imageBytes);
     }
   }
 
@@ -93,7 +103,7 @@ class HomeController extends GetxController {
     // listen to CallEvent Stream
     client.callEvents.listen((event) {
       callEvents.value = event;
-      client.rejectCall(callId: event.id);
+      client.chat.rejectCall(callId: event.id);
       client.chat.sendTextMessage(
         phone: event.sender,
         message: "Hey, Call rejected by whatsapp bot",
@@ -117,12 +127,21 @@ class HomeController extends GetxController {
     });
   }
 
-  void disconnect() async {
+  Future<void> disconnect() async {
     await client?.disconnect(tryLogout: true);
     connected.value = false;
   }
 
-  void sendMessage() async {
+  void test() async {
+    if (!formKey.currentState!.validate()) return;
+    try {
+      // test any method
+    } catch (e) {
+      Get.log("Error : $e");
+    }
+  }
+
+  Future<void> sendMessage() async {
     if (!formKey.currentState!.validate()) return;
     try {
       await client?.chat.sendTextMessage(
@@ -134,7 +153,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> sendFileMessage(
+  Future<void> _sendFileMessage(
     String? filePath,
     WhatsappFileType fileType,
   ) async {
@@ -155,27 +174,21 @@ class HomeController extends GetxController {
     }
   }
 
-  void sendImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-    );
+  void pickFileAndSend(WhatsappFileType whatsappFileType) async {
+    FileType fileType = FileType.any;
+    switch (whatsappFileType) {
+      case WhatsappFileType.image:
+        fileType = FileType.image;
+        break;
+      case WhatsappFileType.audio:
+        fileType = FileType.audio;
+        break;
+      default:
+        break;
+    }
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: fileType);
     String? path = result?.files.first.path;
-    await sendFileMessage(path, WhatsappFileType.image);
-  }
-
-  void sendDocument() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.any,
-    );
-    String? path = result?.files.first.path;
-    await sendFileMessage(path, WhatsappFileType.document);
-  }
-
-  void sendAudio() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.audio,
-    );
-    String? path = result?.files.first.path;
-    await sendFileMessage(path, WhatsappFileType.audio);
+    await _sendFileMessage(path, whatsappFileType);
   }
 }
