@@ -135,7 +135,7 @@ class HomeController extends GetxController {
   void test() async {
     if (!formKey.currentState!.validate()) return;
     try {
-      await client?.removeEventListener('call.incoming_call');
+      // test any method
     } catch (e) {
       Get.log("Error : $e");
     }

@@ -98,6 +98,13 @@ class WpClientMobile implements WpClientInterface {
     OnNewEventFromListener onNewEventFromListener,
   ) async {
     try {
+      await evaluateJs(
+        """ 
+          window.onCustomEvent = (eventName,data) => window.flutter_inappwebview.callHandler('onCustomEvent',{type:eventName,data:data});
+         """,
+        tryPromise: false,
+      );
+
       // Add Dart side method
       controller?.addJavaScriptHandler(
           handlerName: "onCustomEvent",
@@ -111,29 +118,28 @@ class WpClientMobile implements WpClientInterface {
       await controller?.evaluateJavascript(
         source: '''function initEvents() {
             WPP.on('chat.new_message', (msg) => {
-              window.flutter_inappwebview.callHandler('onCustomEvent', {type:"messageEvent",data:msg});
+              window.onCustomEvent("messageEvent",msg);
             });
             WPP.on('call.incoming_call', (call) => {
-              window.flutter_inappwebview.callHandler('onCustomEvent', {type:"callEvent",data:call});
+              window.onCustomEvent("callEvent",call);
             });
             WPP.on('conn.authenticated', () => {
-               window.flutter_inappwebview.callHandler('onCustomEvent', {type:"connectionEvent",data:"authenticated"});
+              window.onCustomEvent("connectionEvent","authenticated");
             });
              WPP.on('conn.logout', () => {
-              window.flutter_inappwebview.callHandler('onCustomEvent', {type:"connectionEvent",data:"authenticated"});
               window.onCustomEvent("connectionEvent","logout");
             });
             WPP.on('conn.auth_code_change', () => {
-              window.flutter_inappwebview.callHandler('onCustomEvent', {type:"connectionEvent",data:"auth_code_change"});
+              window.onCustomEvent("connectionEvent","auth_code_change");
             });
             WPP.on('conn.main_loaded', () => {
-              window.flutter_inappwebview.callHandler('onCustomEvent', {type:"connectionEvent",data:"main_loaded"});
+              window.onCustomEvent("connectionEvent","main_loaded");
             });
             WPP.on('conn.main_ready', () => {
-              window.flutter_inappwebview.callHandler('onCustomEvent', {type:"connectionEvent",data:"main_ready"});
+              window.onCustomEvent("connectionEvent","main_ready");
             });
             WPP.on('conn.require_auth', () => {
-              window.flutter_inappwebview.callHandler('onCustomEvent', {type:"connectionEvent",data:"require_auth"});
+              window.onCustomEvent("connectionEvent","require_auth");
             });
         }
         initEvents();

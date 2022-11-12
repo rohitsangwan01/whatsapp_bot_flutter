@@ -64,9 +64,9 @@ class HomeView extends GetView<HomeController> {
                       ],
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () => controller.test(),
-                      child: const Text("Test")),
+                  // ElevatedButton(
+                  //     onPressed: () => controller.test(),
+                  //     child: const Text("Test")),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Divider(),
