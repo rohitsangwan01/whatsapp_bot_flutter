@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
-import 'package:whatsapp_bot_flutter/src/model/wp_client.dart';
+import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
 import '../../whatsapp_bot_flutter.dart';
 
 class WppChat {
-  WpClient wpClient;
+  WpClientInterface wpClient;
   WppChat(this.wpClient);
 
   /// [sendMessage] may throw errors if passed an invalid contact
@@ -219,5 +219,13 @@ class WppChat {
     return await wpClient.evaluateJs(
         '''WPP.chat.sendCreatePollMessage("${parsePhone(phone)}","$pollName",$pollOptions);''',
         methodName: "sendCreatePollMessage");
+  }
+
+  /// [rejectCall] will reject incoming call
+  Future rejectCall({String? callId}) async {
+    return await wpClient.evaluateJs(
+      '''WPP.call.rejectCall(${callId.jsParse});''',
+      methodName: "RejectCallResult",
+    );
   }
 }

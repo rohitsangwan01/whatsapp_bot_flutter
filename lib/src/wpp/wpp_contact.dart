@@ -1,16 +1,17 @@
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
-import 'package:whatsapp_bot_flutter/src/model/wp_client.dart';
+import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
 
 class WppContact {
-  WpClient wpClient;
+  WpClientInterface wpClient;
   WppContact(this.wpClient);
 
   /// get ProfilePictureUrl of any Number
   Future getProfilePictureUrl({
     required String phone,
   }) async {
-    return await _executeMethod(
-      '''WPP.contact.getProfilePictureUrl("${parsePhone(phone)}");''',
+    return await wpClient.evaluateJs(
+      '''WPP.contact.getProfilePictureUrl(${phone.phoneParse});''',
+      methodName: "getProfilePictureUrl",
     );
   }
 
@@ -18,21 +19,15 @@ class WppContact {
   Future getStatus({
     required String phone,
   }) async {
-    return await _executeMethod(
-      '''WPP.contact.getStatus("${parsePhone(phone)}");''',
+    return await wpClient.evaluateJs(
+      '''WPP.contact.getStatus(${phone.phoneParse});''',
+      methodName: "getStatus",
     );
   }
 
   /// Return to list of contacts
   Future getContacts() async {
-    return await _executeMethod('''WPP.contact.list();''',
-        methodName: "getContacts");
+    return await wpClient
+        .evaluateJs('''WPP.contact.list();''', methodName: "getContacts");
   }
-
-// common method to execute a task
-  Future _executeMethod(
-    String method, {
-    String methodName = "",
-  }) =>
-      wpClient.evaluateJs(method, methodName: method);
 }

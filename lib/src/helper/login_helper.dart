@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:whatsapp_bot_flutter/src/helper/qr_code_helper.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
-import 'package:whatsapp_bot_flutter/src/model/wp_client.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_auth.dart';
+import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
 
 import '../../whatsapp_bot_flutter.dart';
 import '../model/qr_code_image.dart';
@@ -13,8 +15,8 @@ import '../model/qr_code_image.dart';
 /// this method will automatically try to get the qrCode
 /// also it will make sure that we get the latest qrCode
 Future waitForLogin(
-  WpClient wpClient,
-  Function(QrCodeImage, int)? onCatchQR, {
+  WpClientInterface wpClient, {
+  required Function(String qrCodeUrl, Uint8List? qrCodeImage)? onQrCode,
   int waitDurationSeconds = 60,
   Function(ConnectionEvent)? onConnectionEvent,
 }) async {
@@ -32,7 +34,19 @@ Future waitForLogin(
 
     await waitForQrCodeScan(
       wpClient: wpClient,
-      onCatchQR: onCatchQR,
+      onCatchQR: (QrCodeImage qrCodeImage, int attempt) {
+        if (qrCodeImage.base64Image != null && qrCodeImage.urlCode != null) {
+          Uint8List? imageBytes;
+          try {
+            String? base64Image = qrCodeImage.base64Image
+                ?.replaceFirst("data:image/png;base64,", "");
+            imageBytes = base64Decode(base64Image!);
+          } catch (e) {
+            WhatsappLogger.log(e);
+          }
+          onQrCode?.call(qrCodeImage.urlCode!, imageBytes);
+        }
+      },
       waitDurationSeconds: waitDurationSeconds,
     );
 
@@ -75,7 +89,7 @@ Future waitForLogin(
   }
 }
 
-Future<bool> _waitForInChat(WpClient wpClient) async {
+Future<bool> _waitForInChat(WpClientInterface wpClient) async {
   var inChat = await WppAuth(wpClient).isMainReady();
   if (inChat) return true;
   Completer<bool> completer = Completer();

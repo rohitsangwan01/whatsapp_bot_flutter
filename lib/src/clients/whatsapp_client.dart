@@ -1,19 +1,17 @@
 import 'dart:async';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
-import 'package:whatsapp_bot_flutter/src/model/wp_client.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_chat.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_contact.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_events.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_auth.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_profile.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
+import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
 
 /// get [WhatsappClient] from `WhatsappBotFlutter.connect()`
 /// please do not try to create on your own
 class WhatsappClient {
-  WpClient wpClient;
+  WpClientInterface wpClient;
 
   // Wpp Classes
   late WppChat chat;
@@ -28,23 +26,11 @@ class WhatsappClient {
     profile = WppProfile(wpClient);
     _wppAuth = WppAuth(wpClient);
     _wppEvents = WppEvents(wpClient);
-    _wppEvents.init().then((value) {
-      WhatsappLogger.log("_wppEvents initialized");
-    });
+    _wppEvents.init();
   }
 
   /// [isConnected] is to check if we are still connected to the WhatsappPage
-  bool get isConnected {
-    Page? page = wpClient.page;
-    if (page != null) {
-      return page.browser.isConnected && !page.isClosed;
-    }
-    InAppWebViewController? controller = wpClient.webViewController;
-    if (controller != null) {
-      // ignore for now
-    }
-    return false;
-  }
+  bool get isConnected => wpClient.isConnected();
 
   /// [isAuthenticated] is to check if we are loggedIn
   Future<bool> get isAuthenticated => _wppAuth.isAuthenticated();
@@ -70,8 +56,7 @@ class WhatsappClient {
   }) async {
     try {
       if (tryLogout) await logout();
-      wpClient.page?.browser.close();
-      wpClient.headlessWebView?.dispose();
+      wpClient.dispose();
     } catch (e) {
       WhatsappLogger.log(e);
     }
@@ -86,13 +71,5 @@ class WhatsappClient {
     } catch (e) {
       WhatsappLogger.log(e);
     }
-  }
-
-  /// [rejectCall] will reject incoming call
-  Future rejectCall({String? callId}) async {
-    return await wpClient.evaluateJs(
-      '''WPP.call.rejectCall(${callId.jsParse});''',
-      methodName: "RejectCallResult",
-    );
   }
 }

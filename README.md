@@ -113,7 +113,7 @@ To get whatsapp calls Events , subscribe to `whatsappClient.callEvents`
 ```dart
 whatsappClient.callEvents.listen((event) {
   // To reject call
-  whatsappClient.rejectCall(callId: event.id);
+  whatsappClient.chat.rejectCall(callId: event.id);
 });
 ```
 

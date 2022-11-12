@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
+import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter_mobile.dart';
 
 class HomeController extends GetxController {
   RxString error = "".obs;
@@ -15,6 +16,10 @@ class HomeController extends GetxController {
   var message = TextEditingController();
   var phoneNumber = TextEditingController();
   var browserClientWebSocketUrl = TextEditingController();
+
+  String? get browserEndPoint => browserClientWebSocketUrl.text.isEmpty
+      ? null
+      : browserClientWebSocketUrl.text;
 
   var formKey = GlobalKey<FormState>();
 
@@ -43,32 +48,45 @@ class HomeController extends GetxController {
     error.value = "";
     connected.value = false;
     try {
-      client = await WhatsappBotFlutter.connect(
-        // sessionDirectory: "../cache",
-        browserWsEndpoint: browserClientWebSocketUrl.text.isEmpty
-            ? null
-            : browserClientWebSocketUrl.text,
-        chromiumDownloadDirectory: "../.local-chromium",
-        headless: true,
-        isRunningOnMobile: !GetPlatform.isWeb && GetPlatform.isMobile,
-        keepMobileSession: true,
-        onConnectionEvent: (ConnectionEvent event) {
-          connectionEvent(event);
-          if (event == ConnectionEvent.connected) {
-            _closeQrCodeDialog();
-          }
-        },
-        onQrCode: (String qr, Uint8List? imageBytes) {
-          if (imageBytes != null) {
-            _closeQrCodeDialog();
-            _showQrCodeDialog(imageBytes);
-          }
-        },
-      );
-      connected.value = true;
-      if (client != null) initStreams(client!);
+      if (!GetPlatform.isWeb && GetPlatform.isMobile) {
+        // Initialize Mobile Client
+
+        client = await WhatsappBotFlutterMobile.connect(
+          saveSession: true,
+          onConnectionEvent: _onConnectionEvent,
+          onQrCode: _onQrCode,
+        );
+      } else {
+        // Initialize Desktop Client
+        client = await WhatsappBotFlutter.connect(
+          browserWsEndpoint: browserEndPoint,
+          chromiumDownloadDirectory: "../.local-chromium",
+          headless: true,
+          onConnectionEvent: _onConnectionEvent,
+          onQrCode: _onQrCode,
+        );
+      }
+
+      if (client != null) {
+        connected.value = true;
+        initStreams(client!);
+      }
     } catch (er) {
       error.value = er.toString();
+    }
+  }
+
+  void _onConnectionEvent(ConnectionEvent event) {
+    connectionEvent(event);
+    if (event == ConnectionEvent.connected) {
+      _closeQrCodeDialog();
+    }
+  }
+
+  void _onQrCode(String qr, Uint8List? imageBytes) {
+    if (imageBytes != null) {
+      _closeQrCodeDialog();
+      _showQrCodeDialog(imageBytes);
     }
   }
 
@@ -94,7 +112,7 @@ class HomeController extends GetxController {
     // listen to CallEvent Stream
     client.callEvents.listen((event) {
       callEvents.value = event;
-      client.rejectCall(callId: event.id);
+      client.chat.rejectCall(callId: event.id);
       client.chat.sendTextMessage(
         phone: event.sender,
         message: "Hey, Call rejected by whatsapp bot",

@@ -1,8 +1,8 @@
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
-import 'package:whatsapp_bot_flutter/src/model/wp_client.dart';
+import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
 
 class WppAuth {
-  WpClient wpClient;
+  WpClientInterface wpClient;
   WppAuth(this.wpClient);
 
   /// check if User is Authenticated on current opened Page

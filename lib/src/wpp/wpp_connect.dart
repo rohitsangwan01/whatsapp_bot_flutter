@@ -1,0 +1,31 @@
+// Thanks to https://github.com/wppconnect-team/wa-js
+
+import 'package:http/http.dart' as http;
+import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
+import 'package:whatsapp_bot_flutter/src/model/whatsapp_exception.dart';
+
+class WppConnect {
+  /// make sure to call [init] to Initialize Wpp
+  static Future init(WpClientInterface wpClient) async {
+    String latestBuildUrl =
+        "https://github.com/wppconnect-team/wa-js/releases/latest/download/wppconnect-wa.js";
+    String content = await http.read(Uri.parse(latestBuildUrl));
+
+    await wpClient.injectJs(content);
+
+    var result = await wpClient.evaluateJs(
+        '''typeof window.WPP !== 'undefined' && window.WPP.isReady;''');
+
+    if (result == false) {
+      throw WhatsappException(
+        exceptionType: WhatsappExceptionType.failedToConnect,
+        message: "Failed to initialize WPP",
+      );
+    }
+
+    await wpClient
+        .evaluateJs("WPP.chat.defaultSendMessageOptions.createChat = true;");
+    await wpClient.evaluateJs("WPP.conn.setKeepAlive(true);");
+    await wpClient.evaluateJs("WPP.config.poweredBy = 'Whatsapp-Bot-Flutter';");
+  }
+}

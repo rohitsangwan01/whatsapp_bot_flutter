@@ -1,12 +1,11 @@
 import 'dart:typed_data';
-
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 
 // Make sure to run in terminal using
 // dart main.dart ...
 void main(List<String> args) async {
   print("Trying Connecting ...");
-
+  WhatsappBotFlutter.enableLogs(true);
   WhatsappClient? client = await WhatsappBotFlutter.connect(
     //sessionDirectory: "../cache",
     chromiumDownloadDirectory: "../.local-chromium",
