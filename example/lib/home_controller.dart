@@ -52,7 +52,6 @@ class HomeController extends GetxController {
         client = await WhatsappBotFlutter.connect(
           browserWsEndpoint: browserEndPoint,
           chromiumDownloadDirectory: "../.local-chromium",
-          headless: true,
           onConnectionEvent: _onConnectionEvent,
           onQrCode: _onQrCode,
         );

@@ -25,6 +25,7 @@ class WhatsappBotFlutter {
     bool? headless = true,
     String? browserWsEndpoint,
     int qrCodeWaitDurationSeconds = 60,
+    List<String>? puppeteerArgs,
     Function(String qrCodeUrl, Uint8List? qrCodeImage)? onQrCode,
     Function(ConnectionEvent)? onConnectionEvent,
     Duration? connectionTimeout = const Duration(seconds: 20),
@@ -53,6 +54,7 @@ class WhatsappBotFlutter {
           headless: headless,
           executablePath: executablePath,
           userDataDir: sessionDirectory,
+          args: puppeteerArgs,
         );
 
         page = await browser.newPage();
