@@ -9,7 +9,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Whatsapp Message Sender'),
+          title: const Text('Whatsapp Bot'),
           centerTitle: false,
           actions: [
             if (GetPlatform.isDesktop) const ConnectDisconnectWidget(),
