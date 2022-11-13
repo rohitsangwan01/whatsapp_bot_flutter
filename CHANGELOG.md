@@ -1,7 +1,8 @@
 ## 0.0.9
 
-- Update Readme
-- Update platforms
+- Updated platforms
+- Updated Example app
+- Updated Readme
 
 ## 0.0.8
 
