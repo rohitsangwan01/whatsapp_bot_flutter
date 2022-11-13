@@ -1,3 +1,8 @@
+## 0.0.9
+
+- Update Readme
+- Update platforms
+
 ## 0.0.8
 
 - Added support for native Android and Ios

@@ -128,7 +128,6 @@ Supported Whatsapp features :
 - check if logged in user have business account
 - Set profile picture of logged in user
 
-
 ## Mobile Setup (Android/IOS)
 
 To setup on Android , make sure to checkout `flutter_inappwebview` documentation for [Android](https://inappwebview.dev/docs/intro#setup-android) and [IOS](https://inappwebview.dev/docs/intro#setup-ios) setup
@@ -142,9 +141,12 @@ For Macos , Enable outgoing and incoming connections, If getting sandbox issue ,
 <key>com.apple.security.app-sandbox</key>
 <true/>
 ```
+
 Should run out of the box in Windows and Linux
 
 ## Web setup
+
+If getting an error while running on web , try to Add js Script in web/index.html from [Web](https://inappwebview.dev/docs/intro#setup-web) setup
 
 To run on web platform, we have to run a chrome server somewhere using [puppeteer](https://pub.dev/packages/puppeteer), and get `browserWsEndpoint` from there and pass into the connect method
 
