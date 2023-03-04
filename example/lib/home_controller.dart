@@ -152,6 +152,48 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> sendButtonMessage() async {
+    if (!formKey.currentState!.validate()) return;
+    try {
+      await client?.chat.sendTextMessage(
+        phone: phoneNumber.text,
+        message: message.text,
+        useTemplate: true,
+        templateTitle: "test title",
+        templateFooter: "Footer",
+        buttons: [
+          MessageButtons(
+            text: "Phone number",
+            buttonData: "some phone number",
+            buttonType: ButtonType.phoneNumber,
+          ),
+          MessageButtons(
+            text: "open url",
+            buttonData: "https://google.com/",
+            buttonType: ButtonType.url,
+          ),
+          MessageButtons(
+            text: "Button 1",
+            buttonData: "some button id",
+            buttonType: ButtonType.id,
+          ),
+          MessageButtons(
+            text: "Button 2",
+            buttonData: "some button id",
+            buttonType: ButtonType.id,
+          ),
+          MessageButtons(
+            text: "Button 3",
+            buttonData: "some button id",
+            buttonType: ButtonType.id,
+          ),
+        ],
+      );
+    } catch (e) {
+      Get.log("Error : $e");
+    }
+  }
+
   Future<void> _sendFileMessage(
     String? filePath,
     WhatsappFileType fileType,

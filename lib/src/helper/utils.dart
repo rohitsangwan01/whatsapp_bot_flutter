@@ -45,7 +45,7 @@ extension JsParser on dynamic {
     if (this == null) {
       return null;
     } else if (runtimeType == String) {
-      return '''"$this"''';
+      return '''"${this.replaceAll("\n", "\\n").replaceAll("\"", "\\\"")}"''';
     } else {
       // return same for now
       return this;

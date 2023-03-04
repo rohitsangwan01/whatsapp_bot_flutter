@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
@@ -46,6 +48,9 @@ class HomeView extends GetView<HomeController> {
                         ElevatedButton(
                             onPressed: () => controller.sendMessage(),
                             child: const Text("Send Text")),
+                        ElevatedButton(
+                            onPressed: () => controller.sendButtonMessage(),
+                            child: const Text("Send Button Message")),
                         const SizedBox(width: 10),
                         ElevatedButton(
                             onPressed: () => controller
@@ -77,9 +82,20 @@ class HomeView extends GetView<HomeController> {
                         "ConnectionEvent : ${controller.connectionEvent.value?.name}",
                       )),
                   const Divider(),
-                  Obx(() => Text(
-                        "Messages : ${controller.messageEvents.value?.body}",
-                      )),
+                  Obx(() {
+                    String? message = controller.messageEvents.value?.body;
+                    String? type = controller.messageEvents.value?.type;
+                    return Row(
+                      children: [
+                        const Text("Message : "),
+                        (type == "image" || type == "video") && message != null
+                            ? Image.memory(base64Decode(message))
+                            : Expanded(
+                                child: Text(message ?? ""),
+                              ),
+                      ],
+                    );
+                  }),
                   const Divider(),
                   Obx(() => Text(
                         "Calls : ${controller.callEvents.value?.sender}",
