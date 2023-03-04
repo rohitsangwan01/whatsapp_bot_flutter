@@ -13,12 +13,21 @@ class WppChat {
   Future sendTextMessage({
     required String phone,
     required String message,
+    String? templateTitle,
+    String? templateFooter,
+    bool useTemplate = false,
+    List<MessageButtons>? buttons,
     MessageId? replyMessageId,
   }) async {
     String? replyText = replyMessageId?.serialized;
+    String? buttonsText = buttons?.map((e) => e.toJson()).toList().toString();
     return await wpClient.evaluateJs(
         '''WPP.chat.sendTextMessage(${phone.phoneParse}, ${message.jsParse}, {
-            quotedMsg: ${replyText.jsParse}
+            quotedMsg: ${replyText.jsParse},
+            useTemplateButtons: ${useTemplate.jsParse},
+            buttons:$buttonsText,
+            title: ${templateTitle.jsParse},
+            footer: ${templateFooter.jsParse}
           });''',
         methodName: "sendTextMessage");
   }
@@ -34,6 +43,10 @@ class WppChat {
     String? caption,
     String? mimetype,
     MessageId? replyMessageId,
+    String? templateTitle,
+    String? templateFooter,
+    bool useTemplate = false,
+    List<MessageButtons>? buttons,
   }) async {
     String base64Image = base64Encode(fileBytes);
     String mimeType = mimetype ?? getMimeType(fileType);
@@ -43,11 +56,16 @@ class WppChat {
       fileTypeName = mimeType.split("/").first;
     }
     String? replyTextId = replyMessageId?.serialized;
+    String? buttonsText = buttons?.map((e) => e.toJson()).toList().toString();
     String source =
         '''WPP.chat.sendFileMessage(${phone.phoneParse},${fileData.jsParse},{
                     type: ${fileTypeName.jsParse},
                     caption: ${caption.jsParse},
-                    quotedMsg: ${replyTextId.jsParse}
+                    quotedMsg: ${replyTextId.jsParse},
+                    useTemplateButtons: ${useTemplate.jsParse},
+                    buttons:$buttonsText,
+                    title: ${templateTitle.jsParse},
+                    footer: ${templateFooter.jsParse}
                   });''';
     var sendResult = await wpClient.evaluateJs(source);
     WhatsappLogger.log("SendResult : $sendResult");

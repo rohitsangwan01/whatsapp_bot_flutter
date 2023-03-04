@@ -1,3 +1,10 @@
+## 0.0.10
+
+- Implemented dart only in pubspec
+- minor bug fixes
+- added option to send buttons with messages
+- fix quotes in text messages
+
 ## 0.0.9
 
 - Updated platforms
