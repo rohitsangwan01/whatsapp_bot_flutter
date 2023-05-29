@@ -39,13 +39,14 @@ class WhatsappBotFlutter {
       Page? page;
 
       if (browserWsEndpoint != null) {
+        onConnectionEvent?.call(ConnectionEvent.connectingChrome);
         browser = await puppeteer.connect(
           browserWsEndpoint: browserWsEndpoint,
         );
       } else {
         onConnectionEvent?.call(ConnectionEvent.downloadingChrome);
 
-        RevisionInfo revisionInfo = await downloadChrome(
+        DownloadedBrowserInfo revisionInfo = await downloadChrome(
           cachePath: chromiumDownloadDirectory ?? "./.local-chromium",
         );
         String executablePath = revisionInfo.executablePath;
@@ -56,11 +57,11 @@ class WhatsappBotFlutter {
           userDataDir: sessionDirectory,
           args: puppeteerArgs,
         );
-
-        page = await browser.newPage();
-        await page.setUserAgent(WhatsAppMetadata.userAgent);
-        await page.goto(WhatsAppMetadata.whatsAppURL);
       }
+
+      page = await browser.newPage();
+      await page.setUserAgent(WhatsAppMetadata.userAgent);
+      await page.goto(WhatsAppMetadata.whatsAppURL);
 
       wpClient = WpClientDesktop(page: page, browser: browser);
 
