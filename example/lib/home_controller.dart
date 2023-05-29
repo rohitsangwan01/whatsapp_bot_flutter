@@ -2,9 +2,10 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter_mobile.dart';
@@ -36,6 +37,8 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
+  void test() {}
+
   void initConnection() async {
     error.value = "";
     connected.value = false;
@@ -48,9 +51,14 @@ class HomeController extends GetxController {
           onQrCode: _onQrCode,
         );
       } else {
+        // getting XmlHttpRequest error on web platform , so we have to manually
+        // pass the wpp.js file to the client
+        String? wppJsContent =
+            kIsWeb ? await rootBundle.loadString("assets/wpp.js") : null;
         // Initialize Desktop Client
         client = await WhatsappBotFlutter.connect(
           browserWsEndpoint: browserEndPoint,
+          wppJsContent: wppJsContent,
           chromiumDownloadDirectory: "../.local-chromium",
           onConnectionEvent: _onConnectionEvent,
           onQrCode: _onQrCode,
@@ -129,15 +137,6 @@ class HomeController extends GetxController {
   Future<void> disconnect() async {
     await client?.disconnect(tryLogout: true);
     connected.value = false;
-  }
-
-  void test() async {
-    if (!formKey.currentState!.validate()) return;
-    try {
-      // test any method
-    } catch (e) {
-      Get.log("Error : $e");
-    }
   }
 
   Future<void> sendMessage() async {

@@ -4,7 +4,7 @@ enum ConnectionEvent {
   connectingChrome,
   waitingForLogin,
   waitingForQrScan,
-
+  connectingWhatsapp,
   authenticated,
   logout,
   authCodeChange,

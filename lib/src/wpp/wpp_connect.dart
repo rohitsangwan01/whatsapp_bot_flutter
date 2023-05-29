@@ -7,11 +7,14 @@ import 'package:whatsapp_bot_flutter/src/model/whatsapp_exception.dart';
 
 class WppConnect {
   /// make sure to call [init] to Initialize Wpp
-  static Future init(WpClientInterface wpClient) async {
+  static Future init(
+    WpClientInterface wpClient, {
+    String? wppJsContent,
+  }) async {
     String latestBuildUrl =
         "https://github.com/wppconnect-team/wa-js/releases/latest/download/wppconnect-wa.js";
-    String content = await http.read(Uri.parse(latestBuildUrl));
-
+    // Web not able to download from this url, either replace this with another url, or pass the wppJsContent
+    String content = wppJsContent ?? await http.read(Uri.parse(latestBuildUrl));
     await wpClient.injectJs(content);
 
     WhatsappLogger.log("injected Wpp");

@@ -46,3 +46,5 @@ get_cli:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/
