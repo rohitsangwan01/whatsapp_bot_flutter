@@ -152,10 +152,13 @@ To run on web platform, we have to run a chrome server somewhere using [puppetee
 
 checkout [this](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/example/puppeteer_server/main.dart) example of running a chrome server using puppeteer
 
-then pass this `browserWsEndpoint` in connect method like this
+then pass this `browserWsEndpoint` in connect method, and also requires `wppJsContent`, we can download this file from [here](https://github.com/wppconnect-team/wa-js/releases/latest/download/wppconnect-wa.js), add this file in assets and pass like this,
 
 ```dart
-await WhatsappBotFlutter.connect( browserWsEndpoint: "BROWSER_WS_ENDPOINT_URL",);
+await WhatsappBotFlutter.connect(
+    browserWsEndpoint: "BROWSER_WS_ENDPOINT_URL",
+    wppJsContent: await rootBundle.loadString("assets/wpp.js"),
+);
 ```
 
 We can use this on `Mobile` or `Desktop` platforms as well , to connect to a chrome server hosted somewhere else
