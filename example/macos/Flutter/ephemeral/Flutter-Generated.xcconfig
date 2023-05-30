@@ -1,13 +1,13 @@
 // This is a generated file; do not edit or check into version control.
 FLUTTER_ROOT=/Users/rohitsangwan/fvm/versions/stable
-FLUTTER_APPLICATION_PATH=/Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/example
+FLUTTER_APPLICATION_PATH=/Volumes/ExtDrive/Development/flutter_plugins/whatsapp_bot_flutter/example
 COCOAPODS_PARALLEL_CODE_SIGN=true
-FLUTTER_TARGET=/Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/example/lib/main.dart
+FLUTTER_TARGET=/Volumes/ExtDrive/Development/flutter_plugins/whatsapp_bot_flutter/example/lib/main.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1
-DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ==
+DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ==,RkxVVFRFUl9XRUJfQ0FOVkFTS0lUX1VSTD1odHRwczovL3d3dy5nc3RhdGljLmNvbS9mbHV0dGVyLWNhbnZhc2tpdC9iNGZiMTEyMTRkZDJkZGE2Y2UwMTJkZDk4ZWE0OThlOWU4YjkxMjYyLw==
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
-PACKAGE_CONFIG=/Users/rohitsangwan/Drive/Devlopment/flutter_plugins/whatsapp_bot_flutter/example/.dart_tool/package_config.json
+PACKAGE_CONFIG=/Volumes/ExtDrive/Development/flutter_plugins/whatsapp_bot_flutter/example/.dart_tool/package_config.json

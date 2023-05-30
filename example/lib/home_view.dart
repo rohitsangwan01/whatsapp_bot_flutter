@@ -115,7 +115,7 @@ class MiddleFormView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        GetPlatform.isWeb
+        GetPlatform.isWeb || GetPlatform.isDesktop
             ? TextFormField(
                 controller: controller.browserClientWebSocketUrl,
                 decoration: const InputDecoration(
