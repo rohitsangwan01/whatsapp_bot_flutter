@@ -4,11 +4,10 @@ import 'dart:typed_data';
 
 import 'package:whatsapp_bot_flutter/src/helper/qr_code_helper.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
+import 'package:whatsapp_bot_flutter/src/model/qr_code_image.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_auth.dart';
 import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
-
-import '../../whatsapp_bot_flutter.dart';
-import '../model/qr_code_image.dart';
+import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 
 /// [waitForLogin] will either complete with successful login
 /// or failed with timeout exception

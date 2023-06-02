@@ -3,8 +3,7 @@ import 'dart:developer' as developer;
 import 'package:whatsapp_bot_flutter/src/model/whatsapp_exception.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_auth.dart';
 import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
-
-import '../../whatsapp_bot_flutter.dart';
+import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 
 class WhatsappLogger {
   static bool enableLogger = false;

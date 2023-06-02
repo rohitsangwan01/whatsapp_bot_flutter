@@ -1,7 +1,7 @@
 import 'package:puppeteer/puppeteer.dart';
+import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/model/qr_code_image.dart';
 import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
-import '../helper/utils.dart';
 
 class WpClientDesktop implements WpClientInterface {
   Page? page;

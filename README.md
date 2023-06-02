@@ -8,7 +8,7 @@ Whatsapp bot using whatsapp web scraping
 
 ## Getting Started
 
-We can use this library in Flutter as well as Pure dart projects , checkout dart [example](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/example_dart/main.dart)
+We can use this library in Flutter as well as Pure dart projects , checkout dart [example](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/dart_example/main.dart)
 
 First launch on Desktop apps will take some time, it will download chromium files locally, using [puppeteer](https://pub.dev/packages/puppeteer)
 

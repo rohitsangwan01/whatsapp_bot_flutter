@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/model/qr_code_image.dart';
 import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
-import '../helper/utils.dart';
 
 class WpClientMobile implements WpClientInterface {
   InAppWebViewController? controller;
   HeadlessInAppWebView? headlessInAppWebView;
 
-  WpClientMobile(
-      {required this.controller, required this.headlessInAppWebView});
+  WpClientMobile({
+    required this.controller,
+    required this.headlessInAppWebView,
+  });
 
   @override
   Future injectJs(String content) async {

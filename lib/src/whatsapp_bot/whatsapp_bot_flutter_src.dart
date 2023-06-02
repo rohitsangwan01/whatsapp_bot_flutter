@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:puppeteer/puppeteer.dart';
+import 'package:whatsapp_bot_flutter/src/helper/login_helper.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/clients/wpclient_desktop.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_connect.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
 import 'package:zxing2/qrcode.dart';
-
-import '../helper/login_helper.dart';
 
 /// [WhatsappBotFlutter] for maintaining a single  `Browser` and `Page` instance
 /// with methods like connect and send

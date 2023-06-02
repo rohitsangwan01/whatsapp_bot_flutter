@@ -1,3 +1,10 @@
+## 0.1.1
+
+- update to dart3
+- fix web
+- switch to flutter_inappwebview stable version
+
+
 ## 0.0.10
 
 - Implemented dart only in pubspec

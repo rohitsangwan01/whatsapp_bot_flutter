@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
-import '../../whatsapp_bot_flutter.dart';
+import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 
 class WppChat {
   WpClientInterface wpClient;

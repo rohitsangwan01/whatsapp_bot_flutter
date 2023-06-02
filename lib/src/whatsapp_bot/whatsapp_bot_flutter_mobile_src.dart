@@ -2,12 +2,11 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:whatsapp_bot_flutter/src/clients/wpclient_mobile.dart';
+import 'package:whatsapp_bot_flutter/src/helper/login_helper.dart';
 import 'package:whatsapp_bot_flutter/src/helper/utils.dart';
 import 'package:whatsapp_bot_flutter/src/wpp/wpp_connect.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 import 'package:whatsapp_bot_flutter/src/helper/whatsapp_client_interface.dart';
-
-import '../helper/login_helper.dart';
 
 class WhatsappBotFlutterMobile {
   /// call [connect] to connect with Mobile
@@ -47,14 +46,11 @@ class WhatsappBotFlutterMobile {
   // Helper methods
   /// to run webView in headless mode and connect with it
   static Future<WpClientMobile> _getMobileWpClient(bool keepSession) async {
-    WebView.debugLoggingSettings.enabled = false;
     HeadlessInAppWebView headlessWebView = HeadlessInAppWebView(
-      initialUrlRequest: URLRequest(
-          url: WebUri.uri(Uri.parse(
-        WhatsAppMetadata.whatsAppURLForceDesktop,
-      ))),
+      initialUrlRequest:
+          URLRequest(url: Uri.parse(WhatsAppMetadata.whatsAppURLForceDesktop)),
       onConsoleMessage: (controller, consoleMessage) {
-        WhatsappLogger.log(consoleMessage.message);
+        WhatsappLogger.log("ConsoleLog: ${consoleMessage.message}");
       },
       onReceivedServerTrustAuthRequest: (controller, challenge) async {
         return ServerTrustAuthResponse(
@@ -64,13 +60,15 @@ class WhatsappBotFlutterMobile {
       shouldOverrideUrlLoading: (controller, navigationAction) async {
         return NavigationActionPolicy.ALLOW;
       },
-      initialSettings: InAppWebViewSettings(
-        preferredContentMode: UserPreferredContentMode.DESKTOP,
-        userAgent: WhatsAppMetadata.userAgent,
-        javaScriptEnabled: true,
-        incognito: !keepSession,
-        clearCache: !keepSession,
-        cacheEnabled: keepSession,
+      initialOptions: InAppWebViewGroupOptions(
+        crossPlatform: InAppWebViewOptions(
+          preferredContentMode: UserPreferredContentMode.DESKTOP,
+          userAgent: WhatsAppMetadata.userAgent,
+          javaScriptEnabled: true,
+          incognito: !keepSession,
+          clearCache: !keepSession,
+          cacheEnabled: keepSession,
+        ),
       ),
     );
     await headlessWebView.run();
@@ -86,8 +84,8 @@ class WhatsappBotFlutterMobile {
       }
       if (!completer.isCompleted) completer.complete(controller);
     };
-    headlessWebView.onReceivedError = (controller, request, error) {
-      if (!completer.isCompleted) completer.completeError(error.description);
+    headlessWebView.onLoadError = (controller, url, code, message) {
+      if (!completer.isCompleted) completer.completeError(message);
     };
     InAppWebViewController controller = await completer.future;
 
