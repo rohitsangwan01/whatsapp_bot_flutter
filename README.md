@@ -146,11 +146,11 @@ Should run out of the box in Windows and Linux
 
 ## Web setup
 
-If getting an error while running on web , try to Add js Script in web/index.html from [Web](https://inappwebview.dev/docs/intro#setup-web) setup
+checkout web demo app : https://rohitsangwan01.github.io/whatsapp_bot_flutter
 
-To run on web platform, we have to run a chrome server somewhere using [puppeteer](https://pub.dev/packages/puppeteer), and get `browserWsEndpoint` from there and pass into the connect method
+We can use [browserless](https://cloud.browserless.io/account/), Create a free account there and get `API_TOKEN` from browserless, and use this url to connect : `wss://chrome.browserless.io?token=API_TOKEN`
 
-checkout [this](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/example/puppeteer_server/main.dart) example of running a chrome server using puppeteer
+Or we can run [puppeteer](https://pub.dev/packages/puppeteer), and get `browserWsEndpoint` from there and pass into the connect method, checkout [this](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/example/puppeteer_server/main.dart) example
 
 then pass this `browserWsEndpoint` in connect method, and also requires `wppJsContent`, we can download this file from [here](https://github.com/wppconnect-team/wa-js/releases/latest/download/wppconnect-wa.js), add this file in assets and pass like this,
 
