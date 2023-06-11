@@ -1,3 +1,11 @@
+## 1.0.0
+
+- use whatsapp_bot_platform_interface
+- improved docs
+- added proper pure dart implementation
+- extracted mobile support into another package
+
+
 ## 0.1.1
 
 - update to dart3

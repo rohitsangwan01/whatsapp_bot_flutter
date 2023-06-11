@@ -1,6 +1,7 @@
 import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.dart';
 
+/// Desktop client for connecting to whatsapp and perform tasks
 class WpClientDesktop implements WpClientInterface {
   Page? page;
   Browser? browser;

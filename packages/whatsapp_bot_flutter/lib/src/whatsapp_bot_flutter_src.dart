@@ -6,14 +6,14 @@ import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.
 
 /// [WhatsappBotFlutter] for maintaining a single  `Browser` and `Page` instance
 /// with methods like connect and send
-/// [connect] method will open WhatsappWeb in headless webView and connect to the whatsapp
-/// we can manually pass `wppJsContent` to use custom wppConnect.js for connecting to whatsapp ( specially for web )
-/// we can download this file from here : `https://github.com/wppconnect-team/wa-js/releases/latest/download/wppconnect-wa.js`
-/// and pass QrCode in `onQrCode` callback
-/// Scan this code , and on successful connection we will get onSuccessCallback
-/// We will get a WhatsappClient from here ,and we can use this client to work with whatsapp
-/// can throw Errors
 class WhatsappBotFlutter {
+  /// [connect] method will open WhatsappWeb in headless webView and connect to the whatsapp
+  /// we can manually pass `wppJsContent` to use custom wppConnect.js for connecting to whatsapp ( specially for web )
+  /// we can download this file from here : `https://github.com/wppconnect-team/wa-js/releases/latest/download/wppconnect-wa.js`
+  /// and pass QrCode in `onQrCode` callback
+  /// Scan this code , and on successful connection we will get onSuccessCallback
+  /// We will get a WhatsappClient from here ,and we can use this client to work with whatsapp
+  /// can throw Errors
   static Future<WhatsappClient?> connect({
     String? sessionDirectory,
     String? wppJsContent,
