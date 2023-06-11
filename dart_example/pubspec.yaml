@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   whatsapp_bot_flutter:
-    path: ../
+    path: ../packages/whatsapp_bot_flutter
 
 dev_dependencies:
   lints: ^2.0.0

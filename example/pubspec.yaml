@@ -12,7 +12,10 @@ dependencies:
   flex_color_scheme: ^6.0.1
   file_picker: ^5.2.2
   whatsapp_bot_flutter:
-    path: ../
+    path: ../packages/whatsapp_bot_flutter
+  whatsapp_bot_flutter_mobile:
+    path: ../packages/whatsapp_bot_flutter_mobile
+  
 
 dev_dependencies:
   flutter_lints: ^2.0.0
