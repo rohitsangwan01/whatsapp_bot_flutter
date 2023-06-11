@@ -5,16 +5,16 @@ import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 // dart main.dart ...
 void main(List<String> args) async {
   print("Trying Connecting ...");
-  WhatsappBotFlutter.enableLogs(true);
+  WhatsappBotUtils.enableLogs(true);
   WhatsappClient? client = await WhatsappBotFlutter.connect(
-    //sessionDirectory: "../cache",
+    sessionDirectory: "../cache",
     chromiumDownloadDirectory: "../.local-chromium",
-    headless: true,
+    headless: false,
     onConnectionEvent: (ConnectionEvent event) {
       print(event.toString());
     },
     onQrCode: (String qr, Uint8List? imageBytes) {
-      String qrText = WhatsappBotFlutter.convertStringToQrCode(qr);
+      String qrText = WhatsappBotUtils.convertStringToQrCode(qr);
       print(qrText);
     },
   );
