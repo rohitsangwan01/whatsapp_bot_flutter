@@ -29,8 +29,7 @@ WhatsappClient? whatsappClient = await WhatsappBotFlutterMobile.connect(
   },
 );
 ```
-
-Checkout complete docs [here](https://pub.dev/packages/whatsapp_bot_flutter)
+To run on desktop or pure dart projects, checkout complete docs [here](https://github.com/rohitsangwan01/whatsapp_bot_flutter/)
 
 ## Resources
 
