@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
-import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter_mobile.dart';
+import 'package:whatsapp_bot_flutter_mobile/whatsapp_bot_flutter_mobile.dart';
 
 class HomeController extends GetxController {
   var formKey = GlobalKey<FormState>();
@@ -32,7 +32,7 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    WhatsappBotFlutter.enableLogs(true);
+    WhatsappBotUtils.enableLogs(true);
     message.text = "Testing Whatsapp Bot";
     super.onInit();
   }

@@ -4,11 +4,12 @@
 
 [![whatsapp_bot_flutter version](https://img.shields.io/pub/v/whatsapp_bot_flutter?label=whatsapp_bot_flutter)](https://pub.dev/packages/whatsapp_bot_flutter)
 
-Whatsapp bot using whatsapp web scraping
+[![whatsapp_bot_flutter_mobile version](https://img.shields.io/pub/v/whatsapp_bot_flutter_mobile?label=whatsapp_bot_flutter_mobile)](https://pub.dev/packages/whatsapp_bot_flutter_mobile)
+
 
 ## Getting Started
 
-We can use this library in Flutter as well as Pure dart projects , checkout dart [example](https://github.com/rohitsangwan01/whatsapp_bot_flutter/blob/main/dart_example/main.dart)
+We can use this library in Flutter as well as Pure dart projects , checkout `dart_example`
 
 First launch on Desktop apps will take some time, it will download chromium files locally, using [puppeteer](https://pub.dev/packages/puppeteer)
 
@@ -17,7 +18,7 @@ First launch on Desktop apps will take some time, it will download chromium file
 Get `WhatsappClient` using connect method
 
 ```dart
-// use WhatsappBotFlutterMobile.connect for Mobile platforms
+// use WhatsappBotFlutterMobile.connect for Android/IOS platforms
 WhatsappClient? whatsappClient = await WhatsappBotFlutter.connect(
   onConnectionEvent: (ConnectionEvent event) {
     print(event.toString());

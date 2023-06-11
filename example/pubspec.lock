@@ -384,10 +384,24 @@ packages:
   whatsapp_bot_flutter:
     dependency: "direct main"
     description:
-      path: ".."
+      path: "../packages/whatsapp_bot_flutter"
       relative: true
     source: path
-    version: "0.1.1"
+    version: "1.0.0"
+  whatsapp_bot_flutter_mobile:
+    dependency: "direct main"
+    description:
+      path: "../packages/whatsapp_bot_flutter_mobile"
+      relative: true
+    source: path
+    version: "1.0.0"
+  whatsapp_bot_platform_interface:
+    dependency: transitive
+    description:
+      path: "../packages/whatsapp_bot_platform_interface"
+      relative: true
+    source: path
+    version: "0.0.1"
   win32:
     dependency: transitive
     description:
