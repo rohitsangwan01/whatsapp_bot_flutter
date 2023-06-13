@@ -398,10 +398,11 @@ packages:
   whatsapp_bot_platform_interface:
     dependency: transitive
     description:
-      path: "../packages/whatsapp_bot_platform_interface"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: whatsapp_bot_platform_interface
+      sha256: e14f9df342dfc1de0e3bd66b5b5aff3982b3b3250c519dd9ecc984eb8c166dcd
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   win32:
     dependency: transitive
     description:
