@@ -81,45 +81,4 @@ class WppEvents {
     if (connectionEvent == null) return;
     connectionEventStreamController.add(connectionEvent);
   }
-
-  /// Implement `addListener` and `removeListeners` to save resources
-  Future addListener(String event) async {
-    if (await haveListeners(event)) {
-      WhatsappLogger.log("$event already have listener");
-      return;
-    }
-    await wpClient.evaluateJs(
-      '''WPP.addListener('$event', (data) => {
-              window.onCustomEvent(""$event",data);
-          });
-      ''',
-    );
-  }
-
-  Future removeListeners(String event) async {
-    return await wpClient.evaluateJs(
-      """
-          async function getListener(){
-            let listeners = WPP.listeners("$event");
-            for (let i = 0; i < listeners.length; i++) {
-              let listenerMethod = listeners[i];
-              WPP.removeListener("$event",listenerMethod);
-            }       
-          }
-          getListener(); 
-      """,
-      methodName: "removeListeners",
-      tryPromise: false,
-    );
-  }
-
-  Future getActiveEvents() async {
-    return await wpClient
-        .evaluateJs("""WPP.eventNames()""", methodName: "getEventNames");
-  }
-
-  Future haveListeners(String event) async {
-    return await wpClient.evaluateJs("""WPP.hasListeners(${event.jsParse})""",
-        methodName: "haveListeners");
-  }
 }

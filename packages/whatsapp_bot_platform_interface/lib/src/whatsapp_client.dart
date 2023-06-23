@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:whatsapp_bot_platform_interface/src/wpp/wpp_group.dart';
 import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.dart';
 
 /// get [WhatsappClient] from `WhatsappBotFlutter.connect()`
@@ -11,6 +12,7 @@ class WhatsappClient {
   late WppChat chat;
   late WppContact contact;
   late WppProfile profile;
+  late WppGroup group;
   late WppEvents _wppEvents;
   late WppAuth _wppAuth;
 
@@ -18,9 +20,29 @@ class WhatsappClient {
     chat = WppChat(wpClient);
     contact = WppContact(wpClient);
     profile = WppProfile(wpClient);
+    group = WppGroup(wpClient);
     _wppAuth = WppAuth(wpClient);
     _wppEvents = WppEvents(wpClient);
     _wppEvents.init();
+  }
+
+  /// To list to any event from WPP
+  Future<void> on(String event, Function(dynamic) callback) =>
+      wpClient.on(event, callback);
+
+  /// To remove listener from any event from WPP
+  Future<void> off(String event) => wpClient.off(event);
+
+  /// To run a custom function on WPP
+  Future executeFunction(
+    String function, {
+    bool tryPromise = true,
+  }) async {
+    await wpClient.evaluateJs(
+      function,
+      methodName: "executeFunction",
+      tryPromise: tryPromise,
+    );
   }
 
   /// [isConnected] is to check if we are still connected to the WhatsappPage

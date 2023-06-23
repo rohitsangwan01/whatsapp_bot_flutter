@@ -94,6 +94,43 @@ class WpClientMobile implements WpClientInterface {
   }
 
   @override
+  Future<void> on(String event, Function(dynamic) callback) async {
+    String callbackName = "callback_${event.replaceAll(".", "_")}";
+    await evaluateJs(
+      """window.$callbackName = (data) => window.flutter_inappwebview.callHandler('$callbackName',data);""",
+      tryPromise: false,
+    );
+    controller?.addJavaScriptHandler(
+      handlerName: callbackName,
+      callback: callback,
+    );
+    await controller?.evaluateJavascript(
+      source: '''
+        function addListenerMethod() {
+            WPP.on('$event', (data) => {
+              window.$callbackName(data);
+            });
+        }
+        addListenerMethod();
+        ''',
+    );
+  }
+
+  @override
+  Future<void> off(String event) async {
+    String callbackName = "callback_${event.replaceAll(".", "_")}";
+    controller?.removeJavaScriptHandler(handlerName: callbackName);
+    await controller?.evaluateJavascript(
+      source: '''
+        function removeListenerMethod() {
+             WPP.removeAllListeners('$event');
+        }
+        removeListenerMethod();
+        ''',
+    );
+  }
+
+  @override
   Future initializeEventListener(
     OnNewEventFromListener onNewEventFromListener,
   ) async {

@@ -20,4 +20,8 @@ abstract class WpClientInterface {
   Future initializeEventListener(OnNewEventFromListener onNewEventFromListener);
 
   Future<QrCodeImage?> getQrCode();
+
+  Future<void> on(String event, Function(dynamic) callback);
+
+  Future<void> off(String event);
 }

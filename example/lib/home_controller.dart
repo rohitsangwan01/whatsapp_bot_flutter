@@ -37,7 +37,16 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
-  void test() {}
+  void test() async {
+    // client?.group.createGroup(groupName: "Test2");
+    String groupId = '120363142949888782@g.us';
+    // client?.group.addParticipants(
+    //     groupId: '120363142135810421@g.us', phoneNumbers: ['8529151020']);
+    // client?.group.getParticipants(groupId: groupId);
+    // client?.group.getAllGroups();
+    client?.group
+        .removeParticipants(groupId: groupId, phoneNumber: "8529151020");
+  }
 
   void initConnection() async {
     error.value = "";
@@ -68,6 +77,7 @@ class HomeController extends GetxController {
       if (client != null) {
         connected.value = true;
         initStreams(client!);
+        initListeners();
       }
     } catch (er) {
       error.value = er.toString();
@@ -131,6 +141,16 @@ class HomeController extends GetxController {
           );
         }
       }
+    });
+  }
+
+  void initListeners() async {
+    client?.on("chat.msg_revoke", (data) {
+      Get.log("Revoking Event : $data");
+    });
+
+    client?.on("chat.new_reaction", (data) {
+      Get.log("NewReaction Event : $data");
     });
   }
 

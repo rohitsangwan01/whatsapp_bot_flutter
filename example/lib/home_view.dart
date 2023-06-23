@@ -69,9 +69,9 @@ class HomeView extends GetView<HomeController> {
                       ],
                     ),
                   ),
-                  // ElevatedButton(
-                  //     onPressed: () => controller.test(),
-                  //     child: const Text("Test")),
+                  ElevatedButton(
+                      onPressed: () => controller.test(),
+                      child: const Text("Test")),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Divider(),
@@ -115,7 +115,7 @@ class MiddleFormView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        GetPlatform.isWeb || GetPlatform.isDesktop
+        GetPlatform.isWeb
             ? TextFormField(
                 controller: controller.browserClientWebSocketUrl,
                 decoration: const InputDecoration(

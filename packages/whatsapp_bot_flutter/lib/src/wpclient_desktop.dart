@@ -11,6 +11,7 @@ class WpClientDesktop implements WpClientInterface {
   @override
   Future<void> dispose() async {
     browser?.disconnect();
+    browser?.process?.kill();
   }
 
   @override
@@ -19,12 +20,41 @@ class WpClientDesktop implements WpClientInterface {
     String? methodName,
     bool tryPromise = true,
   }) async {
-    //  await validateConnection(this);
-    dynamic result = await page?.evaluate(source);
-    if (methodName?.isNotEmpty == true) {
-      WhatsappLogger.log("${methodName}_Result : $result");
+    try {
+      var result = await page?.evaluate(source);
+      if (methodName?.isNotEmpty == true) {
+        WhatsappLogger.log("${methodName}_Result : $result");
+      }
+      return result;
+    } on ClientError catch (e) {
+      throw WhatsappException(
+        message: e.message ?? "",
+        exceptionType: WhatsappExceptionType.clientErrorException,
+        details: e.details?.toJson().toString(),
+      );
     }
-    return result;
+  }
+
+  Future<Map<dynamic, dynamic>> getJsonDataFromJsHandler(
+      JsHandle? jsHandler) async {
+    try {
+      Map<String, JsHandle>? result = await jsHandler?.properties;
+      var data = {};
+      result?.forEach((key, value) async {
+        dynamic finalData;
+        try {
+          finalData = await value.jsonValue;
+        } catch (e) {
+          finalData = getJsonDataFromJsHandler(value);
+        }
+        print(finalData);
+        data[key] = finalData;
+      });
+      return data;
+    } catch (e) {
+      print(e);
+      return {};
+    }
   }
 
   @override
@@ -67,6 +97,28 @@ class WpClientDesktop implements WpClientInterface {
       //WhatsappLogger.log("QrCodeFetchingError: $e");
       return null;
     }
+  }
+
+  @override
+  Future<void> on(String event, Function(dynamic) callback) async {
+    String callbackName = "callback_${event.replaceAll(".", "_")}";
+    await page?.exposeFunction(callbackName, callback);
+    await page?.evaluate(
+      '''()=>{
+            WPP.on('$event', (data) => {
+              window.$callbackName(data);
+            });
+        }''',
+    );
+  }
+
+  @override
+  Future<void> off(String event) async {
+    await page?.evaluate(
+      '''()=>{
+            WPP.removeAllListeners('$event');
+        }''',
+    );
   }
 
   @override

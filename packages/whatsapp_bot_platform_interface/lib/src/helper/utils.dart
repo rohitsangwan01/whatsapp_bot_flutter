@@ -76,25 +76,36 @@ extension JsParser on dynamic {
       return null;
     } else if (runtimeType == String) {
       return '''"${this.replaceAll("\n", "\\n").replaceAll("\"", "\\\"")}"''';
+    } else if (runtimeType == List<String>) {
+      return '''[${this.map((String e) => e.jsParse).join(",")}]''';
     } else {
       // return same for now
       return this;
     }
   }
 
-  String get phoneParse {
-    // ignore: unnecessary_string_interpolations
-    return parsePhone(this).jsParse;
-  }
+  String get phoneParse => parsePhone(this).jsParse;
+
+  String get groupParse => parseGroup(this).jsParse;
 }
 
-/// [_parsePhone] will try to convert phone number in required format
+/// [parsePhone] will try to convert phone number in required format
 String parsePhone(String phone) {
   String chatSuffix = "@c.us";
   //String groupSuffix = "@g.us";
   String phoneNum = phone.replaceAll("+", "");
   if (!phone.contains(".us")) {
     phoneNum = "$phoneNum$chatSuffix";
+  }
+  return phoneNum;
+}
+
+/// [parseGroup] will try to convert group number in required format
+String parseGroup(String phone) {
+  String groupSuffix = "@g.us";
+  String phoneNum = phone.replaceAll("+", "");
+  if (!phone.contains(".us")) {
+    phoneNum = "$phoneNum$groupSuffix";
   }
   return phoneNum;
 }

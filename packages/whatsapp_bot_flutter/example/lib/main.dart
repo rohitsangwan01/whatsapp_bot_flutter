@@ -1,25 +1,16 @@
 import 'dart:typed_data';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 
-// Make sure to run in terminal using
-// dart main.dart ...
 void main(List<String> args) async {
-  print("Trying Connecting ...");
   WhatsappBotUtils.enableLogs(true);
 
   WhatsappClient? client = await WhatsappBotFlutter.connect(
-    sessionDirectory: "../cache",
-    chromiumDownloadDirectory: "../.local-chromium",
-    headless: false,
     onConnectionEvent: (ConnectionEvent event) {
       print(event.toString());
     },
     onQrCode: (String qr, Uint8List? imageBytes) {
       String qrText = WhatsappBotUtils.convertStringToQrCode(qr);
       print(qrText);
-    },
-    onBrowserCreated: (browser) {
-      print("Browser Created with pid ${browser.process?.pid}");
     },
   );
 
@@ -45,17 +36,5 @@ void main(List<String> args) async {
   // subscribe to call events
   client?.callEvents.listen((CallEvent callEvent) {
     print(callEvent.toJson());
-  });
-
-  client?.on("chat.new_message", (data) {
-    print("Message Event : $data");
-  });
-
-  client?.on("chat.msg_revoke", (data) {
-    print("Revoking Event : $data");
-  });
-
-  client?.on("chat.new_reaction", (data) {
-    print("NewReaction Event : $data");
   });
 }
