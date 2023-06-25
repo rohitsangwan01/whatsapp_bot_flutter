@@ -420,17 +420,17 @@ packages:
   whatsapp_bot_flutter:
     dependency: "direct main"
     description:
-      path: "../packages/whatsapp_bot_flutter"
+      path: ".."
       relative: true
     source: path
-    version: "1.0.1"
+    version: "1.0.2"
   whatsapp_bot_platform_interface:
     dependency: transitive
     description:
-      path: "../packages/whatsapp_bot_platform_interface"
+      path: "../../whatsapp_bot_platform_interface"
       relative: true
     source: path
-    version: "0.0.3"
+    version: "1.0.0"
   yaml:
     dependency: transitive
     description:
@@ -448,4 +448,4 @@ packages:
     source: hosted
     version: "0.2.0"
 sdks:
-  dart: ">=3.0.0 <4.0.0"
+  dart: ">=3.0.1 <4.0.0"

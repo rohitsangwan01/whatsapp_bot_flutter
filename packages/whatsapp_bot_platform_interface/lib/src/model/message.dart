@@ -25,6 +25,7 @@ class Message {
     required this.stickerSentTs,
     required this.requiresDirectConnection,
     required this.pttForwardedFeaturesEnabled,
+    required this.caption,
   });
 
   final MessageId? id;
@@ -52,6 +53,7 @@ class Message {
   final int stickerSentTs;
   final bool requiresDirectConnection;
   final bool pttForwardedFeaturesEnabled;
+  final String caption;
 
   Message copyWith({
     MessageId? id,
@@ -80,6 +82,7 @@ class Message {
     int? stickerSentTs,
     bool? requiresDirectConnection,
     bool? pttForwardedFeaturesEnabled,
+    String? caption,
   }) {
     return Message(
       id: id ?? this.id,
@@ -111,7 +114,20 @@ class Message {
           requiresDirectConnection ?? this.requiresDirectConnection,
       pttForwardedFeaturesEnabled:
           pttForwardedFeaturesEnabled ?? this.pttForwardedFeaturesEnabled,
+      caption: caption ?? this.caption,
     );
+  }
+
+  /// Because Mobile platforms returns data as list
+  /// and desktop returns as map , so to unify the data
+  static List<Message> parse(data) {
+    if (data == null) return [];
+    if (data is List) {
+      return data.map((e) => Message.fromJson(e)).toList();
+    } else if (data is Map<String, dynamic>) {
+      return [Message.fromJson(data)];
+    }
+    return [];
   }
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -141,6 +157,7 @@ class Message {
       stickerSentTs: json["stickerSentTs"] ?? 0,
       requiresDirectConnection: json["requiresDirectConnection"] ?? false,
       pttForwardedFeaturesEnabled: json["pttForwardedFeaturesEnabled"] ?? false,
+      caption: json["caption"] ?? "",
     );
   }
 
@@ -170,6 +187,7 @@ class Message {
         "stickerSentTs": stickerSentTs,
         "requiresDirectConnection": requiresDirectConnection,
         "pttForwardedFeaturesEnabled": pttForwardedFeaturesEnabled,
+        "caption": caption,
       };
 }
 

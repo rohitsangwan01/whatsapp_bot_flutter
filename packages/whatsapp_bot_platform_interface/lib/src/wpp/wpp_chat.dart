@@ -38,16 +38,19 @@ class WppChat {
     required String phone,
     required WhatsappFileType fileType,
     required List<int> fileBytes,
+    String? fileName,
     String? caption,
     String? mimetype,
     MessageId? replyMessageId,
     String? templateTitle,
     String? templateFooter,
     bool useTemplate = false,
+    bool isViewOnce = false,
+    bool audioAsPtt = false,
     List<MessageButtons>? buttons,
   }) async {
     String base64Image = base64Encode(fileBytes);
-    String mimeType = mimetype ?? getMimeType(fileType);
+    String mimeType = mimetype ?? getMimeType(fileType, fileName, fileBytes);
     String fileData = "data:$mimeType;base64,$base64Image";
     String fileTypeName = "image";
     if (mimeType.split("/").length > 1) {
@@ -58,6 +61,9 @@ class WppChat {
     String source =
         '''WPP.chat.sendFileMessage(${phone.phoneParse},${fileData.jsParse},{
                     type: ${fileTypeName.jsParse},
+                    isPtt: ${audioAsPtt.jsParse},
+                    isViewOnce: ${isViewOnce.jsParse},
+                    filename: ${fileName.jsParse},
                     caption: ${caption.jsParse},
                     quotedMsg: ${replyTextId.jsParse},
                     useTemplateButtons: ${useTemplate.jsParse},
@@ -215,14 +221,17 @@ class WppChat {
     );
   }
 
-  /// Delete messages
-  Future deleteMessages({
+  /// Delete message
+  /// Set revoke: true if you want to delete for everyone in group chat
+  Future deleteMessage({
     required String phone,
-    required List<String> messageIds,
+    required String messageId,
+    bool deleteMediaInDevice = false,
+    bool revoke = false,
   }) async {
     return await wpClient.evaluateJs(
-      '''WPP.chat.deleteMessage(${phone.phoneParse},$messageIds);''',
-      methodName: "deleteMessages",
+      '''WPP.chat.deleteMessage(${phone.phoneParse},${messageId.jsParse}, $deleteMediaInDevice, $revoke);''',
+      methodName: "deleteMessage",
     );
   }
 
@@ -260,4 +269,46 @@ class WppChat {
       methodName: "RejectCallResult",
     );
   }
+
+  /// Emoji list: https://unicode.org/emoji/charts/full-emoji-list.html
+  /// To remove reaction, set [emoji] to null
+  Future sendReactionToMessage({
+    required MessageId messageId,
+    String? emoji,
+  }) async {
+    String? serialized = messageId.serialized;
+    return await wpClient.evaluateJs(
+      '''WPP.chat.sendReactionToMessage(${serialized.jsParse}, ${emoji != null ? emoji.jsParse : false});''',
+      methodName: "sendReactionToMessage",
+    );
+  }
+
+  /// [forwardTextMessage] may throw errors if passed an invalid contact
+  /// or if this method completed without any issue , then probably message sent successfully
+  Future forwardTextMessage({
+    required String phone,
+    required MessageId messageId,
+    bool displayCaptionText = false,
+    bool multicast = false,
+  }) async {
+    String? serialized = messageId.serialized;
+    return await wpClient.evaluateJs(
+        '''WPP.chat.forwardMessage(${phone.phoneParse}, ${serialized.jsParse}, {
+            displayCaptionText: $displayCaptionText,
+            multicast: $multicast,
+          });''',
+        methodName: "forwardMessage");
+  }
+
+  // TODO: fix list
+  // /// Delete messages
+  // Future deleteMessages({
+  //   required String phone,
+  //   required List<String> messageIds,
+  // }) async {
+  //   return await wpClient.evaluateJs(
+  //     '''WPP.chat.deleteMessage(${phone.phoneParse},$messageIds);''',
+  //     methodName: "deleteMessages",
+  //   );
+  // }
 }

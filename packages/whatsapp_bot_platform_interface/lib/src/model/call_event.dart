@@ -33,6 +33,16 @@ class CallEvent {
     );
   }
 
+  static List<CallEvent> parse(data) {
+    if (data == null) return [];
+    if (data is List) {
+      return data.map((e) => CallEvent.fromJson(e)).toList();
+    } else if (data is Map<String, dynamic>) {
+      return [CallEvent.fromJson(data)];
+    }
+    return [];
+  }
+
   factory CallEvent.fromJson(Map<String, dynamic> json) {
     return CallEvent(
       id: json["id"] ?? "",

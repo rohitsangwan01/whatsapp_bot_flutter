@@ -6,6 +6,7 @@ import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 void main(List<String> args) async {
   print("Trying Connecting ...");
   WhatsappBotUtils.enableLogs(true);
+
   WhatsappClient? client = await WhatsappBotFlutter.connect(
     sessionDirectory: "../cache",
     chromiumDownloadDirectory: "../.local-chromium",
@@ -17,6 +18,9 @@ void main(List<String> args) async {
       String qrText = WhatsappBotUtils.convertStringToQrCode(qr);
       print(qrText);
     },
+    onBrowserCreated: (browser) {
+      print("Browser Created with pid ${browser.process?.pid}");
+    },
   );
 
   // subscribe to connection events
@@ -25,7 +29,8 @@ void main(List<String> args) async {
   });
 
   // subscribe to Message Events
-  client?.messageEvents.listen((Message message) {
+  client?.on(WhatsappEvent.chat_new_message, (data) {
+    Message message = Message.fromJson(data);
     if (!(message.id?.fromMe ?? true)) {
       print(message.body.toString());
       if (message.body == "hii") {
@@ -36,10 +41,14 @@ void main(List<String> args) async {
         );
       }
     }
+    print("Message Event : $data");
   });
 
-  // subscribe to call events
-  client?.callEvents.listen((CallEvent callEvent) {
-    print(callEvent.toJson());
+  client?.on(WhatsappEvent.chat_msg_revoke, (data) {
+    print("Revoking Event : $data");
+  });
+
+  client?.on(WhatsappEvent.chat_new_reaction, (data) {
+    print("NewReaction Event : $data");
   });
 }

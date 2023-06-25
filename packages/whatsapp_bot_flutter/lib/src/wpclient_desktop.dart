@@ -11,6 +11,7 @@ class WpClientDesktop implements WpClientInterface {
   @override
   Future<void> dispose() async {
     browser?.disconnect();
+    browser?.process?.kill();
   }
 
   @override
@@ -19,12 +20,19 @@ class WpClientDesktop implements WpClientInterface {
     String? methodName,
     bool tryPromise = true,
   }) async {
-    //  await validateConnection(this);
-    dynamic result = await page?.evaluate(source);
-    if (methodName?.isNotEmpty == true) {
-      WhatsappLogger.log("${methodName}_Result : $result");
+    try {
+      var result = await page?.evaluate(source);
+      if (methodName?.isNotEmpty == true) {
+        WhatsappLogger.log("${methodName}_Result : $result");
+      }
+      return result;
+    } on ClientError catch (e) {
+      throw WhatsappException(
+        message: e.message ?? "",
+        exceptionType: WhatsappExceptionType.clientErrorException,
+        details: e.details?.toJson().toString(),
+      );
     }
-    return result;
   }
 
   @override
@@ -70,8 +78,31 @@ class WpClientDesktop implements WpClientInterface {
   }
 
   @override
+  Future<void> on(String event, Function(dynamic) callback) async {
+    String callbackName = "callback_${event.replaceAll(".", "_")}";
+    await page?.exposeFunction(callbackName, callback);
+    await page?.evaluate(
+      '''()=>{
+            WPP.on('$event', (data) => {
+              window.$callbackName(data);
+            });
+        }''',
+    );
+  }
+
+  @override
+  Future<void> off(String event) async {
+    await page?.evaluate(
+      '''()=>{
+            WPP.removeAllListeners('$event');
+        }''',
+    );
+  }
+
+  @override
   Future initializeEventListener(
-      OnNewEventFromListener onNewEventFromListener) async {
+    OnNewEventFromListener onNewEventFromListener,
+  ) async {
     try {
       // Add Dart side method
       await page?.exposeFunction("onCustomEvent", (type, data) {
@@ -81,16 +112,10 @@ class WpClientDesktop implements WpClientInterface {
       // Add all listeners
       await page?.evaluate(
         '''()=>{
-            WPP.on('chat.new_message', (msg) => {
-              window.onCustomEvent("messageEvent",msg);
-            });
-            WPP.on('call.incoming_call', (call) => {
-              window.onCustomEvent("callEvent",call);
-            });
             WPP.on('conn.authenticated', () => {
               window.onCustomEvent("connectionEvent","authenticated");
             });
-             WPP.on('conn.logout', () => {
+            WPP.on('conn.logout', () => {
               window.onCustomEvent("connectionEvent","logout");
             });
             WPP.on('conn.auth_code_change', () => {

@@ -94,6 +94,35 @@ class WpClientMobile implements WpClientInterface {
   }
 
   @override
+  Future<void> on(String event, Function(dynamic) callback) async {
+    String callbackName = "callback_${event.replaceAll(".", "_")}";
+    await evaluateJs(
+      """window.$callbackName = (data) => window.flutter_inappwebview.callHandler('$callbackName',data);""",
+      tryPromise: false,
+    );
+    controller?.addJavaScriptHandler(
+      handlerName: callbackName,
+      callback: callback,
+    );
+    await controller?.evaluateJavascript(
+      source: '''
+            WPP.on('$event', (data) => {
+              window.$callbackName(data);
+            });
+        ''',
+    );
+  }
+
+  @override
+  Future<void> off(String event) async {
+    String callbackName = "callback_${event.replaceAll(".", "_")}";
+    controller?.removeJavaScriptHandler(handlerName: callbackName);
+    await controller?.evaluateJavascript(
+      source: '''WPP.removeAllListeners('$event');''',
+    );
+  }
+
+  @override
   Future initializeEventListener(
     OnNewEventFromListener onNewEventFromListener,
   ) async {
@@ -117,12 +146,6 @@ class WpClientMobile implements WpClientInterface {
       // Add all listeners
       await controller?.evaluateJavascript(
         source: '''function initEvents() {
-            WPP.on('chat.new_message', (msg) => {
-              window.onCustomEvent("messageEvent",msg);
-            });
-            WPP.on('call.incoming_call', (call) => {
-              window.onCustomEvent("callEvent",call);
-            });
             WPP.on('conn.authenticated', () => {
               window.onCustomEvent("connectionEvent","authenticated");
             });

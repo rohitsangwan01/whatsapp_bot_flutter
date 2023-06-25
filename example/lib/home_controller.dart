@@ -37,7 +37,16 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
-  void test() {}
+  void test() async {
+    // client?.group.createGroup(groupName: "Test2");
+    String groupId = '120363142949888782@g.us';
+    // client?.group.addParticipants(
+    //     groupId: '120363142135810421@g.us', phoneNumbers: ['8529151020']);
+    // client?.group.getParticipants(groupId: groupId);
+    // client?.group.getAllGroups();
+    client?.group
+        .removeParticipants(groupId: groupId, phoneNumber: "8529151020");
+  }
 
   void initConnection() async {
     error.value = "";
@@ -67,7 +76,7 @@ class HomeController extends GetxController {
 
       if (client != null) {
         connected.value = true;
-        initStreams(client!);
+        initListeners(client!);
       }
     } catch (er) {
       error.value = er.toString();
@@ -102,26 +111,20 @@ class HomeController extends GetxController {
     );
   }
 
-  void initStreams(WhatsappClient client) async {
+  void initListeners(WhatsappClient client) async {
     // listen to ConnectionEvent Stream
     client.connectionEventStream.listen((event) {
       connectionEvent.value = event;
     });
-    // listen to CallEvent Stream
-    client.callEvents.listen((event) {
-      callEvents.value = event;
-      client.chat.rejectCall(callId: event.id);
-      client.chat.sendTextMessage(
-        phone: event.sender,
-        message: "Hey, Call rejected by whatsapp bot",
-      );
-    });
-    // listen to messageEventStream
-    client.messageEvents.listen((Message message) {
-      if (!(message.id?.fromMe ?? true)) {
-        Get.log(message.toJson().toString());
-        messageEvents.value = message;
 
+    // listen to MessageEvents
+    client.on(WhatsappEvent.chat_new_message, (data) {
+      List<Message> messages = Message.parse(data);
+      if (messages.isEmpty) return;
+      Message message = messages.first;
+      Get.log(message.toJson().toString());
+      if (!(message.id?.fromMe ?? true)) {
+        messageEvents.value = message;
         // auto reply if message == test
         if (message.body == "test") {
           client.chat.sendTextMessage(
@@ -131,6 +134,23 @@ class HomeController extends GetxController {
           );
         }
       }
+    });
+
+    // listen to CallEvents
+    client.on(WhatsappEvent.incoming_call, (data) {
+      List<CallEvent> events = CallEvent.parse(data);
+      if (events.isEmpty) return;
+      CallEvent event = events.first;
+      callEvents.value = event;
+      client.chat.rejectCall(callId: event.id);
+      client.chat.sendTextMessage(
+        phone: event.sender,
+        message: "Hey, Call rejected by whatsapp bot",
+      );
+    });
+
+    client.on(WhatsappEvent.chat_msg_revoke, (data) {
+      Get.log("Revoking Event : $data");
     });
   }
 
@@ -195,6 +215,7 @@ class HomeController extends GetxController {
 
   Future<void> _sendFileMessage(
     String? filePath,
+    String? fileName,
     WhatsappFileType fileType,
   ) async {
     if (!formKey.currentState!.validate()) return;
@@ -202,12 +223,12 @@ class HomeController extends GetxController {
       if (filePath == null) return;
       File file = File(filePath);
       List<int> imageBytes = file.readAsBytesSync();
-
       await client?.chat.sendFileMessage(
         phone: phoneNumber.text,
         fileBytes: imageBytes,
         caption: message.text,
         fileType: fileType,
+        fileName: fileName,
       );
     } catch (e) {
       Get.log("Error : $e");
@@ -229,6 +250,7 @@ class HomeController extends GetxController {
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(type: fileType);
     String? path = result?.files.first.path;
-    await _sendFileMessage(path, whatsappFileType);
+    String? name = result?.names.first;
+    await _sendFileMessage(path, name, whatsappFileType);
   }
 }

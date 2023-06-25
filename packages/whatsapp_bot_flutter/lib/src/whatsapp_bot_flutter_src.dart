@@ -25,6 +25,7 @@ class WhatsappBotFlutter {
     Function(String qrCodeUrl, Uint8List? qrCodeImage)? onQrCode,
     Function(ConnectionEvent)? onConnectionEvent,
     Duration? connectionTimeout = const Duration(seconds: 20),
+    Function(Browser browser)? onBrowserCreated,
   }) async {
     WpClientInterface? wpClient;
 
@@ -53,6 +54,7 @@ class WhatsappBotFlutter {
           userDataDir: sessionDirectory,
           args: puppeteerArgs,
         );
+        onBrowserCreated?.call(browser);
       }
       onConnectionEvent?.call(ConnectionEvent.connectingWhatsapp);
       page = await browser.newPage();
