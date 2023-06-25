@@ -73,7 +73,7 @@ To get new Messages
 
 ```dart
 whatsappClient.on(WhatsappEvent.chat_new_message, (data) {
-    Message message = Message.fromJson(data);
+    List<Message> messages = Message.parse(data);
     // replyMessageId  is optional , add this to send a reply message
     whatsappClient.chat.sendTextMessage(
       phone: message.from,

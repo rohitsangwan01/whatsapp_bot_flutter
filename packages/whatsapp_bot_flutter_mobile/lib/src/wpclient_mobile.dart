@@ -106,12 +106,9 @@ class WpClientMobile implements WpClientInterface {
     );
     await controller?.evaluateJavascript(
       source: '''
-        function addListenerMethod() {
             WPP.on('$event', (data) => {
               window.$callbackName(data);
             });
-        }
-        addListenerMethod();
         ''',
     );
   }
@@ -121,12 +118,7 @@ class WpClientMobile implements WpClientInterface {
     String callbackName = "callback_${event.replaceAll(".", "_")}";
     controller?.removeJavaScriptHandler(handlerName: callbackName);
     await controller?.evaluateJavascript(
-      source: '''
-        function removeListenerMethod() {
-             WPP.removeAllListeners('$event');
-        }
-        removeListenerMethod();
-        ''',
+      source: '''WPP.removeAllListeners('$event');''',
     );
   }
 

@@ -119,9 +119,11 @@ class HomeController extends GetxController {
 
     // listen to MessageEvents
     client.on(WhatsappEvent.chat_new_message, (data) {
-      Message message = Message.fromJson(data);
+      List<Message> messages = Message.parse(data);
+      if (messages.isEmpty) return;
+      Message message = messages.first;
+      Get.log(message.toJson().toString());
       if (!(message.id?.fromMe ?? true)) {
-        Get.log(message.toJson().toString());
         messageEvents.value = message;
         // auto reply if message == test
         if (message.body == "test") {
@@ -136,7 +138,9 @@ class HomeController extends GetxController {
 
     // listen to CallEvents
     client.on(WhatsappEvent.incoming_call, (data) {
-      CallEvent event = CallEvent.fromJson(data);
+      List<CallEvent> events = CallEvent.parse(data);
+      if (events.isEmpty) return;
+      CallEvent event = events.first;
       callEvents.value = event;
       client.chat.rejectCall(callId: event.id);
       client.chat.sendTextMessage(
