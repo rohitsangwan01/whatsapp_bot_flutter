@@ -76,8 +76,7 @@ class HomeController extends GetxController {
 
       if (client != null) {
         connected.value = true;
-        initStreams(client!);
-        initListeners();
+        initListeners(client!);
       }
     } catch (er) {
       error.value = er.toString();
@@ -112,26 +111,18 @@ class HomeController extends GetxController {
     );
   }
 
-  void initStreams(WhatsappClient client) async {
+  void initListeners(WhatsappClient client) async {
     // listen to ConnectionEvent Stream
     client.connectionEventStream.listen((event) {
       connectionEvent.value = event;
     });
-    // listen to CallEvent Stream
-    client.callEvents.listen((event) {
-      callEvents.value = event;
-      client.chat.rejectCall(callId: event.id);
-      client.chat.sendTextMessage(
-        phone: event.sender,
-        message: "Hey, Call rejected by whatsapp bot",
-      );
-    });
-    // listen to messageEventStream
-    client.messageEvents.listen((Message message) {
+
+    // listen to MessageEvents
+    client.on(WhatsappEvent.chat_new_message, (data) {
+      Message message = Message.fromJson(data);
       if (!(message.id?.fromMe ?? true)) {
         Get.log(message.toJson().toString());
         messageEvents.value = message;
-
         // auto reply if message == test
         if (message.body == "test") {
           client.chat.sendTextMessage(
@@ -142,15 +133,20 @@ class HomeController extends GetxController {
         }
       }
     });
-  }
 
-  void initListeners() async {
-    client?.on("chat.msg_revoke", (data) {
-      Get.log("Revoking Event : $data");
+    // listen to CallEvents
+    client.on(WhatsappEvent.incoming_call, (data) {
+      CallEvent event = CallEvent.fromJson(data);
+      callEvents.value = event;
+      client.chat.rejectCall(callId: event.id);
+      client.chat.sendTextMessage(
+        phone: event.sender,
+        message: "Hey, Call rejected by whatsapp bot",
+      );
     });
 
-    client?.on("chat.new_reaction", (data) {
-      Get.log("NewReaction Event : $data");
+    client.on(WhatsappEvent.chat_msg_revoke, (data) {
+      Get.log("Revoking Event : $data");
     });
   }
 
@@ -215,6 +211,7 @@ class HomeController extends GetxController {
 
   Future<void> _sendFileMessage(
     String? filePath,
+    String? fileName,
     WhatsappFileType fileType,
   ) async {
     if (!formKey.currentState!.validate()) return;
@@ -222,12 +219,12 @@ class HomeController extends GetxController {
       if (filePath == null) return;
       File file = File(filePath);
       List<int> imageBytes = file.readAsBytesSync();
-
       await client?.chat.sendFileMessage(
         phone: phoneNumber.text,
         fileBytes: imageBytes,
         caption: message.text,
         fileType: fileType,
+        fileName: fileName,
       );
     } catch (e) {
       Get.log("Error : $e");
@@ -249,6 +246,7 @@ class HomeController extends GetxController {
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(type: fileType);
     String? path = result?.files.first.path;
-    await _sendFileMessage(path, whatsappFileType);
+    String? name = result?.names.first;
+    await _sendFileMessage(path, name, whatsappFileType);
   }
 }

@@ -1,1 +1,1 @@
-enum WhatsappFileType { document, image, audio }
+enum WhatsappFileType { document, image, audio, pdf, unknown }

@@ -35,28 +35,6 @@ class WpClientDesktop implements WpClientInterface {
     }
   }
 
-  Future<Map<dynamic, dynamic>> getJsonDataFromJsHandler(
-      JsHandle? jsHandler) async {
-    try {
-      Map<String, JsHandle>? result = await jsHandler?.properties;
-      var data = {};
-      result?.forEach((key, value) async {
-        dynamic finalData;
-        try {
-          finalData = await value.jsonValue;
-        } catch (e) {
-          finalData = getJsonDataFromJsHandler(value);
-        }
-        print(finalData);
-        data[key] = finalData;
-      });
-      return data;
-    } catch (e) {
-      print(e);
-      return {};
-    }
-  }
-
   @override
   Future<QrCodeImage?> getQrCode() async {
     try {
@@ -123,7 +101,8 @@ class WpClientDesktop implements WpClientInterface {
 
   @override
   Future initializeEventListener(
-      OnNewEventFromListener onNewEventFromListener) async {
+    OnNewEventFromListener onNewEventFromListener,
+  ) async {
     try {
       // Add Dart side method
       await page?.exposeFunction("onCustomEvent", (type, data) {
@@ -133,16 +112,10 @@ class WpClientDesktop implements WpClientInterface {
       // Add all listeners
       await page?.evaluate(
         '''()=>{
-            WPP.on('chat.new_message', (msg) => {
-              window.onCustomEvent("messageEvent",msg);
-            });
-            WPP.on('call.incoming_call', (call) => {
-              window.onCustomEvent("callEvent",call);
-            });
             WPP.on('conn.authenticated', () => {
               window.onCustomEvent("connectionEvent","authenticated");
             });
-             WPP.on('conn.logout', () => {
+            WPP.on('conn.logout', () => {
               window.onCustomEvent("connectionEvent","logout");
             });
             WPP.on('conn.auth_code_change', () => {

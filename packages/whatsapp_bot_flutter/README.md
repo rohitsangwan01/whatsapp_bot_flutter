@@ -40,6 +40,7 @@ We have these modules to access whatsappClient features :
 WhatsappClient.chat
 WhatsappClient.contact
 WhatsappClient.profile
+WhatsappClient.group
 ```
 
 Use `sendTextMessage` to send a text message
@@ -64,10 +65,19 @@ await whatsappClient.chat.sendFileMessage(
 );
 ```
 
-To get new Messages , subscribe to `whatsappClient.messageEvents`
+To get whatsapp connection Events , subscribe to `whatsappClient.connectionEventStream`
 
 ```dart
-whatsappClient.messageEvents.listen((Message message) {
+whatsappClient.connectionEventStream.listen((event) {
+  // Connection Events : authenticated,logout,connected.....
+});
+```
+
+To get new Messages
+
+```dart
+whatsappClient.on(WhatsappEvent.chat_new_message, (data) {
+    Message message = Message.fromJson(data);
     // replyMessageId  is optional , add this to send a reply message
     whatsappClient.chat.sendTextMessage(
       phone: message.from,
@@ -77,22 +87,18 @@ whatsappClient.messageEvents.listen((Message message) {
 });
 ```
 
-To get whatsapp connection Events , subscribe to `whatsappClient.connectionEventStream`
+We can listen to multiple events like this
 
 ```dart
-whatsappClient.connectionEventStream.listen((event) {
-  // Connection Events : authenticated,logout,connected.....
-});
+whatsappClient.on(WhatsappEvent.EVENT_NAME, (data) {})
 ```
 
-To get whatsapp calls Events , subscribe to `whatsappClient.callEvents`
+To stop listening to an event
 
 ```dart
-whatsappClient.callEvents.listen((event) {
-  // To reject call
-  whatsappClient.chat.rejectCall(callId: event.id);
-});
+whatsappClient.off(WhatsappEvent.EVENT_NAME);
 ```
+
 
 ## Features
 
@@ -103,9 +109,7 @@ Supported Whatsapp features :
 - Auto refresh QrCode
 - Logout
 - Keep session
-- Listen to New Messages
-- Listen to Connection Events
-- Listen to calls
+- Listen to whatsapp events
 - Reject calls
 - Send text message
 - Send image, audio & document
@@ -132,6 +136,7 @@ Supported Whatsapp features :
 - Set status
 - check if logged in user have business account
 - Set profile picture of logged in user
+- and many more..
 
 ## Mobile Setup (Android/IOS)
 

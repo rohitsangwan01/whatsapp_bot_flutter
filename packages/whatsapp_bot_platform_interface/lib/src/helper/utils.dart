@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 
+import 'package:mime/mime.dart';
 import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.dart';
 import 'package:zxing2/qrcode.dart';
 
@@ -111,14 +112,26 @@ String parseGroup(String phone) {
 }
 
 /// [getMimeType] returns default mimeType
-String getMimeType(WhatsappFileType fileType) {
+String getMimeType(
+  WhatsappFileType fileType,
+  String? fileName,
+  List<int> bytes,
+) {
   switch (fileType) {
     case WhatsappFileType.document:
       return "application/msword";
+    case WhatsappFileType.pdf:
+      return "application/pdf";
     case WhatsappFileType.image:
       return "image/jpeg";
     case WhatsappFileType.audio:
       return "audio/mp3";
+    case WhatsappFileType.unknown:
+      String? mimeType;
+      if (fileName != null) {
+        mimeType = lookupMimeType(fileName, headerBytes: bytes);
+      }
+      return mimeType ?? "application/octet-stream";
     // case WhatsappFileType.video:
     //   return "video/mp4";
   }

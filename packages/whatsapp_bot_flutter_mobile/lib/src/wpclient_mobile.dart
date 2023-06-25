@@ -154,12 +154,6 @@ class WpClientMobile implements WpClientInterface {
       // Add all listeners
       await controller?.evaluateJavascript(
         source: '''function initEvents() {
-            WPP.on('chat.new_message', (msg) => {
-              window.onCustomEvent("messageEvent",msg);
-            });
-            WPP.on('call.incoming_call', (call) => {
-              window.onCustomEvent("callEvent",call);
-            });
             WPP.on('conn.authenticated', () => {
               window.onCustomEvent("connectionEvent","authenticated");
             });

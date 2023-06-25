@@ -29,7 +29,8 @@ void main(List<String> args) async {
   });
 
   // subscribe to Message Events
-  client?.messageEvents.listen((Message message) {
+  client?.on(WhatsappEvent.chat_new_message, (data) {
+    Message message = Message.fromJson(data);
     if (!(message.id?.fromMe ?? true)) {
       print(message.body.toString());
       if (message.body == "hii") {
@@ -40,22 +41,14 @@ void main(List<String> args) async {
         );
       }
     }
-  });
-
-  // subscribe to call events
-  client?.callEvents.listen((CallEvent callEvent) {
-    print(callEvent.toJson());
-  });
-
-  client?.on("chat.new_message", (data) {
     print("Message Event : $data");
   });
 
-  client?.on("chat.msg_revoke", (data) {
+  client?.on(WhatsappEvent.chat_msg_revoke, (data) {
     print("Revoking Event : $data");
   });
 
-  client?.on("chat.new_reaction", (data) {
+  client?.on(WhatsappEvent.chat_new_reaction, (data) {
     print("NewReaction Event : $data");
   });
 }

@@ -18,23 +18,4 @@ void main(List<String> args) async {
   client?.connectionEventStream.listen((event) {
     print("ConnectionEvent : $event");
   });
-
-  // subscribe to Message Events
-  client?.messageEvents.listen((Message message) {
-    if (!(message.id?.fromMe ?? true)) {
-      print(message.body.toString());
-      if (message.body == "hii") {
-        client.chat.sendTextMessage(
-          phone: message.from,
-          message: "Hey !",
-          replyMessageId: message.id,
-        );
-      }
-    }
-  });
-
-  // subscribe to call events
-  client?.callEvents.listen((CallEvent callEvent) {
-    print(callEvent.toJson());
-  });
 }

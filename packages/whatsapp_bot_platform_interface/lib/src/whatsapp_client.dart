@@ -27,6 +27,7 @@ class WhatsappClient {
   }
 
   /// To list to any event from WPP
+  /// Get event name from [WhatsappEvent]
   Future<void> on(String event, Function(dynamic) callback) =>
       wpClient.on(event, callback);
 
@@ -57,14 +58,6 @@ class WhatsappClient {
   /// [connectionEventStream] will give update of Connection Events
   Stream<ConnectionEvent> get connectionEventStream =>
       _wppEvents.connectionEventStreamController.stream;
-
-  ///[messageEvents] will give update of all new messages
-  Stream<Message> get messageEvents =>
-      _wppEvents.messageEventStreamController.stream;
-
-  ///[callEvents] will give update of all calls
-  Stream<CallEvent> get callEvents =>
-      _wppEvents.callEventStreamController.stream;
 
   /// [disconnect] will close the browser instance and set values to null
   Future<void> disconnect({

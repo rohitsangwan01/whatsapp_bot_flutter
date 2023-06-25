@@ -25,6 +25,7 @@ class Message {
     required this.stickerSentTs,
     required this.requiresDirectConnection,
     required this.pttForwardedFeaturesEnabled,
+    required this.caption,
   });
 
   final MessageId? id;
@@ -52,6 +53,7 @@ class Message {
   final int stickerSentTs;
   final bool requiresDirectConnection;
   final bool pttForwardedFeaturesEnabled;
+  final String caption;
 
   Message copyWith({
     MessageId? id,
@@ -80,6 +82,7 @@ class Message {
     int? stickerSentTs,
     bool? requiresDirectConnection,
     bool? pttForwardedFeaturesEnabled,
+    String? caption,
   }) {
     return Message(
       id: id ?? this.id,
@@ -111,6 +114,7 @@ class Message {
           requiresDirectConnection ?? this.requiresDirectConnection,
       pttForwardedFeaturesEnabled:
           pttForwardedFeaturesEnabled ?? this.pttForwardedFeaturesEnabled,
+      caption: caption ?? this.caption,
     );
   }
 
@@ -141,6 +145,7 @@ class Message {
       stickerSentTs: json["stickerSentTs"] ?? 0,
       requiresDirectConnection: json["requiresDirectConnection"] ?? false,
       pttForwardedFeaturesEnabled: json["pttForwardedFeaturesEnabled"] ?? false,
+      caption: json["caption"] ?? "",
     );
   }
 
@@ -170,6 +175,7 @@ class Message {
         "stickerSentTs": stickerSentTs,
         "requiresDirectConnection": requiresDirectConnection,
         "pttForwardedFeaturesEnabled": pttForwardedFeaturesEnabled,
+        "caption": caption,
       };
 }
 
