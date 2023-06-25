@@ -1,3 +1,7 @@
+## 2.0.1
+
+- change group subject
+
 ## 2.0.0
 
 - update to whatsapp_bot_platform_interface 1.0.0

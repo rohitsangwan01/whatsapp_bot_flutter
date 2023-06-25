@@ -37,7 +37,7 @@ class WppGroup {
     );
   }
 
-  /// To reomve participants from a group
+  /// To remove participants from a group
   Future removeParticipants({
     required String groupId,
     required String phoneNumber,
@@ -45,6 +45,17 @@ class WppGroup {
     return await wpClient.evaluateJs(
       '''WPP.group.removeParticipants(${groupId.groupParse}, ${phoneNumber.phoneParse});''',
       methodName: "removeParticipants",
+    );
+  }
+
+  /// Change group subject
+  Future setSubject({
+    required String groupId,
+    required String subject,
+  }) async {
+    return wpClient.evaluateJs(
+      '''WPP.group.setSubject(${groupId.phoneParse}, ${subject.jsParse});''',
+      methodName: 'setSubject',
     );
   }
 }
