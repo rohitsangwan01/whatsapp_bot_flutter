@@ -134,3 +134,21 @@ String getMimeType(
     //   return "video/mp4";
   }
 }
+
+Map<String, dynamic> base64ToMap(String base64String) {
+  List<String> data = base64String.split(";");
+  Map<String, dynamic> map = {};
+  for (String value in data) {
+    if (value.startsWith("base64,")) {
+      map["base64"] = value.replaceAll("base64,", "");
+    } else if (value.startsWith("data")) {
+      map["data"] = value.replaceAll("data:", "");
+    } else if (value.contains("=")) {
+      var s = value.split("=");
+      if (s.length > 0) {
+        map[s[0]] = s[1];
+      }
+    }
+  }
+  return map;
+}

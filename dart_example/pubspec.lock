@@ -258,7 +258,7 @@ packages:
     source: hosted
     version: "2.1.4"
   puppeteer:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: puppeteer
       sha256: f00b54703dc22af04eaace8f23a33c56008870f990684c2ad8c4115ac51b0a38

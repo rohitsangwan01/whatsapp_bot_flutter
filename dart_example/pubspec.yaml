@@ -7,6 +7,7 @@ environment:
   sdk: ">=2.18.2 <3.0.0"
 
 dependencies:
+  puppeteer: ^3.0.0
   whatsapp_bot_flutter:
     path: ../packages/whatsapp_bot_flutter
 

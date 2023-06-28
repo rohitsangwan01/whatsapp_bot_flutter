@@ -230,12 +230,17 @@ class WppChat {
     );
   }
 
-  /// Download the blob of a media message
-  Future downloadMedia({required String mediaMessageId}) async {
-    return await wpClient.evaluateJs(
-      '''WPP.chat.downloadMedia("$mediaMessageId");''',
+  /// Download the base64 of a media message
+  Future<Map<String, dynamic>?> downloadMedia({
+    required MessageId messageId,
+  }) async {
+    String mediaSerialized = messageId.serialized;
+    String? base64 = await wpClient.evaluateJs(
+      '''WPP.chat.downloadMedia(${mediaSerialized.jsParse}).then(WPP.util.blobToBase64);''',
       methodName: "downloadMedia",
     );
+    if (base64 == null) return null;
+    return base64ToMap(base64);
   }
 
   /// Fetch messages from a chat
