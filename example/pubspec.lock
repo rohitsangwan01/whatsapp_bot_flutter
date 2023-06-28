@@ -411,22 +411,22 @@ packages:
       path: "../packages/whatsapp_bot_flutter"
       relative: true
     source: path
-    version: "2.0.1"
+    version: "2.0.2"
   whatsapp_bot_flutter_mobile:
     dependency: "direct main"
     description:
       path: "../packages/whatsapp_bot_flutter_mobile"
       relative: true
     source: path
-    version: "2.0.1"
+    version: "2.0.2"
   whatsapp_bot_platform_interface:
     dependency: transitive
     description:
       name: whatsapp_bot_platform_interface
-      sha256: "0fd7e0c7d6e7c43648cf99898871ac6208d739beb2aa5d29cf09a6d6860b0aa0"
+      sha256: b2b8205021b2dbdd9fbe48d785e0c1a91a70aa5ca0987ff8f052aad2254f6c15
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.2"
   win32:
     dependency: transitive
     description:

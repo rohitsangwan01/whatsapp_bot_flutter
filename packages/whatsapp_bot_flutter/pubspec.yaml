@@ -1,6 +1,6 @@
 name: whatsapp_bot_flutter
 description: Whatsapp bot using puppeteer and whatsapp web scraping with flutter desktop/web and dart projects support
-version: 2.0.1
+version: 2.0.2
 homepage: https://github.com/rohitsangwan01/whatsapp_bot_flutter
 repository: https://github.com/rohitsangwan01/whatsapp_bot_flutter
 issue_tracker: https://github.com/rohitsangwan01/whatsapp_bot_flutter/issues
@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   puppeteer: ^3.0.0
-  whatsapp_bot_platform_interface: ^1.0.1
+  whatsapp_bot_platform_interface: ^1.0.2
 
 dev_dependencies:
   lints: ^2.0.1
