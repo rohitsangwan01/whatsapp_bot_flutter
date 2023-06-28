@@ -27,6 +27,7 @@ class WpClientMobile implements WpClientInterface {
     String source, {
     String? methodName,
     bool tryPromise = true,
+    bool forceJsonParseResult = false,
   }) async {
     if (!tryPromise) {
       var result = await controller?.evaluateJavascript(source: source);
