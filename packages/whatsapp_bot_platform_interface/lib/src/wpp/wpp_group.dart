@@ -26,6 +26,17 @@ class WppGroup {
     );
   }
 
+  /// Set the group subject
+  Future setSubject({
+    required String groupId,
+    required String subject,
+  }) async {
+    return wpClient.evaluateJs(
+      '''WPP.group.setSubject(${groupId.groupParse}, ${subject.jsParse});''',
+      methodName: 'setSubject',
+    );
+  }
+
   /// To add participants to a group
   Future addParticipants({
     required String groupId,

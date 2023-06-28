@@ -151,7 +151,7 @@ class WpClientDesktop implements WpClientInterface {
           return typeof window.WPP !== 'undefined' && window.WPP.isReady;
       } ''', timeout: const Duration(seconds: 10));
     } catch (e) {
-      WhatsappLogger.log(e);
+      WhatsappLogger.log("InjectFailed: $e");
     }
   }
 }
