@@ -11,18 +11,21 @@ class WppGroup {
       ''', methodName: "createGroup");
   }
 
+  /// To get participants of a group
   Future getParticipants({required String groupId}) async {
     return await wpClient.evaluateJs(
       '''WPP.group.getParticipants(${groupId.groupParse});''',
       methodName: "getParticipants",
+      forceJsonParseResult: true,
     );
   }
 
-  //TODO: fix this for desktop
+  /// To get all groups
   Future getAllGroups() async {
     return await wpClient.evaluateJs(
       '''WPP.group.getAllGroups();''',
       methodName: "getAllGroups",
+      forceJsonParseResult: true,
     );
   }
 
@@ -37,6 +40,7 @@ class WppGroup {
     );
   }
 
+  /// To add participants to a group
   Future addParticipants({
     required String groupId,
     required List<String> phoneNumbers,

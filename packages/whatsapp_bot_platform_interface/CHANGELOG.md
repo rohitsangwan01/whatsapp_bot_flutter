@@ -1,3 +1,7 @@
+## 1.0.1
+
+* minor fixes and improvements
+
 ## 1.0.0
 
 * breaking changes: listen to new messages using client.on(WhatsappEvent.chat_new_message, (data){});

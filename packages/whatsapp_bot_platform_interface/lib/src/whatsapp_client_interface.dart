@@ -11,6 +11,7 @@ abstract class WpClientInterface {
     String source, {
     String? methodName,
     bool tryPromise,
+    bool forceJsonParseResult,
   });
 
   Future<void> dispose();

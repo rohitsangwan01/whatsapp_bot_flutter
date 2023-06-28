@@ -26,7 +26,10 @@ class WppContact {
 
   /// Return to list of contacts
   Future getContacts() async {
-    return await wpClient
-        .evaluateJs('''WPP.contact.list();''', methodName: "getContacts");
+    return await wpClient.evaluateJs(
+      '''WPP.contact.list();''',
+      methodName: "getContacts",
+      forceJsonParseResult: true,
+    );
   }
 }

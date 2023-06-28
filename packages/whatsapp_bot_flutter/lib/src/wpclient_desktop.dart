@@ -19,9 +19,15 @@ class WpClientDesktop implements WpClientInterface {
     String source, {
     String? methodName,
     bool tryPromise = true,
+    bool forceJsonParseResult = false,
   }) async {
     try {
-      var result = await page?.evaluate(source);
+      String js = source;
+      if (forceJsonParseResult) {
+        js = source.replaceAll(";", "");
+        js = 'async () => JSON.stringify(await $js)';
+      }
+      var result = await page?.evaluate(js);
       if (methodName?.isNotEmpty == true) {
         WhatsappLogger.log("${methodName}_Result : $result");
       }

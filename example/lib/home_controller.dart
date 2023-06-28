@@ -37,9 +37,8 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
-  void getAllGroups() async {
-    await client?.group.getAllGroups();
-  }
+  void getAllGroups() => client?.group.getAllGroups();
+  void getChats() => client?.chat.getChats();
 
   void initConnection() async {
     error.value = "";

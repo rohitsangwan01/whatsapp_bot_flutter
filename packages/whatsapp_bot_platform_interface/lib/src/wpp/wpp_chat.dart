@@ -178,23 +178,18 @@ class WppChat {
   }
 
   /// get all Chats using [getChats]
-  Future getChats({bool? onlyUser, bool? onlyGroups}) async {
-    if (onlyUser == true) {
-      return await wpClient.evaluateJs(
-        '''WPP.chat.list({onlyUsers: true});''',
-        methodName: "GetChats",
-      );
-    } else if (onlyGroups == true) {
-      return await wpClient.evaluateJs(
-        '''WPP.chat.list({onlyGroups: true});''',
-        methodName: "GetChats",
-      );
-    } else {
-      return await wpClient.evaluateJs(
-        '''WPP.chat.list();''',
-        methodName: "GetChats",
-      );
-    }
+  Future getChats({
+    bool onlyUser = false,
+    bool onlyGroups = false,
+  }) async {
+    return await wpClient.evaluateJs(
+      '''WPP.chat.list({
+            onlyUsers: ${onlyUser.jsParse},
+            onlyGroups: ${onlyGroups.jsParse}
+         });''',
+      methodName: "GetChats",
+      forceJsonParseResult: true,
+    );
   }
 
   ///Mark a chat as read and send SEEN event
@@ -248,6 +243,7 @@ class WppChat {
     return await wpClient.evaluateJs(
       '''WPP.chat.getMessages(${phone.phoneParse},{count: $count,});''',
       methodName: "getMessages",
+      forceJsonParseResult: true,
     );
   }
 
@@ -299,16 +295,4 @@ class WppChat {
           });''',
         methodName: "forwardMessage");
   }
-
-  // TODO: fix list
-  // /// Delete messages
-  // Future deleteMessages({
-  //   required String phone,
-  //   required List<String> messageIds,
-  // }) async {
-  //   return await wpClient.evaluateJs(
-  //     '''WPP.chat.deleteMessage(${phone.phoneParse},$messageIds);''',
-  //     methodName: "deleteMessages",
-  //   );
-  // }
 }

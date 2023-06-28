@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:whatsapp_bot_platform_interface/src/wpp/wpp_conn.dart';
 import 'package:whatsapp_bot_platform_interface/src/wpp/wpp_group.dart';
 import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.dart';
 
@@ -13,6 +14,7 @@ class WhatsappClient {
   late WppContact contact;
   late WppProfile profile;
   late WppGroup group;
+  late WppConn conn;
   late WppEvents _wppEvents;
   late WppAuth _wppAuth;
 
@@ -21,6 +23,7 @@ class WhatsappClient {
     contact = WppContact(wpClient);
     profile = WppProfile(wpClient);
     group = WppGroup(wpClient);
+    conn = WppConn(wpClient);
     _wppAuth = WppAuth(wpClient);
     _wppEvents = WppEvents(wpClient);
     _wppEvents.init();

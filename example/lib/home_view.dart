@@ -58,6 +58,15 @@ class HomeView extends GetView<HomeController> {
                                 .pickFileAndSend(WhatsappFileType.image),
                             child: const Text("Send Image")),
                         const SizedBox(width: 10),
+                        ElevatedButton(
+                            onPressed: () => controller
+                                .pickFileAndSend(WhatsappFileType.audio),
+                            child: const Text("Send Audio")),
+                        const SizedBox(width: 10),
+                        ElevatedButton(
+                            onPressed: () => controller
+                                .pickFileAndSend(WhatsappFileType.document),
+                            child: const Text("Send Document")),
                       ],
                     ),
                   ),
@@ -70,14 +79,9 @@ class HomeView extends GetView<HomeController> {
                             child: const Text("Get Groups")),
                         const SizedBox(width: 10),
                         ElevatedButton(
-                            onPressed: () => controller
-                                .pickFileAndSend(WhatsappFileType.audio),
-                            child: const Text("Send Audio")),
+                            onPressed: () => controller.getChats(),
+                            child: const Text("Get Chats")),
                         const SizedBox(width: 10),
-                        ElevatedButton(
-                            onPressed: () => controller
-                                .pickFileAndSend(WhatsappFileType.document),
-                            child: const Text("Send Document")),
                       ],
                     ),
                   ),
