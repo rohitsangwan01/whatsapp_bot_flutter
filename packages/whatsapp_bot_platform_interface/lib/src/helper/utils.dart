@@ -77,8 +77,6 @@ extension JsParser on dynamic {
       return null;
     } else if (runtimeType == String) {
       return '''"${this.replaceAll("\n", "\\n").replaceAll("\"", "\\\"")}"''';
-    } else if (runtimeType == List<String>) {
-      return '''[${this.map((String e) => e.jsParse).join(",")}]''';
     } else {
       // return same for now
       return this;

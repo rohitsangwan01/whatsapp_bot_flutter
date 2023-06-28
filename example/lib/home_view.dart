@@ -48,6 +48,7 @@ class HomeView extends GetView<HomeController> {
                         ElevatedButton(
                             onPressed: () => controller.sendMessage(),
                             child: const Text("Send Text")),
+                        const SizedBox(width: 10),
                         ElevatedButton(
                             onPressed: () => controller.sendButtonMessage(),
                             child: const Text("Send Button Message")),
@@ -56,6 +57,17 @@ class HomeView extends GetView<HomeController> {
                             onPressed: () => controller
                                 .pickFileAndSend(WhatsappFileType.image),
                             child: const Text("Send Image")),
+                        const SizedBox(width: 10),
+                      ],
+                    ),
+                  ),
+                  const Divider(),
+                  FittedBox(
+                    child: Row(
+                      children: [
+                        ElevatedButton(
+                            onPressed: () => controller.getAllGroups(),
+                            child: const Text("Get Groups")),
                         const SizedBox(width: 10),
                         ElevatedButton(
                             onPressed: () => controller
@@ -69,9 +81,6 @@ class HomeView extends GetView<HomeController> {
                       ],
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () => controller.test(),
-                      child: const Text("Test")),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Divider(),

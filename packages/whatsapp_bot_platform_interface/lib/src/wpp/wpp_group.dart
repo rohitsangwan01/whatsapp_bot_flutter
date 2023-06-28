@@ -1,6 +1,5 @@
 import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.dart';
 
-//TODO: fix all these methods on desktop/dart
 class WppGroup {
   WpClientInterface wpClient;
   WppGroup(this.wpClient);
@@ -19,6 +18,7 @@ class WppGroup {
     );
   }
 
+  //TODO: fix this for desktop
   Future getAllGroups() async {
     return await wpClient.evaluateJs(
       '''WPP.group.getAllGroups();''',
@@ -37,13 +37,13 @@ class WppGroup {
     );
   }
 
-  /// To add participants to a group
   Future addParticipants({
     required String groupId,
-    required String phoneNumber,
+    required List<String> phoneNumbers,
   }) async {
+    List<String> parseList = phoneNumbers.map((e) => e.phoneParse).toList();
     return await wpClient.evaluateJs(
-      '''WPP.group.addParticipants(${groupId.groupParse}, ${phoneNumber.phoneParse});''',
+      '''WPP.group.addParticipants(${groupId.groupParse},${parseList});''',
       methodName: "addParticipants",
     );
   }
@@ -51,10 +51,11 @@ class WppGroup {
   /// To reomve participants from a group
   Future removeParticipants({
     required String groupId,
-    required String phoneNumber,
+    required List<String> phoneNumbers,
   }) async {
+    List<String> parseList = phoneNumbers.map((e) => e.phoneParse).toList();
     return await wpClient.evaluateJs(
-      '''WPP.group.removeParticipants(${groupId.groupParse}, ${phoneNumber.phoneParse});''',
+      '''WPP.group.removeParticipants(${groupId.groupParse}, ${parseList});''',
       methodName: "removeParticipants",
     );
   }
