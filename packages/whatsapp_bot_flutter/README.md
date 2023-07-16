@@ -102,8 +102,11 @@ whatsappClient.off(WhatsappEvent.EVENT_NAME);
 
 ## Features
 
-Supported Whatsapp features :
 
+
+<details>
+<summary>Supported Whatsapp features :</summary>
+  
 - Create multiple whatsapp clients
 - Login with QR
 - Auto refresh QrCode
@@ -137,6 +140,7 @@ Supported Whatsapp features :
 - check if logged in user have business account
 - Set profile picture of logged in user
 - and many more..
+</details>
 
 ## Mobile Setup (Android/IOS)
 
@@ -157,6 +161,8 @@ Should run out of the box in Windows and Linux
 ## Web setup
 
 checkout web demo app : https://rohitsangwan01.github.io/whatsapp_bot_flutter
+
+To run on WebNatively, checkout [whatsapp_bot_flutter_web](https://pub.dev/packages/whatsapp_bot_flutter_web)
 
 We can use [browserless](https://cloud.browserless.io/account/), Create a free account there and get `API_TOKEN` from browserless, and use this url to connect : `wss://chrome.browserless.io?token=API_TOKEN`
 
