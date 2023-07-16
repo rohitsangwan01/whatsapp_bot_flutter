@@ -6,6 +6,8 @@
 
 [![whatsapp_bot_flutter_mobile version](https://img.shields.io/pub/v/whatsapp_bot_flutter_mobile?label=whatsapp_bot_flutter_mobile)](https://pub.dev/packages/whatsapp_bot_flutter_mobile)
 
+[![whatsapp_bot_flutter_web version](https://img.shields.io/pub/v/whatsapp_bot_flutter_web?label=whatsapp_bot_flutter_web)](https://pub.dev/packages/whatsapp_bot_flutter_web)
+
 
 ## Getting Started
 
