@@ -7,9 +7,15 @@ import 'package:zxing2/qrcode.dart';
 class WhatsappLogger {
   static bool enableLogger = false;
 
+  static Function(dynamic)? handleLogs;
+
   static void log(log) {
     if (!enableLogger) return;
-    developer.log(log.toString(), name: 'WhatsappBotFlutter');
+    if (handleLogs != null) {
+      handleLogs?.call(log);
+    } else {
+      developer.log(log.toString(), name: 'WhatsappBotFlutter');
+    }
   }
 }
 

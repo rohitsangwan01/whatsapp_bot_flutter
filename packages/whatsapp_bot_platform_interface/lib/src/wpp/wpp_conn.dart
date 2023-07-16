@@ -65,11 +65,27 @@ class WppConn {
   Future isMultiDevice() async {
     return await wpClient.evaluateJs(
       '''WPP.conn.isMultiDevice();''',
-      methodName: "isRegistered",
+      methodName: "isMultiDevice",
     );
   }
 
-  /// Check if idel
+  /// If it's true, WhatsApp WEB will switch to MD. If it's false, WhatsApp WEB will switch to Legacy.
+  Future setMultiDevice(bool value) async {
+    return await wpClient.evaluateJs(
+      '''WPP.conn.setMultiDevice(${value});''',
+      methodName: "setMultiDevice",
+    );
+  }
+
+  /// To get auth Code
+  Future getAuthCode() async {
+    return await wpClient.evaluateJs(
+      '''WPP.conn.getAuthCode();''',
+      methodName: "getAuthCode",
+    );
+  }
+
+  /// Check if idle
   Future isIdle() async {
     return await wpClient.evaluateJs(
       '''WPP.conn.isIdle();''',

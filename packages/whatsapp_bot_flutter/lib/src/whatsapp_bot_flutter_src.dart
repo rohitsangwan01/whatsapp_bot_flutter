@@ -13,19 +13,23 @@ class WhatsappBotFlutter {
   /// and pass QrCode in `onQrCode` callback
   /// Scan this code , and on successful connection we will get onSuccessCallback
   /// We will get a WhatsappClient from here ,and we can use this client to work with whatsapp
+  /// use puppeteerClient to pass your own puppeteer instance like this `puppeteerClient: () => puppeteer.launch()`
   /// can throw Errors
   static Future<WhatsappClient?> connect({
     String? sessionDirectory,
     String? wppJsContent,
     String? chromiumDownloadDirectory,
+    String? chromeVersion,
     bool? headless = true,
     String? browserWsEndpoint,
     int qrCodeWaitDurationSeconds = 60,
     List<String>? puppeteerArgs,
+    Duration? connectionTimeout = const Duration(seconds: 20),
     Function(String qrCodeUrl, Uint8List? qrCodeImage)? onQrCode,
     Function(ConnectionEvent)? onConnectionEvent,
-    Duration? connectionTimeout = const Duration(seconds: 20),
+    void Function(int received, int total)? chromeDownloadProgress,
     Function(Browser browser)? onBrowserCreated,
+    Future<Browser> Function()? puppeteerClient,
   }) async {
     WpClientInterface? wpClient;
 
@@ -35,7 +39,10 @@ class WhatsappBotFlutter {
       Browser? browser;
       Page? page;
 
-      if (browserWsEndpoint != null) {
+      if (puppeteerClient != null) {
+        onConnectionEvent?.call(ConnectionEvent.connectingChrome);
+        browser = await puppeteerClient();
+      } else if (browserWsEndpoint != null) {
         onConnectionEvent?.call(ConnectionEvent.connectingChrome);
         browser = await puppeteer.connect(
           browserWsEndpoint: browserWsEndpoint,
@@ -44,7 +51,9 @@ class WhatsappBotFlutter {
         onConnectionEvent?.call(ConnectionEvent.downloadingChrome);
 
         DownloadedBrowserInfo revisionInfo = await downloadChrome(
-          cachePath: chromiumDownloadDirectory ?? "./.local-chromium",
+          cachePath: chromiumDownloadDirectory,
+          version: chromeVersion,
+          onDownloadProgress: chromeDownloadProgress,
         );
         String executablePath = revisionInfo.executablePath;
         onConnectionEvent?.call(ConnectionEvent.connectingChrome);
@@ -54,10 +63,18 @@ class WhatsappBotFlutter {
           userDataDir: sessionDirectory,
           args: puppeteerArgs,
         );
-        onBrowserCreated?.call(browser);
       }
+      onBrowserCreated?.call(browser);
       onConnectionEvent?.call(ConnectionEvent.connectingWhatsapp);
-      page = await browser.newPage();
+      // try to find existing page
+      List<Page> pages = await browser.pages;
+      try {
+        page = pages.firstWhere(
+            (e) => e.url?.contains(WhatsAppMetadata.whatsAppURL) == true);
+      } catch (e) {
+        page = await browser.newPage();
+      }
+
       await page.setUserAgent(WhatsAppMetadata.userAgent);
       await page.goto(WhatsAppMetadata.whatsAppURL);
 

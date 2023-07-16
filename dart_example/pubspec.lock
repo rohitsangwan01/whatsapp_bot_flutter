@@ -121,6 +121,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  hive:
+    dependency: "direct main"
+    description:
+      name: hive
+      sha256: "8dcf6db979d7933da8217edcec84e9df1bdb4e4edc7fc77dbd5aa74356d6d941"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.3"
   http:
     dependency: transitive
     description:
@@ -427,10 +435,9 @@ packages:
   whatsapp_bot_platform_interface:
     dependency: transitive
     description:
-      name: whatsapp_bot_platform_interface
-      sha256: b2b8205021b2dbdd9fbe48d785e0c1a91a70aa5ca0987ff8f052aad2254f6c15
-      url: "https://pub.dev"
-    source: hosted
+      path: "../packages/whatsapp_bot_platform_interface"
+      relative: true
+    source: path
     version: "1.0.2"
   yaml:
     dependency: transitive

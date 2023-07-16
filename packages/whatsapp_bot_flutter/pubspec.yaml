@@ -4,13 +4,16 @@ version: 2.0.2
 homepage: https://github.com/rohitsangwan01/whatsapp_bot_flutter
 repository: https://github.com/rohitsangwan01/whatsapp_bot_flutter
 issue_tracker: https://github.com/rohitsangwan01/whatsapp_bot_flutter/issues
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
   sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
   puppeteer: ^3.0.0
-  whatsapp_bot_platform_interface: ^1.0.2
+  # whatsapp_bot_platform_interface: ^1.0.2
+  whatsapp_bot_platform_interface:
+    path: ../whatsapp_bot_platform_interface
 
 dev_dependencies:
   lints: ^2.0.1
