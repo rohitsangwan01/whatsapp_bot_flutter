@@ -24,21 +24,27 @@ class WpClientWeb implements WpClientInterface {
     String js = source;
     js = source.replaceAll(";", "");
     var result = await bot_js.evaluateJsCodeWithPromise(js, tryPromise);
-    if (methodName?.isNotEmpty == true) {
-      WhatsappLogger.log("${methodName}_Result : $result");
-    }
     if (result != null && result is String) {
       // Try to parse boolean
       if (result == "true" || result == "false") {
         result = result == "true";
-        return;
       }
       // Try to parse int
-      if (int.tryParse(result) != null) {
+      else if (int.tryParse(result) != null) {
         result = int.parse(result);
-        return;
       }
-      result = jsonDecode(result);
+      // Try to parse double
+      else if (double.tryParse(result) != null) {
+        result = double.parse(result);
+      }
+      // Try to parse json
+      else {
+        result = jsonDecode(result);
+      }
+    }
+    if (methodName?.isNotEmpty == true) {
+      WhatsappLogger.log(
+          "${methodName}_Result (${result.runtimeType}) : $result");
     }
     return result;
   }

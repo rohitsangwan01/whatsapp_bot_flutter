@@ -46,12 +46,15 @@ class HomeController extends GetxController {
   void getAllGroups() => client?.group.getAllGroups();
   void getChats() => client?.chat.getChats();
 
-  void initConnection() async {
+  void initConnection({bool withExtension = false}) async {
     error.value = "";
     connected.value = false;
     try {
-      if (GetPlatform.isWeb && GetPlatform.isDesktop) {
-        client = await WhatsappBotFlutterWeb.connect();
+      if (withExtension && GetPlatform.isWeb && GetPlatform.isDesktop) {
+        client = await WhatsappBotFlutterWeb.connect(
+          onConnectionEvent: _onConnectionEvent,
+          onQrCode: _onQrCode,
+        );
       } else if (!GetPlatform.isWeb && GetPlatform.isMobile) {
         // Initialize Mobile Client
         client = await WhatsappBotFlutterMobile.connect(

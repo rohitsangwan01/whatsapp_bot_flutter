@@ -194,6 +194,11 @@ class ConnectDisconnectWidget extends GetView<HomeController> {
                 color: controller.connected.value ? Colors.green : Colors.red,
               ),
             )),
+        if (GetPlatform.isWeb && GetPlatform.isDesktop)
+          ElevatedButton(
+            onPressed: () => controller.initConnection(withExtension: true),
+            child: const Text("ConnectWithExtension"),
+          ),
         ElevatedButton(
           onPressed: () => controller.initConnection(),
           child: const Text("Connect"),

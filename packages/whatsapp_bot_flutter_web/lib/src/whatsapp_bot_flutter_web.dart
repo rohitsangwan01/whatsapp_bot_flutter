@@ -29,20 +29,20 @@ class WhatsappBotFlutterWeb {
         }),
       );
       var tabId = await completer.future;
-      // make sure you scan qr code manually for now
 
       wpClient = WpClientWeb(tabId: tabId);
       await WppConnect.init(wpClient, wppJsContent: "");
       onConnectionEvent?.call(ConnectionEvent.waitingForLogin);
 
-      // await waitForLogin(
-      //   wpClient,
-      //   onConnectionEvent: onConnectionEvent,
-      //   onQrCode: onQrCode,
-      //   waitDurationSeconds: qrCodeWaitDurationSeconds,
-      // );
+      await waitForLogin(
+        wpClient,
+        onConnectionEvent: onConnectionEvent,
+        onQrCode: onQrCode,
+        waitDurationSeconds: qrCodeWaitDurationSeconds,
+      );
 
       var client = WhatsappClient(wpClient: wpClient);
+      onConnectionEvent?.call(ConnectionEvent.connected);
       return client;
     } catch (e) {
       WhatsappLogger.log(e.toString());
