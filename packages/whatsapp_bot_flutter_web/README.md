@@ -4,6 +4,8 @@ Run Whatsapp bot on web natively (within browser without puppeteer)
 
 ## Getting Started
 
+This library is part of [whatsapp_bot_flutter](https://pub.dev/packages/whatsapp_bot_flutter) web implementation
+
 Add this script tag in web/index.html file inside of head tag
 
 ```html
@@ -45,9 +47,7 @@ WhatsappClient? whatsappClient = await WhatsappBotFlutterWeb.connect({
 });
 ```
 
-## TODO
-
-Add more docs and make it stable
+Check complete docs [here](https://github.com/rohitsangwan01/whatsapp_bot_flutter)
 
 ## Resources
 
