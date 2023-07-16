@@ -5,10 +5,11 @@
     "msword",
     "qrcode",
     "rxnol",
+    "scripty",
     "setuid",
     "testid",
     "typeof",
     "wpclient",
-    "zxing",
+    "zxing"
   ]
 }

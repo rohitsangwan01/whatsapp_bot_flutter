@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_overrides
+// ignore_for_file: unnecessary_overrides, avoid_print
 
 import 'dart:async';
 import 'dart:io';
@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp_bot_flutter/whatsapp_bot_flutter.dart';
 import 'package:whatsapp_bot_flutter_mobile/whatsapp_bot_flutter_mobile.dart';
+import 'package:whatsapp_bot_flutter_web/whatsapp_bot_flutter_web.dart';
 
 class HomeController extends GetxController {
   var formKey = GlobalKey<FormState>();
@@ -33,6 +34,11 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     WhatsappBotUtils.enableLogs(true);
+    if (GetPlatform.isWeb) {
+      WhatsappLogger.handleLogs = (log) {
+        print(log.toString());
+      };
+    }
     message.text = "Testing Whatsapp Bot";
     super.onInit();
   }
@@ -44,7 +50,9 @@ class HomeController extends GetxController {
     error.value = "";
     connected.value = false;
     try {
-      if (!GetPlatform.isWeb && GetPlatform.isMobile) {
+      if (GetPlatform.isWeb && GetPlatform.isDesktop) {
+        client = await WhatsappBotFlutterWeb.connect();
+      } else if (!GetPlatform.isWeb && GetPlatform.isMobile) {
         // Initialize Mobile Client
         client = await WhatsappBotFlutterMobile.connect(
           saveSession: true,
