@@ -15,7 +15,7 @@ Add this script tag in web/index.html file inside of head tag
 Install WhatsappBotFlutter extension on chrome, this extension will insert some required js code in whatsapp web which is required for communication
 
 Install using [scripty](https://scripty.abhisheksatre.com/#/store), 
-To install with scripty, open the (link)[(https://scripty.abhisheksatre.com/#/store)] and search for `WhatsappBotFlutterCommunicator` and install it, that's it
+To install with scripty, open the [link](https://scripty.abhisheksatre.com/#/store) and search for `WhatsappBotFlutterCommunicator` and install it, that's it
 this will automatically inject required js in whatsappWeb whenever needed
 
 Or use any extension to inject this code in whatsapp web
