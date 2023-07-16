@@ -100,43 +100,44 @@ whatsappClient.off(WhatsappEvent.EVENT_NAME);
 
 ## Features
 
-Supported Whatsapp features :
+<details>
+  <summary>Supported Whatsapp features :</summary>
+  - Create multiple whatsapp clients
+  
+  - Login with QR
+  - Auto refresh QrCode
+  - Logout
+  - Keep session
+  - Listen to whatsapp events
+  - Reject calls
+  - Send text message
+  - Send image, audio & document
+  - Send location message
+  - Send poll in groups
+  - Send contact card
+  - Reply to a message
+  - Archive/Unarchive chats
+  - Mute/Unmute chat
+  - Clear chat
+  - Delete chat
+  - Get lastSeen
+  - Get chats
+  - Mark messages as seen
+  - Mark message as unread
+  - Pin/Unpin chat
+  - Delete messages
+  - Download media
+  - Get messages
+  - Get profile picture
+  - Get status
+  - Get contacts
+  - Get status of loggedIn user
+  - Set status
+  - check if logged in user have business account
+  - Set profile picture of logged in user
+  - and many more..
+</details>
 
-- Create multiple whatsapp clients
-- Login with QR
-- Auto refresh QrCode
-- Logout
-- Keep session
-- Listen to New Messages
-- Listen to Connection Events
-- Listen to calls
-- Reject calls
-- Send text message
-- Send image, audio & document
-- Send location message
-- Send poll in groups
-- Send contact card
-- Reply to a message
-- Archive/Unarchive chats
-- Mute/Unmute chat
-- Clear chat
-- Delete chat
-- Get lastSeen
-- Get chats
-- Mark messages as seen
-- Mark message as unread
-- Pin/Unpin chat
-- Delete messages
-- Download media
-- Get messages
-- Get profile picture
-- Get status
-- Get contacts
-- Get status of loggedIn user
-- Set status
-- check if logged in user have business account
-- Set profile picture of logged in user
-- and many more..
 
 ## Mobile Setup (Android/IOS)
 
@@ -157,6 +158,8 @@ Should run out of the box in Windows and Linux
 ## Web setup
 
 checkout web demo app : https://rohitsangwan01.github.io/whatsapp_bot_flutter
+
+To run natively on Web, checkout [whatsapp_bot_flutter_web](https://pub.dev/packages/whatsapp_bot_flutter_web)
 
 We can use [browserless](https://cloud.browserless.io/account/), Create a free account there and get `API_TOKEN` from browserless, and use this url to connect : `wss://chrome.browserless.io?token=API_TOKEN`
 
