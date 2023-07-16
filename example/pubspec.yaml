@@ -15,7 +15,14 @@ dependencies:
     path: ../packages/whatsapp_bot_flutter
   whatsapp_bot_flutter_mobile:
     path: ../packages/whatsapp_bot_flutter_mobile
+  whatsapp_bot_flutter_web:
+    path: ../packages/whatsapp_bot_flutter_web  
   
+dependency_overrides:
+  whatsapp_bot_platform_interface:
+    path: ../packages/whatsapp_bot_platform_interface  
+  
+
 
 dev_dependencies:
   flutter_lints: ^2.0.0

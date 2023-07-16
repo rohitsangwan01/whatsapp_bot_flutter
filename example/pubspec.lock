@@ -411,22 +411,28 @@ packages:
       path: "../packages/whatsapp_bot_flutter"
       relative: true
     source: path
-    version: "2.0.2"
+    version: "2.0.3"
   whatsapp_bot_flutter_mobile:
     dependency: "direct main"
     description:
       path: "../packages/whatsapp_bot_flutter_mobile"
       relative: true
     source: path
-    version: "2.0.2"
-  whatsapp_bot_platform_interface:
-    dependency: transitive
+    version: "2.0.3"
+  whatsapp_bot_flutter_web:
+    dependency: "direct main"
     description:
-      name: whatsapp_bot_platform_interface
-      sha256: b2b8205021b2dbdd9fbe48d785e0c1a91a70aa5ca0987ff8f052aad2254f6c15
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.2"
+      path: "../packages/whatsapp_bot_flutter_web"
+      relative: true
+    source: path
+    version: "0.0.1"
+  whatsapp_bot_platform_interface:
+    dependency: "direct overridden"
+    description:
+      path: "../packages/whatsapp_bot_platform_interface"
+      relative: true
+    source: path
+    version: "1.0.3"
   win32:
     dependency: transitive
     description:
@@ -460,5 +466,5 @@ packages:
     source: hosted
     version: "0.2.0"
 sdks:
-  dart: ">=3.0.0 <4.0.0"
+  dart: ">=3.0.1 <4.0.0"
   flutter: ">=3.7.0"
