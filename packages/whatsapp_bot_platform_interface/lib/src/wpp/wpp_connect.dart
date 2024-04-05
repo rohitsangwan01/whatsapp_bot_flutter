@@ -23,7 +23,6 @@ class WppConnect {
     );
 
     if (result == false) {
-      print(result);
       throw WhatsappException(
         exceptionType: WhatsappExceptionType.failedToConnect,
         message: "Failed to initialize WPP",
