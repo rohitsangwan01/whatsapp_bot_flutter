@@ -10,6 +10,6 @@ enum ConnectionEvent {
   authCodeChange,
   connecting,
   connected,
-  disconnected
+  disconnected,
   requireAuth
 }
