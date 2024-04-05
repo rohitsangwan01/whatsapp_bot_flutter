@@ -44,12 +44,6 @@ class WppEvents {
       case "require_auth":
         connectionEvent = ConnectionEvent.requireAuth;
         break;
-      case "disconnected":
-        connectionEvent = ConnectionEvent.disconnected;
-        break;
-      case "connected":
-        connectionEvent = ConnectionEvent.connected;
-        break;
       default:
         WhatsappLogger.log("Unknown Event : $event");
     }
