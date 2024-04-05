@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:puppeteer/puppeteer.dart';
 import 'package:whatsapp_bot_flutter/src/wpclient_desktop.dart';
 import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.dart';
+import 'package:puppeteer/plugins/stealth.dart';
 
 /// [WhatsappBotFlutter] for maintaining a single  `Browser` and `Page` instance
 /// with methods like connect and send
@@ -32,6 +33,7 @@ class WhatsappBotFlutter {
     Future<Browser> Function()? puppeteerClient,
   }) async {
     WpClientInterface? wpClient;
+    final stealthPlugin = StealthPlugin();
 
     try {
       onConnectionEvent?.call(ConnectionEvent.initializing);
@@ -62,6 +64,8 @@ class WhatsappBotFlutter {
           executablePath: executablePath,
           userDataDir: sessionDirectory,
           args: puppeteerArgs,
+          plugins: [stealthPlugin],
+
         );
       }
       onBrowserCreated?.call(browser);
@@ -75,6 +79,7 @@ class WhatsappBotFlutter {
         page = await browser.newPage();
       }
 
+      await page.setBypassCSP(true);
       await page.setUserAgent(WhatsAppMetadata.userAgent);
       await page.goto(WhatsAppMetadata.whatsAppURL);
 
