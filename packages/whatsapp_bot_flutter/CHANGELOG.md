@@ -1,3 +1,7 @@
+## 2.0.4
+
+- Bump whatsapp_bot_platform_interface
+
 ## 2.0.2
 
 - fix downloadMedia
@@ -25,13 +29,11 @@
 - added proper pure dart implementation
 - extracted mobile support into another package
 
-
 ## 0.1.1
 
 - update to dart3
 - fix web
 - switch to flutter_inappwebview stable version
-
 
 ## 0.0.10
 

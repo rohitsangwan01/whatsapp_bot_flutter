@@ -1,3 +1,7 @@
+## 2.0.4
+
+- Bump whatsapp_bot_platform_interface
+
 ## 2.0.2
 
 - fix downloadMedia

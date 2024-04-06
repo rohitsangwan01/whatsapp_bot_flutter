@@ -431,14 +431,15 @@ packages:
       path: "../packages/whatsapp_bot_flutter"
       relative: true
     source: path
-    version: "2.0.2"
+    version: "2.0.3"
   whatsapp_bot_platform_interface:
     dependency: transitive
     description:
-      path: "../packages/whatsapp_bot_platform_interface"
-      relative: true
-    source: path
-    version: "1.0.2"
+      name: whatsapp_bot_platform_interface
+      sha256: "39310e03ea76b42e7141a76b76bcf056f26ae40a8646bc0d2e1492a23d3b6ebd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   yaml:
     dependency: transitive
     description:

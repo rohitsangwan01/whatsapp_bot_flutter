@@ -13,7 +13,7 @@ class WpClientMobile implements WpClientInterface {
 
   @override
   Future injectJs(String content) async {
-    await controller?.evaluateJavascript(source: content);
+    await evaluateJs(content);
     await Future.delayed(const Duration(seconds: 2));
   }
 
@@ -36,7 +36,7 @@ class WpClientMobile implements WpClientInterface {
       }
       return result;
     }
-    final String functionBody = """  
+    final String functionBody = """
         var result = new Promise(async function (resolve, reject) {  
           try{
             var data = await $source;
@@ -129,7 +129,7 @@ class WpClientMobile implements WpClientInterface {
   ) async {
     try {
       await evaluateJs(
-        """ 
+        """
           window.onCustomEvent = (eventName,data) => window.flutter_inappwebview.callHandler('onCustomEvent',{type:eventName,data:data});
          """,
         tryPromise: false,

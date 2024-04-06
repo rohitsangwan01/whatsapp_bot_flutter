@@ -17,12 +17,7 @@ class WppConnect {
 
     WhatsappLogger.log("injected Wpp");
 
-    var result = await wpClient.evaluateJs(
-      '''typeof window.WPP !== 'undefined' && window.WPP.isReady;''',
-      tryPromise: false,
-    );
-
-    if (result == false) {
+    if (!await _waitForWppReady(wpClient, 5)) {
       throw WhatsappException(
         exceptionType: WhatsappExceptionType.failedToConnect,
         message: "Failed to initialize WPP",
@@ -41,5 +36,23 @@ class WppConnect {
       "WPP.config.poweredBy = 'Whatsapp-Bot-Flutter';",
       tryPromise: false,
     );
+  }
+
+  static Future<bool> _waitForWppReady(
+    WpClientInterface wpClient,
+    int tryCount,
+  ) async {
+    int count = 0;
+    while (count < tryCount) {
+      await Future.delayed(const Duration(seconds: 1));
+      var result = await wpClient.evaluateJs(
+        '''typeof window.WPP !== 'undefined' && window.WPP.isReady;''',
+        tryPromise: false,
+      );
+      if (result == true) return true;
+      WhatsappLogger.log("Checking WPP, Retry: $count");
+      count++;
+    }
+    return false;
   }
 }
