@@ -9,6 +9,8 @@ class WhatsappBotFlutterMobile {
   static Future<WhatsappClient?> connect({
     bool saveSession = false,
     int qrCodeWaitDurationSeconds = 60,
+    String? linkWithPhoneNumber,
+    Function(String code)? onPhoneLinkCode,
     Function(String qrCodeUrl, Uint8List? qrCodeImage)? onQrCode,
     Function(ConnectionEvent)? onConnectionEvent,
     Duration? connectionTimeout = const Duration(seconds: 20),
@@ -37,6 +39,8 @@ class WhatsappBotFlutterMobile {
         wpClient,
         onConnectionEvent: onConnectionEvent,
         onQrCode: onQrCode,
+        linkWithPhoneNumber: linkWithPhoneNumber,
+        onPhoneLinkCode: onPhoneLinkCode,
         waitDurationSeconds: qrCodeWaitDurationSeconds,
       );
 

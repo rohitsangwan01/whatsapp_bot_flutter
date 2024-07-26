@@ -1,6 +1,6 @@
 name: whatsapp_bot_flutter_mobile
 description: Whatsapp bot using webview and whatsapp web scraping
-version: 2.1.0
+version: 2.1.1
 homepage: https://github.com/rohitsangwan01/whatsapp_bot_flutter
 repository: https://github.com/rohitsangwan01/whatsapp_bot_flutter
 issue_tracker: https://github.com/rohitsangwan01/whatsapp_bot_flutter/issues
@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_inappwebview: ^6.0.0
-  whatsapp_bot_platform_interface: ^2.0.0
+  whatsapp_bot_platform_interface: ^2.0.1
 
 # dependency_overrides: 
 #   whatsapp_bot_platform_interface: 

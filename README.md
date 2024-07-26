@@ -8,7 +8,6 @@
 
 [![whatsapp_bot_flutter_web version](https://img.shields.io/pub/v/whatsapp_bot_flutter_web?label=whatsapp_bot_flutter_web)](https://pub.dev/packages/whatsapp_bot_flutter_web)
 
-
 ## Getting Started
 
 We can use this library in Flutter as well as Pure dart projects , checkout `dart_example`
@@ -18,6 +17,8 @@ First launch on Desktop apps will take some time, it will download chromium file
 ## Usage
 
 Get `WhatsappClient` using connect method
+
+Either link with QRCode (default) and get QrCode in `onQrCode` callback or set `linkWithPhoneNumber`, and get code in `onPhoneLinkCode` callback
 
 ```dart
 // use WhatsappBotFlutterMobile.connect for Android/IOS platforms
@@ -97,7 +98,6 @@ To stop listening to an event
 whatsappClient.off(WhatsappEvent.EVENT_NAME);
 ```
 
-
 ## Features
 
 <details>
@@ -137,7 +137,6 @@ whatsappClient.off(WhatsappEvent.EVENT_NAME);
   - Set profile picture of logged in user
   - and many more..
 </details>
-
 
 ## Mobile Setup (Android/IOS)
 

@@ -11,8 +11,12 @@ void main(List<String> args) async {
     sessionDirectory: "../cache",
     chromiumDownloadDirectory: "../.local-chromium",
     headless: false,
+    linkWithPhoneNumber: '917988280596',
     onConnectionEvent: (ConnectionEvent event) {
       print(event.toString());
+    },
+    onPhoneLinkCode: (code) {
+      print(code);
     },
     onQrCode: (String qr, Uint8List? imageBytes) {
       String qrText = WhatsappBotUtils.convertStringToQrCode(qr);

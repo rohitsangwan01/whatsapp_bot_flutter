@@ -35,6 +35,8 @@ Run project using : `flutter run -d web-server --web-port 8000 --web-hostname 0.
 
 First we have to get `WhatsappClient` using `WhatsappBotFlutterWeb.connect()` method 
 
+Either link with QRCode (default) and get QrCode in `onQrCode` callback or set `linkWithPhoneNumber`, and get code in `onPhoneLinkCode` callback
+
 ```dart
 WhatsappClient? whatsappClient = await WhatsappBotFlutterWeb.connect({
   onConnectionEvent: (ConnectionEvent event) {

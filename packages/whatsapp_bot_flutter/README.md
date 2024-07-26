@@ -16,6 +16,8 @@ First launch on Desktop apps will take some time, it will download chromium file
 
 Get `WhatsappClient` using connect method
 
+Either link with QRCode (default) and get QrCode in `onQrCode` callback or set `linkWithPhoneNumber` and get code in `onPhoneLinkCode` callback
+
 ```dart
 WhatsappClient? whatsappClient = await WhatsappBotFlutter.connect(
   onConnectionEvent: (ConnectionEvent event) {
@@ -98,7 +100,6 @@ To stop listening to an event
 ```dart
 whatsappClient.off(WhatsappEvent.EVENT_NAME);
 ```
-
 
 ## Features
 

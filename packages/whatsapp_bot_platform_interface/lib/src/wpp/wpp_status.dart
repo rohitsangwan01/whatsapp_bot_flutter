@@ -27,6 +27,17 @@ class WppStatus {
     );
   }
 
+  /// Send read status
+  Future sendReadStatus({
+    required String phone,
+    required String statusId,
+  }) async {
+    return await wpClient.evaluateJs(
+      '''WPP.status.sendReadStatus(${phone.phoneParse}, ${statusId.jsParse});''',
+      methodName: "sendReadStatus",
+    );
+  }
+
   /// remove your status
   Future remove({required String statusId}) async {
     return await wpClient.evaluateJs(

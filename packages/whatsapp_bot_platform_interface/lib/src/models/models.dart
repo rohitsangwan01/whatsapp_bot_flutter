@@ -260,6 +260,7 @@ enum ConnectionEvent {
   connectingChrome,
   waitingForLogin,
   waitingForQrScan,
+  waitingForPhoneLink,
   connectingWhatsapp,
   authenticated,
   logout,

@@ -1,3 +1,7 @@
+## 2.1.1
+
+- Bump whatsapp_bot_platform_interface
+
 ## 2.1.0
 
 - Bump whatsapp_bot_platform_interface

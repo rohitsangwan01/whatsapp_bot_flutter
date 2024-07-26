@@ -16,6 +16,7 @@ class WhatsappBotFlutter {
   /// We will get a WhatsappClient from here ,and we can use this client to work with whatsapp
   /// use puppeteerClient to pass your own puppeteer instance like this `puppeteerClient: () => puppeteer.launch()`
   /// can throw Errors
+  /// To link with phone number, pass phone number with country code in `linkWithPhoneNumber` and get LoinCode in `onPhoneLinkCode`
   static Future<WhatsappClient?> connect({
     String? sessionDirectory,
     String? wppJsContent,
@@ -25,6 +26,8 @@ class WhatsappBotFlutter {
     String? browserWsEndpoint,
     int qrCodeWaitDurationSeconds = 60,
     List<String>? puppeteerArgs,
+    String? linkWithPhoneNumber,
+    Function(String code)? onPhoneLinkCode,
     Duration connectionTimeout = const Duration(seconds: 20),
     Duration wppInitTimeout = const Duration(seconds: 15),
     Function(String qrCodeUrl, Uint8List? qrCodeImage)? onQrCode,
@@ -97,6 +100,8 @@ class WhatsappBotFlutter {
         wpClient,
         onConnectionEvent: onConnectionEvent,
         onQrCode: onQrCode,
+        onPhoneLinkCode: onPhoneLinkCode,
+        linkWithPhoneNumber: linkWithPhoneNumber,
         waitDurationSeconds: qrCodeWaitDurationSeconds,
       );
 

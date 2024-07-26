@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:whatsapp_bot_platform_interface/src/helper/qr_code_helper.dart';
+import 'package:whatsapp_bot_platform_interface/src/wpp/wpp_conn.dart';
 import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.dart';
 
 /// [waitForLogin] will either complete with successful login
@@ -11,7 +12,9 @@ import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.
 /// also it will make sure that we get the latest qrCode
 Future waitForLogin(
   WpClientInterface wpClient, {
+  String? linkWithPhoneNumber = null,
   required Function(String qrCodeUrl, Uint8List? qrCodeImage)? onQrCode,
+  Function(String code)? onPhoneLinkCode,
   int waitDurationSeconds = 60,
   Function(ConnectionEvent)? onConnectionEvent,
 }) async {
@@ -23,52 +26,55 @@ Future waitForLogin(
   bool authenticated = await wppAuth.isAuthenticated();
 
   if (!authenticated) {
-    onConnectionEvent?.call(ConnectionEvent.waitingForQrScan);
+    if (linkWithPhoneNumber == null) {
+      onConnectionEvent?.call(ConnectionEvent.waitingForQrScan);
 
-    WhatsappLogger.log('Waiting for QRCode Scan...');
+      WhatsappLogger.log('Waiting for QRCode Scan...');
 
-    await waitForQrCodeScan(
-      wpClient: wpClient,
-      onCatchQR: (QrCodeImage qrCodeImage, int attempt) {
-        if (qrCodeImage.base64Image != null && qrCodeImage.urlCode != null) {
-          Uint8List? imageBytes;
-          try {
-            String? base64Image = qrCodeImage.base64Image
-                ?.replaceFirst("data:image/png;base64,", "");
-            imageBytes = base64Decode(base64Image!);
-          } catch (e) {
-            WhatsappLogger.log(e);
+      await waitForQrCodeScan(
+        wpClient: wpClient,
+        onCatchQR: (QrCodeImage qrCodeImage, int attempt) {
+          if (qrCodeImage.base64Image != null && qrCodeImage.urlCode != null) {
+            Uint8List? imageBytes;
+            try {
+              String? base64Image = qrCodeImage.base64Image
+                  ?.replaceFirst("data:image/png;base64,", "");
+              imageBytes = base64Decode(base64Image!);
+            } catch (e) {
+              WhatsappLogger.log(e);
+            }
+            onQrCode?.call(qrCodeImage.urlCode!, imageBytes);
           }
-          onQrCode?.call(qrCodeImage.urlCode!, imageBytes);
-        }
-      },
-      waitDurationSeconds: waitDurationSeconds,
-    );
+        },
+        waitDurationSeconds: waitDurationSeconds,
+      );
 
-    WhatsappLogger.log('Checking QRCode status...');
+      WhatsappLogger.log('Checking QRCode status...');
+      await Future.delayed(const Duration(milliseconds: 200));
+      authenticated = await wppAuth.isAuthenticated();
+      if (!authenticated) throw 'Login Failed';
+      onConnectionEvent?.call(ConnectionEvent.authenticated);
+    } else {
+      onConnectionEvent?.call(ConnectionEvent.waitingForPhoneLink);
+      WhatsappLogger.log('Waiting to link with phone number');
+      String code = await WppConn(wpClient).genLinkDeviceCodeForPhoneNumber(
+        linkWithPhoneNumber,
+      );
+      onPhoneLinkCode?.call(code);
+    }
 
     await Future.delayed(const Duration(milliseconds: 200));
+    WhatsappLogger.log('Checking phone is connected...');
 
-    authenticated = await wppAuth.isAuthenticated();
-
-    if (authenticated) {
-      onConnectionEvent?.call(ConnectionEvent.authenticated);
-
-      await Future.delayed(const Duration(milliseconds: 200));
-      WhatsappLogger.log('Checking phone is connected...');
-
-      onConnectionEvent?.call(ConnectionEvent.connecting);
-      bool inChat = await _waitForInChat(wpClient);
-      if (!inChat) {
-        WhatsappLogger.log('Phone not connected');
-        throw 'Phone not connected';
-      }
-
-      WhatsappLogger.log('Connected successfully');
-      onConnectionEvent?.call(ConnectionEvent.connected);
-    } else {
-      throw 'Login Failed';
+    onConnectionEvent?.call(ConnectionEvent.connecting);
+    bool inChat = await _waitForInChat(wpClient);
+    if (!inChat) {
+      WhatsappLogger.log('Phone not connected');
+      throw 'Phone not connected';
     }
+
+    WhatsappLogger.log('Connected successfully');
+    onConnectionEvent?.call(ConnectionEvent.connected);
   } else {
     await Future.delayed(const Duration(milliseconds: 200));
     WhatsappLogger.log('Checking phone is connected...');

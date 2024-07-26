@@ -4,6 +4,13 @@ class WppConn {
   WpClientInterface wpClient;
   WppConn(this.wpClient);
 
+  Future<String> genLinkDeviceCodeForPhoneNumber(String phone) async {
+    return await wpClient.evaluateJs(
+      '''WPP.conn.genLinkDeviceCodeForPhoneNumber(${phone.phoneParse});''',
+      methodName: "genLinkDeviceCodeForPhoneNumber",
+    );
+  }
+
   /// Set keep alive state, that will force the focused and online state
   Future setAlive([bool value = true]) async {
     var aliveValue = value ? '' : false;

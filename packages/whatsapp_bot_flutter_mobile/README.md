@@ -17,7 +17,7 @@ Android sdk:minSdkVersion cannot be smaller than version 19
 
 ## Usage
 
-First we have to get `WhatsappClient` using `WhatsappBotFlutterMobile.connect` method , we can get qrcode from `onQrCode` callback, this will return a qrString and ImageByte , we can use ImageBytes to show qr as Image widget , or we can convert qrCode String to QrCode widget by any library,
+First we have to get `WhatsappClient` using `WhatsappBotFlutterMobile.connect` method , we can get qrcode from `onQrCode` callback, this will return a qrString and ImageByte , we can use ImageBytes to show qr as Image widget , or we can convert qrCode String to QrCode widget by any library, or set `linkWithPhoneNumber`, and get code in `onPhoneLinkCode` callback to login with phone number and link code
 
 ```dart
 WhatsappClient? whatsappClient = await WhatsappBotFlutterMobile.connect(

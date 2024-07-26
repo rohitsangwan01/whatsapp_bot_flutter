@@ -1,3 +1,7 @@
+## 2.0.1
+
+- Add `linkWithPhoneNumber` and `onPhoneLinkCode` to login with phone number
+
 ## 2.0.0
 
 - Breaking Changes: Update models and set properties to nullable
