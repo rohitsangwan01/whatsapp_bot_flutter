@@ -1,4 +1,3 @@
-import 'package:whatsapp_bot_platform_interface/src/models/models.dart';
 import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.dart';
 
 class WppGroup {
@@ -9,7 +8,8 @@ class WppGroup {
     required String groupId,
     required MessageId messageId,
   }) =>
-      wpClient.evaluateJs('WPP.chat.openChatAt(${groupId.groupParse}, ${messageId.serialized.jsParse});');
+      wpClient.evaluateJs(
+          'WPP.chat.openChatAt(${groupId.groupParse}, ${messageId.serialized.jsParse});');
 
   Future sendTextMessage({
     required String groupId,
@@ -22,13 +22,15 @@ class WppGroup {
   }) async {
     String? replyText = replyMessageId?.serialized;
     String? buttonsText = buttons?.map((e) => e.toJson()).toList().toString();
-    return wpClient.evaluateJs('''WPP.chat.sendTextMessage(${groupId.groupParse}, ${message.jsParse}, {
+    return wpClient.evaluateJs(
+        '''WPP.chat.sendTextMessage(${groupId.groupParse}, ${message.jsParse}, {
             quotedMsg: ${replyText.jsParse},
             useTemplateButtons: ${useTemplate.jsParse},
             buttons:$buttonsText,
             title: ${templateTitle.jsParse},
             footer: ${templateFooter.jsParse}
-          });''', methodName: "sendTextMessage");
+          });''',
+        methodName: "sendTextMessage");
   }
 
   /// To add participants to a group

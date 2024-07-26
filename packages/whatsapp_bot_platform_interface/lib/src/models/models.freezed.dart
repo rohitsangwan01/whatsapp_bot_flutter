@@ -21,41 +21,41 @@ Chat _$ChatFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Chat {
   String get id => throw _privateConstructorUsedError;
-  LastReceivedKey get lastReceivedKey => throw _privateConstructorUsedError;
-  int get t => throw _privateConstructorUsedError;
-  int get unreadCount => throw _privateConstructorUsedError;
-  int get unreadDividerOffset => throw _privateConstructorUsedError;
+  LastReceivedKey? get lastReceivedKey => throw _privateConstructorUsedError;
+  int? get t => throw _privateConstructorUsedError;
+  int? get unreadCount => throw _privateConstructorUsedError;
+  int? get unreadDividerOffset => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get archive => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get isLocked => throw _privateConstructorUsedError;
-  int get muteExpiration => throw _privateConstructorUsedError;
+  int? get muteExpiration => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get isAutoMuted => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get notSpam => throw _privateConstructorUsedError;
-  int get pin => throw _privateConstructorUsedError;
-  int get ephemeralDuration => throw _privateConstructorUsedError;
-  int get ephemeralSettingTimestamp => throw _privateConstructorUsedError;
-  String get disappearingModeInitiator => throw _privateConstructorUsedError;
-  String get disappearingModeTrigger => throw _privateConstructorUsedError;
-  int get unreadMentionCount => throw _privateConstructorUsedError;
+  int? get pin => throw _privateConstructorUsedError;
+  int? get ephemeralDuration => throw _privateConstructorUsedError;
+  int? get ephemeralSettingTimestamp => throw _privateConstructorUsedError;
+  String? get disappearingModeInitiator => throw _privateConstructorUsedError;
+  String? get disappearingModeTrigger => throw _privateConstructorUsedError;
+  int? get unreadMentionCount => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get hasUnreadMention => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get archiveAtMentionViewedInDrawer => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get hasChatBeenOpened => throw _privateConstructorUsedError;
-  Map<dynamic, dynamic> get tcToken => throw _privateConstructorUsedError;
-  int get tcTokenTimestamp => throw _privateConstructorUsedError;
-  int get tcTokenSenderTimestamp => throw _privateConstructorUsedError;
-  int get endOfHistoryTransferType => throw _privateConstructorUsedError;
+  Map<dynamic, dynamic>? get tcToken => throw _privateConstructorUsedError;
+  int? get tcTokenTimestamp => throw _privateConstructorUsedError;
+  int? get tcTokenSenderTimestamp => throw _privateConstructorUsedError;
+  int? get endOfHistoryTransferType => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get pendingInitialLoading => throw _privateConstructorUsedError;
   int get celebrationAnimationLastPlayed => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get hasRequestedWelcomeMsg => throw _privateConstructorUsedError;
-  List<Message> get msgs => throw _privateConstructorUsedError;
+  List<Message>? get msgs => throw _privateConstructorUsedError;
 
   /// Serializes this Chat to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -73,34 +73,34 @@ abstract class $ChatCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      LastReceivedKey lastReceivedKey,
-      int t,
-      int unreadCount,
-      int unreadDividerOffset,
+      LastReceivedKey? lastReceivedKey,
+      int? t,
+      int? unreadCount,
+      int? unreadDividerOffset,
       @JsonKey(defaultValue: false) bool archive,
       @JsonKey(defaultValue: false) bool isLocked,
-      int muteExpiration,
+      int? muteExpiration,
       @JsonKey(defaultValue: false) bool isAutoMuted,
       @JsonKey(defaultValue: false) bool notSpam,
-      int pin,
-      int ephemeralDuration,
-      int ephemeralSettingTimestamp,
-      String disappearingModeInitiator,
-      String disappearingModeTrigger,
-      int unreadMentionCount,
+      int? pin,
+      int? ephemeralDuration,
+      int? ephemeralSettingTimestamp,
+      String? disappearingModeInitiator,
+      String? disappearingModeTrigger,
+      int? unreadMentionCount,
       @JsonKey(defaultValue: false) bool hasUnreadMention,
       @JsonKey(defaultValue: false) bool archiveAtMentionViewedInDrawer,
       @JsonKey(defaultValue: false) bool hasChatBeenOpened,
-      Map<dynamic, dynamic> tcToken,
-      int tcTokenTimestamp,
-      int tcTokenSenderTimestamp,
-      int endOfHistoryTransferType,
+      Map<dynamic, dynamic>? tcToken,
+      int? tcTokenTimestamp,
+      int? tcTokenSenderTimestamp,
+      int? endOfHistoryTransferType,
       @JsonKey(defaultValue: false) bool pendingInitialLoading,
       int celebrationAnimationLastPlayed,
       @JsonKey(defaultValue: false) bool hasRequestedWelcomeMsg,
-      List<Message> msgs});
+      List<Message>? msgs});
 
-  $LastReceivedKeyCopyWith<$Res> get lastReceivedKey;
+  $LastReceivedKeyCopyWith<$Res>? get lastReceivedKey;
 }
 
 /// @nodoc
@@ -119,54 +119,54 @@ class _$ChatCopyWithImpl<$Res, $Val extends Chat>
   @override
   $Res call({
     Object? id = null,
-    Object? lastReceivedKey = null,
-    Object? t = null,
-    Object? unreadCount = null,
-    Object? unreadDividerOffset = null,
+    Object? lastReceivedKey = freezed,
+    Object? t = freezed,
+    Object? unreadCount = freezed,
+    Object? unreadDividerOffset = freezed,
     Object? archive = null,
     Object? isLocked = null,
-    Object? muteExpiration = null,
+    Object? muteExpiration = freezed,
     Object? isAutoMuted = null,
     Object? notSpam = null,
-    Object? pin = null,
-    Object? ephemeralDuration = null,
-    Object? ephemeralSettingTimestamp = null,
-    Object? disappearingModeInitiator = null,
-    Object? disappearingModeTrigger = null,
-    Object? unreadMentionCount = null,
+    Object? pin = freezed,
+    Object? ephemeralDuration = freezed,
+    Object? ephemeralSettingTimestamp = freezed,
+    Object? disappearingModeInitiator = freezed,
+    Object? disappearingModeTrigger = freezed,
+    Object? unreadMentionCount = freezed,
     Object? hasUnreadMention = null,
     Object? archiveAtMentionViewedInDrawer = null,
     Object? hasChatBeenOpened = null,
-    Object? tcToken = null,
-    Object? tcTokenTimestamp = null,
-    Object? tcTokenSenderTimestamp = null,
-    Object? endOfHistoryTransferType = null,
+    Object? tcToken = freezed,
+    Object? tcTokenTimestamp = freezed,
+    Object? tcTokenSenderTimestamp = freezed,
+    Object? endOfHistoryTransferType = freezed,
     Object? pendingInitialLoading = null,
     Object? celebrationAnimationLastPlayed = null,
     Object? hasRequestedWelcomeMsg = null,
-    Object? msgs = null,
+    Object? msgs = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      lastReceivedKey: null == lastReceivedKey
+      lastReceivedKey: freezed == lastReceivedKey
           ? _value.lastReceivedKey
           : lastReceivedKey // ignore: cast_nullable_to_non_nullable
-              as LastReceivedKey,
-      t: null == t
+              as LastReceivedKey?,
+      t: freezed == t
           ? _value.t
           : t // ignore: cast_nullable_to_non_nullable
-              as int,
-      unreadCount: null == unreadCount
+              as int?,
+      unreadCount: freezed == unreadCount
           ? _value.unreadCount
           : unreadCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      unreadDividerOffset: null == unreadDividerOffset
+              as int?,
+      unreadDividerOffset: freezed == unreadDividerOffset
           ? _value.unreadDividerOffset
           : unreadDividerOffset // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       archive: null == archive
           ? _value.archive
           : archive // ignore: cast_nullable_to_non_nullable
@@ -175,10 +175,10 @@ class _$ChatCopyWithImpl<$Res, $Val extends Chat>
           ? _value.isLocked
           : isLocked // ignore: cast_nullable_to_non_nullable
               as bool,
-      muteExpiration: null == muteExpiration
+      muteExpiration: freezed == muteExpiration
           ? _value.muteExpiration
           : muteExpiration // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       isAutoMuted: null == isAutoMuted
           ? _value.isAutoMuted
           : isAutoMuted // ignore: cast_nullable_to_non_nullable
@@ -187,30 +187,30 @@ class _$ChatCopyWithImpl<$Res, $Val extends Chat>
           ? _value.notSpam
           : notSpam // ignore: cast_nullable_to_non_nullable
               as bool,
-      pin: null == pin
+      pin: freezed == pin
           ? _value.pin
           : pin // ignore: cast_nullable_to_non_nullable
-              as int,
-      ephemeralDuration: null == ephemeralDuration
+              as int?,
+      ephemeralDuration: freezed == ephemeralDuration
           ? _value.ephemeralDuration
           : ephemeralDuration // ignore: cast_nullable_to_non_nullable
-              as int,
-      ephemeralSettingTimestamp: null == ephemeralSettingTimestamp
+              as int?,
+      ephemeralSettingTimestamp: freezed == ephemeralSettingTimestamp
           ? _value.ephemeralSettingTimestamp
           : ephemeralSettingTimestamp // ignore: cast_nullable_to_non_nullable
-              as int,
-      disappearingModeInitiator: null == disappearingModeInitiator
+              as int?,
+      disappearingModeInitiator: freezed == disappearingModeInitiator
           ? _value.disappearingModeInitiator
           : disappearingModeInitiator // ignore: cast_nullable_to_non_nullable
-              as String,
-      disappearingModeTrigger: null == disappearingModeTrigger
+              as String?,
+      disappearingModeTrigger: freezed == disappearingModeTrigger
           ? _value.disappearingModeTrigger
           : disappearingModeTrigger // ignore: cast_nullable_to_non_nullable
-              as String,
-      unreadMentionCount: null == unreadMentionCount
+              as String?,
+      unreadMentionCount: freezed == unreadMentionCount
           ? _value.unreadMentionCount
           : unreadMentionCount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       hasUnreadMention: null == hasUnreadMention
           ? _value.hasUnreadMention
           : hasUnreadMention // ignore: cast_nullable_to_non_nullable
@@ -223,22 +223,22 @@ class _$ChatCopyWithImpl<$Res, $Val extends Chat>
           ? _value.hasChatBeenOpened
           : hasChatBeenOpened // ignore: cast_nullable_to_non_nullable
               as bool,
-      tcToken: null == tcToken
+      tcToken: freezed == tcToken
           ? _value.tcToken
           : tcToken // ignore: cast_nullable_to_non_nullable
-              as Map<dynamic, dynamic>,
-      tcTokenTimestamp: null == tcTokenTimestamp
+              as Map<dynamic, dynamic>?,
+      tcTokenTimestamp: freezed == tcTokenTimestamp
           ? _value.tcTokenTimestamp
           : tcTokenTimestamp // ignore: cast_nullable_to_non_nullable
-              as int,
-      tcTokenSenderTimestamp: null == tcTokenSenderTimestamp
+              as int?,
+      tcTokenSenderTimestamp: freezed == tcTokenSenderTimestamp
           ? _value.tcTokenSenderTimestamp
           : tcTokenSenderTimestamp // ignore: cast_nullable_to_non_nullable
-              as int,
-      endOfHistoryTransferType: null == endOfHistoryTransferType
+              as int?,
+      endOfHistoryTransferType: freezed == endOfHistoryTransferType
           ? _value.endOfHistoryTransferType
           : endOfHistoryTransferType // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       pendingInitialLoading: null == pendingInitialLoading
           ? _value.pendingInitialLoading
           : pendingInitialLoading // ignore: cast_nullable_to_non_nullable
@@ -251,10 +251,10 @@ class _$ChatCopyWithImpl<$Res, $Val extends Chat>
           ? _value.hasRequestedWelcomeMsg
           : hasRequestedWelcomeMsg // ignore: cast_nullable_to_non_nullable
               as bool,
-      msgs: null == msgs
+      msgs: freezed == msgs
           ? _value.msgs
           : msgs // ignore: cast_nullable_to_non_nullable
-              as List<Message>,
+              as List<Message>?,
     ) as $Val);
   }
 
@@ -262,8 +262,12 @@ class _$ChatCopyWithImpl<$Res, $Val extends Chat>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $LastReceivedKeyCopyWith<$Res> get lastReceivedKey {
-    return $LastReceivedKeyCopyWith<$Res>(_value.lastReceivedKey, (value) {
+  $LastReceivedKeyCopyWith<$Res>? get lastReceivedKey {
+    if (_value.lastReceivedKey == null) {
+      return null;
+    }
+
+    return $LastReceivedKeyCopyWith<$Res>(_value.lastReceivedKey!, (value) {
       return _then(_value.copyWith(lastReceivedKey: value) as $Val);
     });
   }
@@ -278,35 +282,35 @@ abstract class _$$ChatImplCopyWith<$Res> implements $ChatCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      LastReceivedKey lastReceivedKey,
-      int t,
-      int unreadCount,
-      int unreadDividerOffset,
+      LastReceivedKey? lastReceivedKey,
+      int? t,
+      int? unreadCount,
+      int? unreadDividerOffset,
       @JsonKey(defaultValue: false) bool archive,
       @JsonKey(defaultValue: false) bool isLocked,
-      int muteExpiration,
+      int? muteExpiration,
       @JsonKey(defaultValue: false) bool isAutoMuted,
       @JsonKey(defaultValue: false) bool notSpam,
-      int pin,
-      int ephemeralDuration,
-      int ephemeralSettingTimestamp,
-      String disappearingModeInitiator,
-      String disappearingModeTrigger,
-      int unreadMentionCount,
+      int? pin,
+      int? ephemeralDuration,
+      int? ephemeralSettingTimestamp,
+      String? disappearingModeInitiator,
+      String? disappearingModeTrigger,
+      int? unreadMentionCount,
       @JsonKey(defaultValue: false) bool hasUnreadMention,
       @JsonKey(defaultValue: false) bool archiveAtMentionViewedInDrawer,
       @JsonKey(defaultValue: false) bool hasChatBeenOpened,
-      Map<dynamic, dynamic> tcToken,
-      int tcTokenTimestamp,
-      int tcTokenSenderTimestamp,
-      int endOfHistoryTransferType,
+      Map<dynamic, dynamic>? tcToken,
+      int? tcTokenTimestamp,
+      int? tcTokenSenderTimestamp,
+      int? endOfHistoryTransferType,
       @JsonKey(defaultValue: false) bool pendingInitialLoading,
       int celebrationAnimationLastPlayed,
       @JsonKey(defaultValue: false) bool hasRequestedWelcomeMsg,
-      List<Message> msgs});
+      List<Message>? msgs});
 
   @override
-  $LastReceivedKeyCopyWith<$Res> get lastReceivedKey;
+  $LastReceivedKeyCopyWith<$Res>? get lastReceivedKey;
 }
 
 /// @nodoc
@@ -322,54 +326,54 @@ class __$$ChatImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? lastReceivedKey = null,
-    Object? t = null,
-    Object? unreadCount = null,
-    Object? unreadDividerOffset = null,
+    Object? lastReceivedKey = freezed,
+    Object? t = freezed,
+    Object? unreadCount = freezed,
+    Object? unreadDividerOffset = freezed,
     Object? archive = null,
     Object? isLocked = null,
-    Object? muteExpiration = null,
+    Object? muteExpiration = freezed,
     Object? isAutoMuted = null,
     Object? notSpam = null,
-    Object? pin = null,
-    Object? ephemeralDuration = null,
-    Object? ephemeralSettingTimestamp = null,
-    Object? disappearingModeInitiator = null,
-    Object? disappearingModeTrigger = null,
-    Object? unreadMentionCount = null,
+    Object? pin = freezed,
+    Object? ephemeralDuration = freezed,
+    Object? ephemeralSettingTimestamp = freezed,
+    Object? disappearingModeInitiator = freezed,
+    Object? disappearingModeTrigger = freezed,
+    Object? unreadMentionCount = freezed,
     Object? hasUnreadMention = null,
     Object? archiveAtMentionViewedInDrawer = null,
     Object? hasChatBeenOpened = null,
-    Object? tcToken = null,
-    Object? tcTokenTimestamp = null,
-    Object? tcTokenSenderTimestamp = null,
-    Object? endOfHistoryTransferType = null,
+    Object? tcToken = freezed,
+    Object? tcTokenTimestamp = freezed,
+    Object? tcTokenSenderTimestamp = freezed,
+    Object? endOfHistoryTransferType = freezed,
     Object? pendingInitialLoading = null,
     Object? celebrationAnimationLastPlayed = null,
     Object? hasRequestedWelcomeMsg = null,
-    Object? msgs = null,
+    Object? msgs = freezed,
   }) {
     return _then(_$ChatImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      lastReceivedKey: null == lastReceivedKey
+      lastReceivedKey: freezed == lastReceivedKey
           ? _value.lastReceivedKey
           : lastReceivedKey // ignore: cast_nullable_to_non_nullable
-              as LastReceivedKey,
-      t: null == t
+              as LastReceivedKey?,
+      t: freezed == t
           ? _value.t
           : t // ignore: cast_nullable_to_non_nullable
-              as int,
-      unreadCount: null == unreadCount
+              as int?,
+      unreadCount: freezed == unreadCount
           ? _value.unreadCount
           : unreadCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      unreadDividerOffset: null == unreadDividerOffset
+              as int?,
+      unreadDividerOffset: freezed == unreadDividerOffset
           ? _value.unreadDividerOffset
           : unreadDividerOffset // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       archive: null == archive
           ? _value.archive
           : archive // ignore: cast_nullable_to_non_nullable
@@ -378,10 +382,10 @@ class __$$ChatImplCopyWithImpl<$Res>
           ? _value.isLocked
           : isLocked // ignore: cast_nullable_to_non_nullable
               as bool,
-      muteExpiration: null == muteExpiration
+      muteExpiration: freezed == muteExpiration
           ? _value.muteExpiration
           : muteExpiration // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       isAutoMuted: null == isAutoMuted
           ? _value.isAutoMuted
           : isAutoMuted // ignore: cast_nullable_to_non_nullable
@@ -390,30 +394,30 @@ class __$$ChatImplCopyWithImpl<$Res>
           ? _value.notSpam
           : notSpam // ignore: cast_nullable_to_non_nullable
               as bool,
-      pin: null == pin
+      pin: freezed == pin
           ? _value.pin
           : pin // ignore: cast_nullable_to_non_nullable
-              as int,
-      ephemeralDuration: null == ephemeralDuration
+              as int?,
+      ephemeralDuration: freezed == ephemeralDuration
           ? _value.ephemeralDuration
           : ephemeralDuration // ignore: cast_nullable_to_non_nullable
-              as int,
-      ephemeralSettingTimestamp: null == ephemeralSettingTimestamp
+              as int?,
+      ephemeralSettingTimestamp: freezed == ephemeralSettingTimestamp
           ? _value.ephemeralSettingTimestamp
           : ephemeralSettingTimestamp // ignore: cast_nullable_to_non_nullable
-              as int,
-      disappearingModeInitiator: null == disappearingModeInitiator
+              as int?,
+      disappearingModeInitiator: freezed == disappearingModeInitiator
           ? _value.disappearingModeInitiator
           : disappearingModeInitiator // ignore: cast_nullable_to_non_nullable
-              as String,
-      disappearingModeTrigger: null == disappearingModeTrigger
+              as String?,
+      disappearingModeTrigger: freezed == disappearingModeTrigger
           ? _value.disappearingModeTrigger
           : disappearingModeTrigger // ignore: cast_nullable_to_non_nullable
-              as String,
-      unreadMentionCount: null == unreadMentionCount
+              as String?,
+      unreadMentionCount: freezed == unreadMentionCount
           ? _value.unreadMentionCount
           : unreadMentionCount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       hasUnreadMention: null == hasUnreadMention
           ? _value.hasUnreadMention
           : hasUnreadMention // ignore: cast_nullable_to_non_nullable
@@ -426,22 +430,22 @@ class __$$ChatImplCopyWithImpl<$Res>
           ? _value.hasChatBeenOpened
           : hasChatBeenOpened // ignore: cast_nullable_to_non_nullable
               as bool,
-      tcToken: null == tcToken
+      tcToken: freezed == tcToken
           ? _value._tcToken
           : tcToken // ignore: cast_nullable_to_non_nullable
-              as Map<dynamic, dynamic>,
-      tcTokenTimestamp: null == tcTokenTimestamp
+              as Map<dynamic, dynamic>?,
+      tcTokenTimestamp: freezed == tcTokenTimestamp
           ? _value.tcTokenTimestamp
           : tcTokenTimestamp // ignore: cast_nullable_to_non_nullable
-              as int,
-      tcTokenSenderTimestamp: null == tcTokenSenderTimestamp
+              as int?,
+      tcTokenSenderTimestamp: freezed == tcTokenSenderTimestamp
           ? _value.tcTokenSenderTimestamp
           : tcTokenSenderTimestamp // ignore: cast_nullable_to_non_nullable
-              as int,
-      endOfHistoryTransferType: null == endOfHistoryTransferType
+              as int?,
+      endOfHistoryTransferType: freezed == endOfHistoryTransferType
           ? _value.endOfHistoryTransferType
           : endOfHistoryTransferType // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       pendingInitialLoading: null == pendingInitialLoading
           ? _value.pendingInitialLoading
           : pendingInitialLoading // ignore: cast_nullable_to_non_nullable
@@ -454,10 +458,10 @@ class __$$ChatImplCopyWithImpl<$Res>
           ? _value.hasRequestedWelcomeMsg
           : hasRequestedWelcomeMsg // ignore: cast_nullable_to_non_nullable
               as bool,
-      msgs: null == msgs
+      msgs: freezed == msgs
           ? _value._msgs
           : msgs // ignore: cast_nullable_to_non_nullable
-              as List<Message>,
+              as List<Message>?,
     ));
   }
 }
@@ -486,14 +490,14 @@ class _$ChatImpl implements _Chat {
       @JsonKey(defaultValue: false)
       required this.archiveAtMentionViewedInDrawer,
       @JsonKey(defaultValue: false) required this.hasChatBeenOpened,
-      required final Map<dynamic, dynamic> tcToken,
+      required final Map<dynamic, dynamic>? tcToken,
       required this.tcTokenTimestamp,
       required this.tcTokenSenderTimestamp,
       required this.endOfHistoryTransferType,
       @JsonKey(defaultValue: false) required this.pendingInitialLoading,
       required this.celebrationAnimationLastPlayed,
       @JsonKey(defaultValue: false) required this.hasRequestedWelcomeMsg,
-      required final List<Message> msgs})
+      required final List<Message>? msgs})
       : _tcToken = tcToken,
         _msgs = msgs;
 
@@ -503,13 +507,13 @@ class _$ChatImpl implements _Chat {
   @override
   final String id;
   @override
-  final LastReceivedKey lastReceivedKey;
+  final LastReceivedKey? lastReceivedKey;
   @override
-  final int t;
+  final int? t;
   @override
-  final int unreadCount;
+  final int? unreadCount;
   @override
-  final int unreadDividerOffset;
+  final int? unreadDividerOffset;
   @override
   @JsonKey(defaultValue: false)
   final bool archive;
@@ -517,7 +521,7 @@ class _$ChatImpl implements _Chat {
   @JsonKey(defaultValue: false)
   final bool isLocked;
   @override
-  final int muteExpiration;
+  final int? muteExpiration;
   @override
   @JsonKey(defaultValue: false)
   final bool isAutoMuted;
@@ -525,17 +529,17 @@ class _$ChatImpl implements _Chat {
   @JsonKey(defaultValue: false)
   final bool notSpam;
   @override
-  final int pin;
+  final int? pin;
   @override
-  final int ephemeralDuration;
+  final int? ephemeralDuration;
   @override
-  final int ephemeralSettingTimestamp;
+  final int? ephemeralSettingTimestamp;
   @override
-  final String disappearingModeInitiator;
+  final String? disappearingModeInitiator;
   @override
-  final String disappearingModeTrigger;
+  final String? disappearingModeTrigger;
   @override
-  final int unreadMentionCount;
+  final int? unreadMentionCount;
   @override
   @JsonKey(defaultValue: false)
   final bool hasUnreadMention;
@@ -545,20 +549,22 @@ class _$ChatImpl implements _Chat {
   @override
   @JsonKey(defaultValue: false)
   final bool hasChatBeenOpened;
-  final Map<dynamic, dynamic> _tcToken;
+  final Map<dynamic, dynamic>? _tcToken;
   @override
-  Map<dynamic, dynamic> get tcToken {
+  Map<dynamic, dynamic>? get tcToken {
+    final value = _tcToken;
+    if (value == null) return null;
     if (_tcToken is EqualUnmodifiableMapView) return _tcToken;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_tcToken);
+    return EqualUnmodifiableMapView(value);
   }
 
   @override
-  final int tcTokenTimestamp;
+  final int? tcTokenTimestamp;
   @override
-  final int tcTokenSenderTimestamp;
+  final int? tcTokenSenderTimestamp;
   @override
-  final int endOfHistoryTransferType;
+  final int? endOfHistoryTransferType;
   @override
   @JsonKey(defaultValue: false)
   final bool pendingInitialLoading;
@@ -567,12 +573,14 @@ class _$ChatImpl implements _Chat {
   @override
   @JsonKey(defaultValue: false)
   final bool hasRequestedWelcomeMsg;
-  final List<Message> _msgs;
+  final List<Message>? _msgs;
   @override
-  List<Message> get msgs {
+  List<Message>? get msgs {
+    final value = _msgs;
+    if (value == null) return null;
     if (_msgs is EqualUnmodifiableListView) return _msgs;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_msgs);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -690,46 +698,46 @@ class _$ChatImpl implements _Chat {
 abstract class _Chat implements Chat {
   const factory _Chat(
       {required final String id,
-      required final LastReceivedKey lastReceivedKey,
-      required final int t,
-      required final int unreadCount,
-      required final int unreadDividerOffset,
+      required final LastReceivedKey? lastReceivedKey,
+      required final int? t,
+      required final int? unreadCount,
+      required final int? unreadDividerOffset,
       @JsonKey(defaultValue: false) required final bool archive,
       @JsonKey(defaultValue: false) required final bool isLocked,
-      required final int muteExpiration,
+      required final int? muteExpiration,
       @JsonKey(defaultValue: false) required final bool isAutoMuted,
       @JsonKey(defaultValue: false) required final bool notSpam,
-      required final int pin,
-      required final int ephemeralDuration,
-      required final int ephemeralSettingTimestamp,
-      required final String disappearingModeInitiator,
-      required final String disappearingModeTrigger,
-      required final int unreadMentionCount,
+      required final int? pin,
+      required final int? ephemeralDuration,
+      required final int? ephemeralSettingTimestamp,
+      required final String? disappearingModeInitiator,
+      required final String? disappearingModeTrigger,
+      required final int? unreadMentionCount,
       @JsonKey(defaultValue: false) required final bool hasUnreadMention,
       @JsonKey(defaultValue: false)
       required final bool archiveAtMentionViewedInDrawer,
       @JsonKey(defaultValue: false) required final bool hasChatBeenOpened,
-      required final Map<dynamic, dynamic> tcToken,
-      required final int tcTokenTimestamp,
-      required final int tcTokenSenderTimestamp,
-      required final int endOfHistoryTransferType,
+      required final Map<dynamic, dynamic>? tcToken,
+      required final int? tcTokenTimestamp,
+      required final int? tcTokenSenderTimestamp,
+      required final int? endOfHistoryTransferType,
       @JsonKey(defaultValue: false) required final bool pendingInitialLoading,
       required final int celebrationAnimationLastPlayed,
       @JsonKey(defaultValue: false) required final bool hasRequestedWelcomeMsg,
-      required final List<Message> msgs}) = _$ChatImpl;
+      required final List<Message>? msgs}) = _$ChatImpl;
 
   factory _Chat.fromJson(Map<String, dynamic> json) = _$ChatImpl.fromJson;
 
   @override
   String get id;
   @override
-  LastReceivedKey get lastReceivedKey;
+  LastReceivedKey? get lastReceivedKey;
   @override
-  int get t;
+  int? get t;
   @override
-  int get unreadCount;
+  int? get unreadCount;
   @override
-  int get unreadDividerOffset;
+  int? get unreadDividerOffset;
   @override
   @JsonKey(defaultValue: false)
   bool get archive;
@@ -737,7 +745,7 @@ abstract class _Chat implements Chat {
   @JsonKey(defaultValue: false)
   bool get isLocked;
   @override
-  int get muteExpiration;
+  int? get muteExpiration;
   @override
   @JsonKey(defaultValue: false)
   bool get isAutoMuted;
@@ -745,17 +753,17 @@ abstract class _Chat implements Chat {
   @JsonKey(defaultValue: false)
   bool get notSpam;
   @override
-  int get pin;
+  int? get pin;
   @override
-  int get ephemeralDuration;
+  int? get ephemeralDuration;
   @override
-  int get ephemeralSettingTimestamp;
+  int? get ephemeralSettingTimestamp;
   @override
-  String get disappearingModeInitiator;
+  String? get disappearingModeInitiator;
   @override
-  String get disappearingModeTrigger;
+  String? get disappearingModeTrigger;
   @override
-  int get unreadMentionCount;
+  int? get unreadMentionCount;
   @override
   @JsonKey(defaultValue: false)
   bool get hasUnreadMention;
@@ -766,13 +774,13 @@ abstract class _Chat implements Chat {
   @JsonKey(defaultValue: false)
   bool get hasChatBeenOpened;
   @override
-  Map<dynamic, dynamic> get tcToken;
+  Map<dynamic, dynamic>? get tcToken;
   @override
-  int get tcTokenTimestamp;
+  int? get tcTokenTimestamp;
   @override
-  int get tcTokenSenderTimestamp;
+  int? get tcTokenSenderTimestamp;
   @override
-  int get endOfHistoryTransferType;
+  int? get endOfHistoryTransferType;
   @override
   @JsonKey(defaultValue: false)
   bool get pendingInitialLoading;
@@ -782,7 +790,7 @@ abstract class _Chat implements Chat {
   @JsonKey(defaultValue: false)
   bool get hasRequestedWelcomeMsg;
   @override
-  List<Message> get msgs;
+  List<Message>? get msgs;
 
   /// Create a copy of Chat
   /// with the given fields replaced by the non-null parameter values.
@@ -800,10 +808,10 @@ LastReceivedKey _$LastReceivedKeyFromJson(Map<String, dynamic> json) {
 mixin _$LastReceivedKey {
   @JsonKey(defaultValue: false)
   bool get fromMe => throw _privateConstructorUsedError;
-  String get remote => throw _privateConstructorUsedError;
-  String get self => throw _privateConstructorUsedError;
+  String? get remote => throw _privateConstructorUsedError;
+  String? get self => throw _privateConstructorUsedError;
   @JsonKey(name: '_serialized')
-  String get serialized => throw _privateConstructorUsedError;
+  String? get serialized => throw _privateConstructorUsedError;
 
   /// Serializes this LastReceivedKey to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -823,9 +831,9 @@ abstract class $LastReceivedKeyCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(defaultValue: false) bool fromMe,
-      String remote,
-      String self,
-      @JsonKey(name: '_serialized') String serialized});
+      String? remote,
+      String? self,
+      @JsonKey(name: '_serialized') String? serialized});
 }
 
 /// @nodoc
@@ -844,27 +852,27 @@ class _$LastReceivedKeyCopyWithImpl<$Res, $Val extends LastReceivedKey>
   @override
   $Res call({
     Object? fromMe = null,
-    Object? remote = null,
-    Object? self = null,
-    Object? serialized = null,
+    Object? remote = freezed,
+    Object? self = freezed,
+    Object? serialized = freezed,
   }) {
     return _then(_value.copyWith(
       fromMe: null == fromMe
           ? _value.fromMe
           : fromMe // ignore: cast_nullable_to_non_nullable
               as bool,
-      remote: null == remote
+      remote: freezed == remote
           ? _value.remote
           : remote // ignore: cast_nullable_to_non_nullable
-              as String,
-      self: null == self
+              as String?,
+      self: freezed == self
           ? _value.self
           : self // ignore: cast_nullable_to_non_nullable
-              as String,
-      serialized: null == serialized
+              as String?,
+      serialized: freezed == serialized
           ? _value.serialized
           : serialized // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -879,9 +887,9 @@ abstract class _$$LastReceivedKeyImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(defaultValue: false) bool fromMe,
-      String remote,
-      String self,
-      @JsonKey(name: '_serialized') String serialized});
+      String? remote,
+      String? self,
+      @JsonKey(name: '_serialized') String? serialized});
 }
 
 /// @nodoc
@@ -898,27 +906,27 @@ class __$$LastReceivedKeyImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? fromMe = null,
-    Object? remote = null,
-    Object? self = null,
-    Object? serialized = null,
+    Object? remote = freezed,
+    Object? self = freezed,
+    Object? serialized = freezed,
   }) {
     return _then(_$LastReceivedKeyImpl(
       fromMe: null == fromMe
           ? _value.fromMe
           : fromMe // ignore: cast_nullable_to_non_nullable
               as bool,
-      remote: null == remote
+      remote: freezed == remote
           ? _value.remote
           : remote // ignore: cast_nullable_to_non_nullable
-              as String,
-      self: null == self
+              as String?,
+      self: freezed == self
           ? _value.self
           : self // ignore: cast_nullable_to_non_nullable
-              as String,
-      serialized: null == serialized
+              as String?,
+      serialized: freezed == serialized
           ? _value.serialized
           : serialized // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -939,12 +947,12 @@ class _$LastReceivedKeyImpl implements _LastReceivedKey {
   @JsonKey(defaultValue: false)
   final bool fromMe;
   @override
-  final String remote;
+  final String? remote;
   @override
-  final String self;
+  final String? self;
   @override
   @JsonKey(name: '_serialized')
-  final String serialized;
+  final String? serialized;
 
   @override
   String toString() {
@@ -988,9 +996,9 @@ class _$LastReceivedKeyImpl implements _LastReceivedKey {
 abstract class _LastReceivedKey implements LastReceivedKey {
   const factory _LastReceivedKey(
           {@JsonKey(defaultValue: false) required final bool fromMe,
-          required final String remote,
-          required final String self,
-          @JsonKey(name: '_serialized') required final String serialized}) =
+          required final String? remote,
+          required final String? self,
+          @JsonKey(name: '_serialized') required final String? serialized}) =
       _$LastReceivedKeyImpl;
 
   factory _LastReceivedKey.fromJson(Map<String, dynamic> json) =
@@ -1000,12 +1008,12 @@ abstract class _LastReceivedKey implements LastReceivedKey {
   @JsonKey(defaultValue: false)
   bool get fromMe;
   @override
-  String get remote;
+  String? get remote;
   @override
-  String get self;
+  String? get self;
   @override
   @JsonKey(name: '_serialized')
-  String get serialized;
+  String? get serialized;
 
   /// Create a copy of LastReceivedKey
   /// with the given fields replaced by the non-null parameter values.
@@ -1022,12 +1030,12 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Message {
   MessageId? get id => throw _privateConstructorUsedError;
-  String get body => throw _privateConstructorUsedError;
-  String get type => throw _privateConstructorUsedError;
-  int get t => throw _privateConstructorUsedError;
-  String get notifyName => throw _privateConstructorUsedError;
-  String get from => throw _privateConstructorUsedError;
-  String get to => throw _privateConstructorUsedError;
+  String? get body => throw _privateConstructorUsedError;
+  String? get type => throw _privateConstructorUsedError;
+  int? get t => throw _privateConstructorUsedError;
+  String? get notifyName => throw _privateConstructorUsedError;
+  String? get from => throw _privateConstructorUsedError;
+  String? get to => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get isNewMsg => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
@@ -1050,17 +1058,17 @@ mixin _$Message {
   bool get ephemeralOutOfSync => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get productHeaderImageRejected => throw _privateConstructorUsedError;
-  int get lastPlaybackProgress => throw _privateConstructorUsedError;
+  int? get lastPlaybackProgress => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get isDynamicReplyButtonMsg => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get isMdHistoryMsg => throw _privateConstructorUsedError;
-  int get stickerSentTs => throw _privateConstructorUsedError;
+  int? get stickerSentTs => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get requiresDirectConnection => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get pttForwardedFeaturesEnabled => throw _privateConstructorUsedError;
-  String get caption => throw _privateConstructorUsedError;
+  String? get caption => throw _privateConstructorUsedError;
 
   /// Serializes this Message to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1078,12 +1086,12 @@ abstract class $MessageCopyWith<$Res> {
   @useResult
   $Res call(
       {MessageId? id,
-      String body,
-      String type,
-      int t,
-      String notifyName,
-      String from,
-      String to,
+      String? body,
+      String? type,
+      int? t,
+      String? notifyName,
+      String? from,
+      String? to,
       @JsonKey(defaultValue: false) bool isNewMsg,
       @JsonKey(defaultValue: false) bool star,
       @JsonKey(defaultValue: false) bool kicNotified,
@@ -1095,13 +1103,13 @@ abstract class $MessageCopyWith<$Res> {
       @JsonKey(defaultValue: false) bool hasReaction,
       @JsonKey(defaultValue: false) bool ephemeralOutOfSync,
       @JsonKey(defaultValue: false) bool productHeaderImageRejected,
-      int lastPlaybackProgress,
+      int? lastPlaybackProgress,
       @JsonKey(defaultValue: false) bool isDynamicReplyButtonMsg,
       @JsonKey(defaultValue: false) bool isMdHistoryMsg,
-      int stickerSentTs,
+      int? stickerSentTs,
       @JsonKey(defaultValue: false) bool requiresDirectConnection,
       @JsonKey(defaultValue: false) bool pttForwardedFeaturesEnabled,
-      String caption});
+      String? caption});
 
   $MessageIdCopyWith<$Res>? get id;
 }
@@ -1122,12 +1130,12 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
   @override
   $Res call({
     Object? id = freezed,
-    Object? body = null,
-    Object? type = null,
-    Object? t = null,
-    Object? notifyName = null,
-    Object? from = null,
-    Object? to = null,
+    Object? body = freezed,
+    Object? type = freezed,
+    Object? t = freezed,
+    Object? notifyName = freezed,
+    Object? from = freezed,
+    Object? to = freezed,
     Object? isNewMsg = null,
     Object? star = null,
     Object? kicNotified = null,
@@ -1139,43 +1147,43 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
     Object? hasReaction = null,
     Object? ephemeralOutOfSync = null,
     Object? productHeaderImageRejected = null,
-    Object? lastPlaybackProgress = null,
+    Object? lastPlaybackProgress = freezed,
     Object? isDynamicReplyButtonMsg = null,
     Object? isMdHistoryMsg = null,
-    Object? stickerSentTs = null,
+    Object? stickerSentTs = freezed,
     Object? requiresDirectConnection = null,
     Object? pttForwardedFeaturesEnabled = null,
-    Object? caption = null,
+    Object? caption = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as MessageId?,
-      body: null == body
+      body: freezed == body
           ? _value.body
           : body // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
+              as String?,
+      type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      t: null == t
+              as String?,
+      t: freezed == t
           ? _value.t
           : t // ignore: cast_nullable_to_non_nullable
-              as int,
-      notifyName: null == notifyName
+              as int?,
+      notifyName: freezed == notifyName
           ? _value.notifyName
           : notifyName // ignore: cast_nullable_to_non_nullable
-              as String,
-      from: null == from
+              as String?,
+      from: freezed == from
           ? _value.from
           : from // ignore: cast_nullable_to_non_nullable
-              as String,
-      to: null == to
+              as String?,
+      to: freezed == to
           ? _value.to
           : to // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       isNewMsg: null == isNewMsg
           ? _value.isNewMsg
           : isNewMsg // ignore: cast_nullable_to_non_nullable
@@ -1220,10 +1228,10 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
           ? _value.productHeaderImageRejected
           : productHeaderImageRejected // ignore: cast_nullable_to_non_nullable
               as bool,
-      lastPlaybackProgress: null == lastPlaybackProgress
+      lastPlaybackProgress: freezed == lastPlaybackProgress
           ? _value.lastPlaybackProgress
           : lastPlaybackProgress // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       isDynamicReplyButtonMsg: null == isDynamicReplyButtonMsg
           ? _value.isDynamicReplyButtonMsg
           : isDynamicReplyButtonMsg // ignore: cast_nullable_to_non_nullable
@@ -1232,10 +1240,10 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
           ? _value.isMdHistoryMsg
           : isMdHistoryMsg // ignore: cast_nullable_to_non_nullable
               as bool,
-      stickerSentTs: null == stickerSentTs
+      stickerSentTs: freezed == stickerSentTs
           ? _value.stickerSentTs
           : stickerSentTs // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       requiresDirectConnection: null == requiresDirectConnection
           ? _value.requiresDirectConnection
           : requiresDirectConnection // ignore: cast_nullable_to_non_nullable
@@ -1244,10 +1252,10 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
           ? _value.pttForwardedFeaturesEnabled
           : pttForwardedFeaturesEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      caption: null == caption
+      caption: freezed == caption
           ? _value.caption
           : caption // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 
@@ -1275,12 +1283,12 @@ abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
   @useResult
   $Res call(
       {MessageId? id,
-      String body,
-      String type,
-      int t,
-      String notifyName,
-      String from,
-      String to,
+      String? body,
+      String? type,
+      int? t,
+      String? notifyName,
+      String? from,
+      String? to,
       @JsonKey(defaultValue: false) bool isNewMsg,
       @JsonKey(defaultValue: false) bool star,
       @JsonKey(defaultValue: false) bool kicNotified,
@@ -1292,13 +1300,13 @@ abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
       @JsonKey(defaultValue: false) bool hasReaction,
       @JsonKey(defaultValue: false) bool ephemeralOutOfSync,
       @JsonKey(defaultValue: false) bool productHeaderImageRejected,
-      int lastPlaybackProgress,
+      int? lastPlaybackProgress,
       @JsonKey(defaultValue: false) bool isDynamicReplyButtonMsg,
       @JsonKey(defaultValue: false) bool isMdHistoryMsg,
-      int stickerSentTs,
+      int? stickerSentTs,
       @JsonKey(defaultValue: false) bool requiresDirectConnection,
       @JsonKey(defaultValue: false) bool pttForwardedFeaturesEnabled,
-      String caption});
+      String? caption});
 
   @override
   $MessageIdCopyWith<$Res>? get id;
@@ -1318,12 +1326,12 @@ class __$$MessageImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? body = null,
-    Object? type = null,
-    Object? t = null,
-    Object? notifyName = null,
-    Object? from = null,
-    Object? to = null,
+    Object? body = freezed,
+    Object? type = freezed,
+    Object? t = freezed,
+    Object? notifyName = freezed,
+    Object? from = freezed,
+    Object? to = freezed,
     Object? isNewMsg = null,
     Object? star = null,
     Object? kicNotified = null,
@@ -1335,43 +1343,43 @@ class __$$MessageImplCopyWithImpl<$Res>
     Object? hasReaction = null,
     Object? ephemeralOutOfSync = null,
     Object? productHeaderImageRejected = null,
-    Object? lastPlaybackProgress = null,
+    Object? lastPlaybackProgress = freezed,
     Object? isDynamicReplyButtonMsg = null,
     Object? isMdHistoryMsg = null,
-    Object? stickerSentTs = null,
+    Object? stickerSentTs = freezed,
     Object? requiresDirectConnection = null,
     Object? pttForwardedFeaturesEnabled = null,
-    Object? caption = null,
+    Object? caption = freezed,
   }) {
     return _then(_$MessageImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as MessageId?,
-      body: null == body
+      body: freezed == body
           ? _value.body
           : body // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
+              as String?,
+      type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      t: null == t
+              as String?,
+      t: freezed == t
           ? _value.t
           : t // ignore: cast_nullable_to_non_nullable
-              as int,
-      notifyName: null == notifyName
+              as int?,
+      notifyName: freezed == notifyName
           ? _value.notifyName
           : notifyName // ignore: cast_nullable_to_non_nullable
-              as String,
-      from: null == from
+              as String?,
+      from: freezed == from
           ? _value.from
           : from // ignore: cast_nullable_to_non_nullable
-              as String,
-      to: null == to
+              as String?,
+      to: freezed == to
           ? _value.to
           : to // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       isNewMsg: null == isNewMsg
           ? _value.isNewMsg
           : isNewMsg // ignore: cast_nullable_to_non_nullable
@@ -1416,10 +1424,10 @@ class __$$MessageImplCopyWithImpl<$Res>
           ? _value.productHeaderImageRejected
           : productHeaderImageRejected // ignore: cast_nullable_to_non_nullable
               as bool,
-      lastPlaybackProgress: null == lastPlaybackProgress
+      lastPlaybackProgress: freezed == lastPlaybackProgress
           ? _value.lastPlaybackProgress
           : lastPlaybackProgress // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       isDynamicReplyButtonMsg: null == isDynamicReplyButtonMsg
           ? _value.isDynamicReplyButtonMsg
           : isDynamicReplyButtonMsg // ignore: cast_nullable_to_non_nullable
@@ -1428,10 +1436,10 @@ class __$$MessageImplCopyWithImpl<$Res>
           ? _value.isMdHistoryMsg
           : isMdHistoryMsg // ignore: cast_nullable_to_non_nullable
               as bool,
-      stickerSentTs: null == stickerSentTs
+      stickerSentTs: freezed == stickerSentTs
           ? _value.stickerSentTs
           : stickerSentTs // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       requiresDirectConnection: null == requiresDirectConnection
           ? _value.requiresDirectConnection
           : requiresDirectConnection // ignore: cast_nullable_to_non_nullable
@@ -1440,10 +1448,10 @@ class __$$MessageImplCopyWithImpl<$Res>
           ? _value.pttForwardedFeaturesEnabled
           : pttForwardedFeaturesEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      caption: null == caption
+      caption: freezed == caption
           ? _value.caption
           : caption // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -1484,17 +1492,17 @@ class _$MessageImpl implements _Message {
   @override
   final MessageId? id;
   @override
-  final String body;
+  final String? body;
   @override
-  final String type;
+  final String? type;
   @override
-  final int t;
+  final int? t;
   @override
-  final String notifyName;
+  final String? notifyName;
   @override
-  final String from;
+  final String? from;
   @override
-  final String to;
+  final String? to;
   @override
   @JsonKey(defaultValue: false)
   final bool isNewMsg;
@@ -1529,7 +1537,7 @@ class _$MessageImpl implements _Message {
   @JsonKey(defaultValue: false)
   final bool productHeaderImageRejected;
   @override
-  final int lastPlaybackProgress;
+  final int? lastPlaybackProgress;
   @override
   @JsonKey(defaultValue: false)
   final bool isDynamicReplyButtonMsg;
@@ -1537,7 +1545,7 @@ class _$MessageImpl implements _Message {
   @JsonKey(defaultValue: false)
   final bool isMdHistoryMsg;
   @override
-  final int stickerSentTs;
+  final int? stickerSentTs;
   @override
   @JsonKey(defaultValue: false)
   final bool requiresDirectConnection;
@@ -1545,7 +1553,7 @@ class _$MessageImpl implements _Message {
   @JsonKey(defaultValue: false)
   final bool pttForwardedFeaturesEnabled;
   @override
-  final String caption;
+  final String? caption;
 
   @override
   String toString() {
@@ -1657,12 +1665,12 @@ class _$MessageImpl implements _Message {
 abstract class _Message implements Message {
   const factory _Message(
       {required final MessageId? id,
-      required final String body,
-      required final String type,
-      required final int t,
-      required final String notifyName,
-      required final String from,
-      required final String to,
+      required final String? body,
+      required final String? type,
+      required final int? t,
+      required final String? notifyName,
+      required final String? from,
+      required final String? to,
       @JsonKey(defaultValue: false) required final bool isNewMsg,
       @JsonKey(defaultValue: false) required final bool star,
       @JsonKey(defaultValue: false) required final bool kicNotified,
@@ -1675,32 +1683,32 @@ abstract class _Message implements Message {
       @JsonKey(defaultValue: false) required final bool ephemeralOutOfSync,
       @JsonKey(defaultValue: false)
       required final bool productHeaderImageRejected,
-      required final int lastPlaybackProgress,
+      required final int? lastPlaybackProgress,
       @JsonKey(defaultValue: false) required final bool isDynamicReplyButtonMsg,
       @JsonKey(defaultValue: false) required final bool isMdHistoryMsg,
-      required final int stickerSentTs,
+      required final int? stickerSentTs,
       @JsonKey(defaultValue: false)
       required final bool requiresDirectConnection,
       @JsonKey(defaultValue: false)
       required final bool pttForwardedFeaturesEnabled,
-      required final String caption}) = _$MessageImpl;
+      required final String? caption}) = _$MessageImpl;
 
   factory _Message.fromJson(Map<String, dynamic> json) = _$MessageImpl.fromJson;
 
   @override
   MessageId? get id;
   @override
-  String get body;
+  String? get body;
   @override
-  String get type;
+  String? get type;
   @override
-  int get t;
+  int? get t;
   @override
-  String get notifyName;
+  String? get notifyName;
   @override
-  String get from;
+  String? get from;
   @override
-  String get to;
+  String? get to;
   @override
   @JsonKey(defaultValue: false)
   bool get isNewMsg;
@@ -1735,7 +1743,7 @@ abstract class _Message implements Message {
   @JsonKey(defaultValue: false)
   bool get productHeaderImageRejected;
   @override
-  int get lastPlaybackProgress;
+  int? get lastPlaybackProgress;
   @override
   @JsonKey(defaultValue: false)
   bool get isDynamicReplyButtonMsg;
@@ -1743,7 +1751,7 @@ abstract class _Message implements Message {
   @JsonKey(defaultValue: false)
   bool get isMdHistoryMsg;
   @override
-  int get stickerSentTs;
+  int? get stickerSentTs;
   @override
   @JsonKey(defaultValue: false)
   bool get requiresDirectConnection;
@@ -1751,7 +1759,7 @@ abstract class _Message implements Message {
   @JsonKey(defaultValue: false)
   bool get pttForwardedFeaturesEnabled;
   @override
-  String get caption;
+  String? get caption;
 
   /// Create a copy of Message
   /// with the given fields replaced by the non-null parameter values.
@@ -1769,10 +1777,10 @@ MessageId _$MessageIdFromJson(Map<String, dynamic> json) {
 mixin _$MessageId {
   @JsonKey(defaultValue: false)
   bool get fromMe => throw _privateConstructorUsedError;
-  String get remote => throw _privateConstructorUsedError;
-  String get id => throw _privateConstructorUsedError;
+  String? get remote => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   @JsonKey(name: '_serialized')
-  String get serialized => throw _privateConstructorUsedError;
+  String? get serialized => throw _privateConstructorUsedError;
 
   /// Serializes this MessageId to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1791,9 +1799,9 @@ abstract class $MessageIdCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(defaultValue: false) bool fromMe,
-      String remote,
-      String id,
-      @JsonKey(name: '_serialized') String serialized});
+      String? remote,
+      String? id,
+      @JsonKey(name: '_serialized') String? serialized});
 }
 
 /// @nodoc
@@ -1812,27 +1820,27 @@ class _$MessageIdCopyWithImpl<$Res, $Val extends MessageId>
   @override
   $Res call({
     Object? fromMe = null,
-    Object? remote = null,
-    Object? id = null,
-    Object? serialized = null,
+    Object? remote = freezed,
+    Object? id = freezed,
+    Object? serialized = freezed,
   }) {
     return _then(_value.copyWith(
       fromMe: null == fromMe
           ? _value.fromMe
           : fromMe // ignore: cast_nullable_to_non_nullable
               as bool,
-      remote: null == remote
+      remote: freezed == remote
           ? _value.remote
           : remote // ignore: cast_nullable_to_non_nullable
-              as String,
-      id: null == id
+              as String?,
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      serialized: null == serialized
+              as String?,
+      serialized: freezed == serialized
           ? _value.serialized
           : serialized // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -1847,9 +1855,9 @@ abstract class _$$MessageIdImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(defaultValue: false) bool fromMe,
-      String remote,
-      String id,
-      @JsonKey(name: '_serialized') String serialized});
+      String? remote,
+      String? id,
+      @JsonKey(name: '_serialized') String? serialized});
 }
 
 /// @nodoc
@@ -1866,27 +1874,27 @@ class __$$MessageIdImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? fromMe = null,
-    Object? remote = null,
-    Object? id = null,
-    Object? serialized = null,
+    Object? remote = freezed,
+    Object? id = freezed,
+    Object? serialized = freezed,
   }) {
     return _then(_$MessageIdImpl(
       fromMe: null == fromMe
           ? _value.fromMe
           : fromMe // ignore: cast_nullable_to_non_nullable
               as bool,
-      remote: null == remote
+      remote: freezed == remote
           ? _value.remote
           : remote // ignore: cast_nullable_to_non_nullable
-              as String,
-      id: null == id
+              as String?,
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      serialized: null == serialized
+              as String?,
+      serialized: freezed == serialized
           ? _value.serialized
           : serialized // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -1907,12 +1915,12 @@ class _$MessageIdImpl implements _MessageId {
   @JsonKey(defaultValue: false)
   final bool fromMe;
   @override
-  final String remote;
+  final String? remote;
   @override
-  final String id;
+  final String? id;
   @override
   @JsonKey(name: '_serialized')
-  final String serialized;
+  final String? serialized;
 
   @override
   String toString() {
@@ -1954,9 +1962,9 @@ class _$MessageIdImpl implements _MessageId {
 abstract class _MessageId implements MessageId {
   const factory _MessageId(
           {@JsonKey(defaultValue: false) required final bool fromMe,
-          required final String remote,
-          required final String id,
-          @JsonKey(name: '_serialized') required final String serialized}) =
+          required final String? remote,
+          required final String? id,
+          @JsonKey(name: '_serialized') required final String? serialized}) =
       _$MessageIdImpl;
 
   factory _MessageId.fromJson(Map<String, dynamic> json) =
@@ -1966,12 +1974,12 @@ abstract class _MessageId implements MessageId {
   @JsonKey(defaultValue: false)
   bool get fromMe;
   @override
-  String get remote;
+  String? get remote;
   @override
-  String get id;
+  String? get id;
   @override
   @JsonKey(name: '_serialized')
-  String get serialized;
+  String? get serialized;
 
   /// Create a copy of MessageId
   /// with the given fields replaced by the non-null parameter values.
@@ -1987,15 +1995,15 @@ CallEvent _$CallEventFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CallEvent {
-  String get id => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get isGroup => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get isVideo => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: 0)
   int get offerTime => throw _privateConstructorUsedError;
-  String get sender => throw _privateConstructorUsedError;
-  String get peerJid => throw _privateConstructorUsedError;
+  String? get sender => throw _privateConstructorUsedError;
+  String? get peerJid => throw _privateConstructorUsedError;
 
   /// Serializes this CallEvent to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -2013,12 +2021,12 @@ abstract class $CallEventCopyWith<$Res> {
       _$CallEventCopyWithImpl<$Res, CallEvent>;
   @useResult
   $Res call(
-      {String id,
+      {String? id,
       @JsonKey(defaultValue: false) bool isGroup,
       @JsonKey(defaultValue: false) bool isVideo,
       @JsonKey(defaultValue: 0) int offerTime,
-      String sender,
-      String peerJid});
+      String? sender,
+      String? peerJid});
 }
 
 /// @nodoc
@@ -2036,18 +2044,18 @@ class _$CallEventCopyWithImpl<$Res, $Val extends CallEvent>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? isGroup = null,
     Object? isVideo = null,
     Object? offerTime = null,
-    Object? sender = null,
-    Object? peerJid = null,
+    Object? sender = freezed,
+    Object? peerJid = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       isGroup: null == isGroup
           ? _value.isGroup
           : isGroup // ignore: cast_nullable_to_non_nullable
@@ -2060,14 +2068,14 @@ class _$CallEventCopyWithImpl<$Res, $Val extends CallEvent>
           ? _value.offerTime
           : offerTime // ignore: cast_nullable_to_non_nullable
               as int,
-      sender: null == sender
+      sender: freezed == sender
           ? _value.sender
           : sender // ignore: cast_nullable_to_non_nullable
-              as String,
-      peerJid: null == peerJid
+              as String?,
+      peerJid: freezed == peerJid
           ? _value.peerJid
           : peerJid // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -2081,12 +2089,12 @@ abstract class _$$CallEventImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
+      {String? id,
       @JsonKey(defaultValue: false) bool isGroup,
       @JsonKey(defaultValue: false) bool isVideo,
       @JsonKey(defaultValue: 0) int offerTime,
-      String sender,
-      String peerJid});
+      String? sender,
+      String? peerJid});
 }
 
 /// @nodoc
@@ -2102,18 +2110,18 @@ class __$$CallEventImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? isGroup = null,
     Object? isVideo = null,
     Object? offerTime = null,
-    Object? sender = null,
-    Object? peerJid = null,
+    Object? sender = freezed,
+    Object? peerJid = freezed,
   }) {
     return _then(_$CallEventImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       isGroup: null == isGroup
           ? _value.isGroup
           : isGroup // ignore: cast_nullable_to_non_nullable
@@ -2126,14 +2134,14 @@ class __$$CallEventImplCopyWithImpl<$Res>
           ? _value.offerTime
           : offerTime // ignore: cast_nullable_to_non_nullable
               as int,
-      sender: null == sender
+      sender: freezed == sender
           ? _value.sender
           : sender // ignore: cast_nullable_to_non_nullable
-              as String,
-      peerJid: null == peerJid
+              as String?,
+      peerJid: freezed == peerJid
           ? _value.peerJid
           : peerJid // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -2153,7 +2161,7 @@ class _$CallEventImpl implements _CallEvent {
       _$$CallEventImplFromJson(json);
 
   @override
-  final String id;
+  final String? id;
   @override
   @JsonKey(defaultValue: false)
   final bool isGroup;
@@ -2164,9 +2172,9 @@ class _$CallEventImpl implements _CallEvent {
   @JsonKey(defaultValue: 0)
   final int offerTime;
   @override
-  final String sender;
+  final String? sender;
   @override
-  final String peerJid;
+  final String? peerJid;
 
   @override
   String toString() {
@@ -2210,18 +2218,18 @@ class _$CallEventImpl implements _CallEvent {
 
 abstract class _CallEvent implements CallEvent {
   const factory _CallEvent(
-      {required final String id,
+      {required final String? id,
       @JsonKey(defaultValue: false) required final bool isGroup,
       @JsonKey(defaultValue: false) required final bool isVideo,
       @JsonKey(defaultValue: 0) required final int offerTime,
-      required final String sender,
-      required final String peerJid}) = _$CallEventImpl;
+      required final String? sender,
+      required final String? peerJid}) = _$CallEventImpl;
 
   factory _CallEvent.fromJson(Map<String, dynamic> json) =
       _$CallEventImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
   @override
   @JsonKey(defaultValue: false)
   bool get isGroup;
@@ -2232,9 +2240,9 @@ abstract class _CallEvent implements CallEvent {
   @JsonKey(defaultValue: 0)
   int get offerTime;
   @override
-  String get sender;
+  String? get sender;
   @override
-  String get peerJid;
+  String? get peerJid;
 
   /// Create a copy of CallEvent
   /// with the given fields replaced by the non-null parameter values.

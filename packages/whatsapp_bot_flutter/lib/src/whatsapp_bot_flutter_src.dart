@@ -25,7 +25,8 @@ class WhatsappBotFlutter {
     String? browserWsEndpoint,
     int qrCodeWaitDurationSeconds = 60,
     List<String>? puppeteerArgs,
-    Duration? connectionTimeout = const Duration(seconds: 20),
+    Duration connectionTimeout = const Duration(seconds: 20),
+    Duration wppInitTimeout = const Duration(seconds: 15),
     Function(String qrCodeUrl, Uint8List? qrCodeImage)? onQrCode,
     Function(ConnectionEvent)? onConnectionEvent,
     void Function(int received, int total)? chromeDownloadProgress,
@@ -65,7 +66,6 @@ class WhatsappBotFlutter {
           userDataDir: sessionDirectory,
           args: puppeteerArgs,
           plugins: [stealthPlugin],
-
         );
       }
       onBrowserCreated?.call(browser);
@@ -88,6 +88,7 @@ class WhatsappBotFlutter {
       await WppConnect.init(
         wpClient,
         wppJsContent: wppJsContent,
+        waitTimeOut: wppInitTimeout,
       );
 
       onConnectionEvent?.call(ConnectionEvent.waitingForLogin);

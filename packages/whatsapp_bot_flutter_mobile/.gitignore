@@ -31,3 +31,5 @@ build/
 /cache
 /*.local-chromium
 /whatsapp_sender
+.flutter-plugins
+.flutter-plugins-dependencies

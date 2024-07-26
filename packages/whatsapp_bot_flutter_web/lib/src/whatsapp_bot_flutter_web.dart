@@ -14,6 +14,7 @@ class WhatsappBotFlutterWeb {
     Function(ConnectionEvent)? onConnectionEvent,
     Function(String qrCodeUrl, Uint8List? qrCodeImage)? onQrCode,
     int qrCodeWaitDurationSeconds = 60,
+    Duration wppInitTimeout = const Duration(seconds: 15),
   }) async {
     WpClientInterface? wpClient;
     try {
@@ -31,7 +32,11 @@ class WhatsappBotFlutterWeb {
       var tabId = await completer.future;
 
       wpClient = WpClientWeb(tabId: tabId);
-      await WppConnect.init(wpClient, wppJsContent: "");
+      await WppConnect.init(
+        wpClient,
+        wppJsContent: "",
+        waitTimeOut: wppInitTimeout,
+      );
       onConnectionEvent?.call(ConnectionEvent.waitingForLogin);
 
       await waitForLogin(

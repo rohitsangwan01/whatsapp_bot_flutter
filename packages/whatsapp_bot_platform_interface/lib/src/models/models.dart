@@ -8,32 +8,33 @@ part 'models.freezed.dart';
 class Chat with _$Chat {
   const factory Chat({
     required final String id,
-    required final LastReceivedKey lastReceivedKey,
-    required final int t,
-    required final int unreadCount,
-    required final int unreadDividerOffset,
+    required final LastReceivedKey? lastReceivedKey,
+    required final int? t,
+    required final int? unreadCount,
+    required final int? unreadDividerOffset,
     @JsonKey(defaultValue: false) required final bool archive,
     @JsonKey(defaultValue: false) required final bool isLocked,
-    required final int muteExpiration,
+    required final int? muteExpiration,
     @JsonKey(defaultValue: false) required final bool isAutoMuted,
     @JsonKey(defaultValue: false) required final bool notSpam,
-    required final int pin,
-    required final int ephemeralDuration,
-    required final int ephemeralSettingTimestamp,
-    required final String disappearingModeInitiator,
-    required final String disappearingModeTrigger,
-    required final int unreadMentionCount,
+    required final int? pin,
+    required final int? ephemeralDuration,
+    required final int? ephemeralSettingTimestamp,
+    required final String? disappearingModeInitiator,
+    required final String? disappearingModeTrigger,
+    required final int? unreadMentionCount,
     @JsonKey(defaultValue: false) required final bool hasUnreadMention,
-    @JsonKey(defaultValue: false) required final bool archiveAtMentionViewedInDrawer,
+    @JsonKey(defaultValue: false)
+    required final bool archiveAtMentionViewedInDrawer,
     @JsonKey(defaultValue: false) required final bool hasChatBeenOpened,
-    required final Map tcToken,
-    required final int tcTokenTimestamp,
-    required final int tcTokenSenderTimestamp,
-    required final int endOfHistoryTransferType,
+    required final Map? tcToken,
+    required final int? tcTokenTimestamp,
+    required final int? tcTokenSenderTimestamp,
+    required final int? endOfHistoryTransferType,
     @JsonKey(defaultValue: false) required final bool pendingInitialLoading,
     required final int celebrationAnimationLastPlayed,
     @JsonKey(defaultValue: false) required final bool hasRequestedWelcomeMsg,
-    required final List<Message> msgs,
+    required final List<Message>? msgs,
   }) = _Chat;
 
   factory Chat.fromJson(Map<String, dynamic> json) => _$ChatFromJson(json);
@@ -43,24 +44,25 @@ class Chat with _$Chat {
 class LastReceivedKey with _$LastReceivedKey {
   const factory LastReceivedKey({
     @JsonKey(defaultValue: false) required final bool fromMe,
-    required final String remote,
-    required final String self,
-    @JsonKey(name: '_serialized') required final String serialized,
+    required final String? remote,
+    required final String? self,
+    @JsonKey(name: '_serialized') required final String? serialized,
   }) = _LastReceivedKey;
 
-  factory LastReceivedKey.fromJson(Map<String, dynamic> json) => _$LastReceivedKeyFromJson(json);
+  factory LastReceivedKey.fromJson(Map<String, dynamic> json) =>
+      _$LastReceivedKeyFromJson(json);
 }
 
 @freezed
 class Message with _$Message {
   const factory Message({
     required final MessageId? id,
-    required final String body,
-    required final String type,
-    required final int t,
-    required final String notifyName,
-    required final String from,
-    required final String to,
+    required final String? body,
+    required final String? type,
+    required final int? t,
+    required final String? notifyName,
+    required final String? from,
+    required final String? to,
     @JsonKey(defaultValue: false) required final bool isNewMsg,
     @JsonKey(defaultValue: false) required final bool star,
     @JsonKey(defaultValue: false) required final bool kicNotified,
@@ -71,17 +73,20 @@ class Message with _$Message {
     @JsonKey(defaultValue: false) required final bool isForwarded,
     @JsonKey(defaultValue: false) required final bool hasReaction,
     @JsonKey(defaultValue: false) required final bool ephemeralOutOfSync,
-    @JsonKey(defaultValue: false) required final bool productHeaderImageRejected,
-    required final int lastPlaybackProgress,
+    @JsonKey(defaultValue: false)
+    required final bool productHeaderImageRejected,
+    required final int? lastPlaybackProgress,
     @JsonKey(defaultValue: false) required final bool isDynamicReplyButtonMsg,
     @JsonKey(defaultValue: false) required final bool isMdHistoryMsg,
-    required final int stickerSentTs,
+    required final int? stickerSentTs,
     @JsonKey(defaultValue: false) required final bool requiresDirectConnection,
-    @JsonKey(defaultValue: false) required final bool pttForwardedFeaturesEnabled,
-    required final String caption,
+    @JsonKey(defaultValue: false)
+    required final bool pttForwardedFeaturesEnabled,
+    required final String? caption,
   }) = _Message;
 
-  factory Message.fromJson(Map<String, dynamic> json) => _$MessageFromJson(json);
+  factory Message.fromJson(Map<String, dynamic> json) =>
+      _$MessageFromJson(json);
 
   /// Because Mobile platforms returns data as list
   /// and desktop returns as map , so to unify the data
@@ -100,26 +105,28 @@ class Message with _$Message {
 class MessageId with _$MessageId {
   const factory MessageId({
     @JsonKey(defaultValue: false) required final bool fromMe,
-    required final String remote,
-    required final String id,
-    @JsonKey(name: '_serialized') required final String serialized,
+    required final String? remote,
+    required final String? id,
+    @JsonKey(name: '_serialized') required final String? serialized,
   }) = _MessageId;
 
-  factory MessageId.fromJson(Map<String, dynamic> json) => _$MessageIdFromJson(json);
+  factory MessageId.fromJson(Map<String, dynamic> json) =>
+      _$MessageIdFromJson(json);
 }
 
 @freezed
 class CallEvent with _$CallEvent {
   const factory CallEvent({
-    required final String id,
+    required final String? id,
     @JsonKey(defaultValue: false) required final bool isGroup,
     @JsonKey(defaultValue: false) required final bool isVideo,
     @JsonKey(defaultValue: 0) required final int offerTime,
-    required final String sender,
-    required final String peerJid,
+    required final String? sender,
+    required final String? peerJid,
   }) = _CallEvent;
 
-  factory CallEvent.fromJson(Map<String, dynamic> json) => _$CallEventFromJson(json);
+  factory CallEvent.fromJson(Map<String, dynamic> json) =>
+      _$CallEventFromJson(json);
 
   static List<CallEvent> parse(data) {
     if (data == null) return [];
@@ -158,7 +165,8 @@ class QrCodeImage with _$QrCodeImage {
     String? base64Image,
   }) = _QrCodeImage;
 
-  factory QrCodeImage.fromJson(Map<String, dynamic> json) => _$QrCodeImageFromJson(json);
+  factory QrCodeImage.fromJson(Map<String, dynamic> json) =>
+      _$QrCodeImageFromJson(json);
 }
 
 /// Whatsapp Events, https://wppconnect.io/wa-js/modules/ev.html
@@ -216,65 +224,10 @@ enum WhatsappEvent {
   final String value;
 
   static WhatsappEvent? parse(String value) {
-    switch (value) {
-      case 'blocklist.sync':
-        return blocklistSync;
-      case 'call.incoming_call':
-        return callIncomingCall;
-      case 'chat.active_chat':
-        return chatActiveChat;
-      case 'chat.live_location_end':
-        return chatLiveLocationEnd;
-      case 'chat.live_location_start':
-        return chatLiveLocationStart;
-      case 'chat.live_location_update':
-        return chatLiveLocationUpdate;
-      case 'chat.msg_ack_change':
-        return chatMsgAckChange;
-      case 'chat.msg_revoke':
-        return chatMsgRevoke;
-      case 'chat.new_message':
-        return chatNewMessage;
-      case 'chat.new_reaction':
-        return chatNewReaction;
-      case 'chat.poll_response':
-        return chatPollResponse;
-      case 'chat.presence_change':
-        return chatPresenceChange;
-      case 'chat.update_label':
-        return chatUpdateLabel;
-      case 'config.update':
-        return configUpdate;
-      case 'conn.auth_code_change':
-        return connAuthCodeChange;
-      case 'conn.authenticated':
-        return connAuthenticated;
-      case 'conn.logout':
-        return connLogout;
-      case 'conn.main_init':
-        return connMainInit;
-      case 'conn.main_loaded':
-        return connMainLoaded;
-      case 'conn.main_ready':
-        return connMainReady;
-      case 'conn.needs_update':
-        return connNeedsUpdate;
-      case 'conn.online':
-        return connOnline;
-      case 'conn.qrcode_idle':
-        return connQrCodeIdle;
-      case 'conn.require_auth':
-        return connRequireAuth;
-      case 'group.participant_changed':
-        return groupParticipantChanged;
-      case 'status.sync':
-        return statusSync;
-      case 'webpack.injected':
-        return webpackInjected;
-      case 'webpack.ready':
-        return webpackReady;
-      default:
-        return null;
+    try {
+      return WhatsappEvent.values.firstWhere((e) => e.value == value);
+    } catch (_) {
+      return null;
     }
   }
 }

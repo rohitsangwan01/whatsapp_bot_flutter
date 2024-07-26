@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:whatsapp_bot_platform_interface/src/models/models.dart';
 import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.dart';
 
 class WppChat {
@@ -10,7 +9,8 @@ class WppChat {
     required String phone,
     required MessageId messageId,
   }) =>
-      wpClient.evaluateJs('WPP.chat.openChatAt(${phone.phoneParse}, ${messageId.serialized.jsParse});');
+      wpClient.evaluateJs(
+          'WPP.chat.openChatAt(${phone.phoneParse}, ${messageId.serialized.jsParse});');
 
   /// [sendMessage] may throw errors if passed an invalid contact
   /// or if this method completed without any issue , then probably message sent successfully
@@ -26,13 +26,15 @@ class WppChat {
   }) async {
     String? replyText = replyMessageId?.serialized;
     String? buttonsText = buttons?.map((e) => e.toJson()).toList().toString();
-    return await wpClient.evaluateJs('''WPP.chat.sendTextMessage(${phone.phoneParse}, ${message.jsParse}, {
+    return await wpClient.evaluateJs(
+        '''WPP.chat.sendTextMessage(${phone.phoneParse}, ${message.jsParse}, {
             quotedMsg: ${replyText.jsParse},
             useTemplateButtons: ${useTemplate.jsParse},
             buttons:$buttonsText,
             title: ${templateTitle.jsParse},
             footer: ${templateFooter.jsParse}
-          });''', methodName: "sendTextMessage");
+          });''',
+        methodName: "sendTextMessage");
   }
 
   ///send file messages using [sendFileMessage]
@@ -71,7 +73,8 @@ class WppChat {
     String? replyTextId = replyMessageId?.serialized;
     String? buttonsText = buttons?.map((e) => e.toJson()).toList().toString();
 
-    String source = '''WPP.chat.sendFileMessage(${phone.phoneParse},${fileData.jsParse},{
+    String source =
+        '''WPP.chat.sendFileMessage(${phone.phoneParse},${fileData.jsParse},{
     type: ${fileTypeName.jsParse},
     isPtt: ${audioAsPtt.jsParse},
     isViewOnce: ${isViewOnce.jsParse},
@@ -94,7 +97,8 @@ class WppChat {
     required String contactPhone,
     required String contactName,
   }) async {
-    return await wpClient.evaluateJs('''WPP.chat.sendVCardContactMessage(${phone.phoneParse}, {
+    return await wpClient
+        .evaluateJs('''WPP.chat.sendVCardContactMessage(${phone.phoneParse}, {
             id: ${contactPhone.phoneParse},
             name: ${contactName.jsParse}
           });''', methodName: "sendContactCard");
@@ -109,7 +113,8 @@ class WppChat {
     String? address,
     String? url,
   }) async {
-    return await wpClient.evaluateJs('''WPP.chat.sendLocationMessage(${phone.phoneParse}, {
+    return await wpClient
+        .evaluateJs('''WPP.chat.sendLocationMessage(${phone.phoneParse}, {
               lat: ${lat.jsParse},
               lng: ${long.jsParse},
               name: ${name.jsParse},
@@ -139,20 +144,37 @@ class WppChat {
   }
 
   /// to check if we [canMute] phone number
-  Future<bool> canMute({required String phone}) async => await wpClient.evaluateJs('''WPP.chat.canMute(${phone.phoneParse});''', methodName: "CanMute");
+  Future<bool> canMute({required String phone}) async =>
+      await wpClient.evaluateJs('''WPP.chat.canMute(${phone.phoneParse});''',
+          methodName: "CanMute");
 
-  ///Mute a chat, you can use  expiration and use unix timestamp (seconds only)
+  /// Mute a chat, you can use  expiration and use unix timestamp (seconds only)
+  /// or duration (in seconds )
   Future mute({
     required String phone,
-    required int expirationUnixTimeStamp,
+    int? duration,
+    int? expirationUnixTimeStamp,
   }) async {
     if (!await canMute(phone: phone)) throw "Cannot Mute $phone";
-    return await wpClient.evaluateJs('''WPP.chat.mute(${phone.phoneParse},{expiration: $expirationUnixTimeStamp});''', methodName: "Mute");
+    if (duration != null) {
+      return wpClient.evaluateJs(
+        '''WPP.chat.mute(${phone.phoneParse},{duration: $duration});''',
+        methodName: "Mute",
+      );
+    } else if (expirationUnixTimeStamp != null) {
+      return wpClient.evaluateJs(
+        '''WPP.chat.mute(${phone.phoneParse},{expiration: $expirationUnixTimeStamp});''',
+        methodName: "Mute",
+      );
+    }
+    throw Exception("duration or expiration must be provided");
   }
 
   /// Un mute chat
   Future unmute({required String phone}) async {
-    return await wpClient.evaluateJs('''WPP.chat.unmute(${phone.phoneParse});''', methodName: "unmute");
+    return await wpClient.evaluateJs(
+        '''WPP.chat.unmute(${phone.phoneParse});''',
+        methodName: "unmute");
   }
 
   /// [clear] chat
@@ -160,18 +182,23 @@ class WppChat {
     required String phone,
     bool keepStarred = false,
   }) async =>
-      await wpClient.evaluateJs('''WPP.chat.clear(${phone.phoneParse},$keepStarred);''', methodName: "ClearChat");
+      await wpClient.evaluateJs(
+          '''WPP.chat.clear(${phone.phoneParse},$keepStarred);''',
+          methodName: "ClearChat");
 
   /// [delete] chat
   Future delete({
     required String phone,
   }) async =>
-      await wpClient.evaluateJs('''WPP.chat.delete(${phone.phoneParse});''', methodName: "DeleteChat");
+      await wpClient.evaluateJs('''WPP.chat.delete(${phone.phoneParse});''',
+          methodName: "DeleteChat");
 
   ///Get timestamp of last seen using [getLastSeen]
   /// return either a timestamp or 0 if last seen off
   Future<int?> getLastSeen({required String phone}) async {
-    var lastSeen = await wpClient.evaluateJs('''WPP.chat.getLastSeen(${phone.phoneParse});''', methodName: "GetLastSeen");
+    var lastSeen = await wpClient.evaluateJs(
+        '''WPP.chat.getLastSeen(${phone.phoneParse});''',
+        methodName: "GetLastSeen");
     if (lastSeen.runtimeType == bool) return lastSeen ? 1 : 0;
     if (lastSeen.runtimeType == int) return lastSeen;
     return null;
@@ -265,7 +292,7 @@ class WppChat {
   Future<Map<String, dynamic>?> downloadMedia({
     required MessageId messageId,
   }) async {
-    String mediaSerialized = messageId.serialized;
+    String? mediaSerialized = messageId.serialized;
     String? base64 = await wpClient.evaluateJs(
       '''WPP.chat.downloadMedia(${mediaSerialized.jsParse}).then(WPP.util.blobToBase64);''',
       methodName: "downloadMedia",
@@ -284,7 +311,10 @@ class WppChat {
   }
 
   /// Send a create poll message , Note: This only works for groups
-  Future sendCreatePollMessage({required String phone, required String pollName, required List<String> pollOptions}) async {
+  Future sendCreatePollMessage(
+      {required String phone,
+      required String pollName,
+      required List<String> pollOptions}) async {
     return await wpClient.evaluateJs(
       '''WPP.chat.sendCreatePollMessage(${phone.phoneParse},${pollName.jsParse},${pollOptions.jsParse});''',
       methodName: "sendCreatePollMessage",
@@ -321,9 +351,11 @@ class WppChat {
     bool multicast = false,
   }) async {
     String? serialized = messageId.serialized;
-    return await wpClient.evaluateJs('''WPP.chat.forwardMessage(${phone.phoneParse}, ${serialized.jsParse}, {
+    return await wpClient.evaluateJs(
+        '''WPP.chat.forwardMessage(${phone.phoneParse}, ${serialized.jsParse}, {
             displayCaptionText: $displayCaptionText,
             multicast: $multicast,
-          });''', methodName: "forwardMessage");
+          });''',
+        methodName: "forwardMessage");
   }
 }

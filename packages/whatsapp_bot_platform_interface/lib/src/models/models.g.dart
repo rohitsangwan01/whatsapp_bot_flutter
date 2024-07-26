@@ -8,38 +8,40 @@ part of 'models.dart';
 
 _$ChatImpl _$$ChatImplFromJson(Map<String, dynamic> json) => _$ChatImpl(
       id: json['id'] as String,
-      lastReceivedKey: LastReceivedKey.fromJson(
-          json['lastReceivedKey'] as Map<String, dynamic>),
-      t: (json['t'] as num).toInt(),
-      unreadCount: (json['unreadCount'] as num).toInt(),
-      unreadDividerOffset: (json['unreadDividerOffset'] as num).toInt(),
+      lastReceivedKey: json['lastReceivedKey'] == null
+          ? null
+          : LastReceivedKey.fromJson(
+              json['lastReceivedKey'] as Map<String, dynamic>),
+      t: (json['t'] as num?)?.toInt(),
+      unreadCount: (json['unreadCount'] as num?)?.toInt(),
+      unreadDividerOffset: (json['unreadDividerOffset'] as num?)?.toInt(),
       archive: json['archive'] as bool? ?? false,
       isLocked: json['isLocked'] as bool? ?? false,
-      muteExpiration: (json['muteExpiration'] as num).toInt(),
+      muteExpiration: (json['muteExpiration'] as num?)?.toInt(),
       isAutoMuted: json['isAutoMuted'] as bool? ?? false,
       notSpam: json['notSpam'] as bool? ?? false,
-      pin: (json['pin'] as num).toInt(),
-      ephemeralDuration: (json['ephemeralDuration'] as num).toInt(),
+      pin: (json['pin'] as num?)?.toInt(),
+      ephemeralDuration: (json['ephemeralDuration'] as num?)?.toInt(),
       ephemeralSettingTimestamp:
-          (json['ephemeralSettingTimestamp'] as num).toInt(),
-      disappearingModeInitiator: json['disappearingModeInitiator'] as String,
-      disappearingModeTrigger: json['disappearingModeTrigger'] as String,
-      unreadMentionCount: (json['unreadMentionCount'] as num).toInt(),
+          (json['ephemeralSettingTimestamp'] as num?)?.toInt(),
+      disappearingModeInitiator: json['disappearingModeInitiator'] as String?,
+      disappearingModeTrigger: json['disappearingModeTrigger'] as String?,
+      unreadMentionCount: (json['unreadMentionCount'] as num?)?.toInt(),
       hasUnreadMention: json['hasUnreadMention'] as bool? ?? false,
       archiveAtMentionViewedInDrawer:
           json['archiveAtMentionViewedInDrawer'] as bool? ?? false,
       hasChatBeenOpened: json['hasChatBeenOpened'] as bool? ?? false,
-      tcToken: json['tcToken'] as Map<String, dynamic>,
-      tcTokenTimestamp: (json['tcTokenTimestamp'] as num).toInt(),
-      tcTokenSenderTimestamp: (json['tcTokenSenderTimestamp'] as num).toInt(),
+      tcToken: json['tcToken'] as Map<String, dynamic>?,
+      tcTokenTimestamp: (json['tcTokenTimestamp'] as num?)?.toInt(),
+      tcTokenSenderTimestamp: (json['tcTokenSenderTimestamp'] as num?)?.toInt(),
       endOfHistoryTransferType:
-          (json['endOfHistoryTransferType'] as num).toInt(),
+          (json['endOfHistoryTransferType'] as num?)?.toInt(),
       pendingInitialLoading: json['pendingInitialLoading'] as bool? ?? false,
       celebrationAnimationLastPlayed:
           (json['celebrationAnimationLastPlayed'] as num).toInt(),
       hasRequestedWelcomeMsg: json['hasRequestedWelcomeMsg'] as bool? ?? false,
-      msgs: (json['msgs'] as List<dynamic>)
-          .map((e) => Message.fromJson(e as Map<String, dynamic>))
+      msgs: (json['msgs'] as List<dynamic>?)
+          ?.map((e) => Message.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -78,9 +80,9 @@ _$LastReceivedKeyImpl _$$LastReceivedKeyImplFromJson(
         Map<String, dynamic> json) =>
     _$LastReceivedKeyImpl(
       fromMe: json['fromMe'] as bool? ?? false,
-      remote: json['remote'] as String,
-      self: json['self'] as String,
-      serialized: json['_serialized'] as String,
+      remote: json['remote'] as String?,
+      self: json['self'] as String?,
+      serialized: json['_serialized'] as String?,
     );
 
 Map<String, dynamic> _$$LastReceivedKeyImplToJson(
@@ -97,12 +99,12 @@ _$MessageImpl _$$MessageImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] == null
           ? null
           : MessageId.fromJson(json['id'] as Map<String, dynamic>),
-      body: json['body'] as String,
-      type: json['type'] as String,
-      t: (json['t'] as num).toInt(),
-      notifyName: json['notifyName'] as String,
-      from: json['from'] as String,
-      to: json['to'] as String,
+      body: json['body'] as String?,
+      type: json['type'] as String?,
+      t: (json['t'] as num?)?.toInt(),
+      notifyName: json['notifyName'] as String?,
+      from: json['from'] as String?,
+      to: json['to'] as String?,
       isNewMsg: json['isNewMsg'] as bool? ?? false,
       star: json['star'] as bool? ?? false,
       kicNotified: json['kicNotified'] as bool? ?? false,
@@ -115,16 +117,16 @@ _$MessageImpl _$$MessageImplFromJson(Map<String, dynamic> json) =>
       ephemeralOutOfSync: json['ephemeralOutOfSync'] as bool? ?? false,
       productHeaderImageRejected:
           json['productHeaderImageRejected'] as bool? ?? false,
-      lastPlaybackProgress: (json['lastPlaybackProgress'] as num).toInt(),
+      lastPlaybackProgress: (json['lastPlaybackProgress'] as num?)?.toInt(),
       isDynamicReplyButtonMsg:
           json['isDynamicReplyButtonMsg'] as bool? ?? false,
       isMdHistoryMsg: json['isMdHistoryMsg'] as bool? ?? false,
-      stickerSentTs: (json['stickerSentTs'] as num).toInt(),
+      stickerSentTs: (json['stickerSentTs'] as num?)?.toInt(),
       requiresDirectConnection:
           json['requiresDirectConnection'] as bool? ?? false,
       pttForwardedFeaturesEnabled:
           json['pttForwardedFeaturesEnabled'] as bool? ?? false,
-      caption: json['caption'] as String,
+      caption: json['caption'] as String?,
     );
 
 Map<String, dynamic> _$$MessageImplToJson(_$MessageImpl instance) =>
@@ -159,9 +161,9 @@ Map<String, dynamic> _$$MessageImplToJson(_$MessageImpl instance) =>
 _$MessageIdImpl _$$MessageIdImplFromJson(Map<String, dynamic> json) =>
     _$MessageIdImpl(
       fromMe: json['fromMe'] as bool? ?? false,
-      remote: json['remote'] as String,
-      id: json['id'] as String,
-      serialized: json['_serialized'] as String,
+      remote: json['remote'] as String?,
+      id: json['id'] as String?,
+      serialized: json['_serialized'] as String?,
     );
 
 Map<String, dynamic> _$$MessageIdImplToJson(_$MessageIdImpl instance) =>
@@ -174,12 +176,12 @@ Map<String, dynamic> _$$MessageIdImplToJson(_$MessageIdImpl instance) =>
 
 _$CallEventImpl _$$CallEventImplFromJson(Map<String, dynamic> json) =>
     _$CallEventImpl(
-      id: json['id'] as String,
+      id: json['id'] as String?,
       isGroup: json['isGroup'] as bool? ?? false,
       isVideo: json['isVideo'] as bool? ?? false,
       offerTime: (json['offerTime'] as num?)?.toInt() ?? 0,
-      sender: json['sender'] as String,
-      peerJid: json['peerJid'] as String,
+      sender: json['sender'] as String?,
+      peerJid: json['peerJid'] as String?,
     );
 
 Map<String, dynamic> _$$CallEventImplToJson(_$CallEventImpl instance) =>
