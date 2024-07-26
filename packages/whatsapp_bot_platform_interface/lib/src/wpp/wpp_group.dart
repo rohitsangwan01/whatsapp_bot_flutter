@@ -1,8 +1,35 @@
+import 'package:whatsapp_bot_platform_interface/src/models/models.dart';
 import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.dart';
 
 class WppGroup {
   WpClientInterface wpClient;
   WppGroup(this.wpClient);
+
+  Future openChatAt({
+    required String groupId,
+    required MessageId messageId,
+  }) =>
+      wpClient.evaluateJs('WPP.chat.openChatAt(${groupId.groupParse}, ${messageId.serialized.jsParse});');
+
+  Future sendTextMessage({
+    required String groupId,
+    required String message,
+    String? templateTitle,
+    String? templateFooter,
+    bool useTemplate = false,
+    List<MessageButtons>? buttons,
+    MessageId? replyMessageId,
+  }) async {
+    String? replyText = replyMessageId?.serialized;
+    String? buttonsText = buttons?.map((e) => e.toJson()).toList().toString();
+    return wpClient.evaluateJs('''WPP.chat.sendTextMessage(${groupId.groupParse}, ${message.jsParse}, {
+            quotedMsg: ${replyText.jsParse},
+            useTemplateButtons: ${useTemplate.jsParse},
+            buttons:$buttonsText,
+            title: ${templateTitle.jsParse},
+            footer: ${templateFooter.jsParse}
+          });''', methodName: "sendTextMessage");
+  }
 
   /// To add participants to a group
   Future createGroup({required String groupName}) async {

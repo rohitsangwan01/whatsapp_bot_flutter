@@ -1,4 +1,4 @@
-import 'package:whatsapp_bot_platform_interface/src/model/export_models.dart';
+import 'package:whatsapp_bot_platform_interface/src/models/models.dart';
 
 /// Interface for creating a Whatsapp Client
 
@@ -22,7 +22,7 @@ abstract class WpClientInterface {
 
   Future<QrCodeImage?> getQrCode();
 
-  Future<void> on(String event, Function(dynamic) callback);
+  Future<void> on(WhatsappEvent event, Function(dynamic) callback);
 
-  Future<void> off(String event);
+  Future<void> off(WhatsappEvent event);
 }

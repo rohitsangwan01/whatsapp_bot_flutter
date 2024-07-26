@@ -32,9 +32,9 @@ class WpClientDesktop implements WpClientInterface {
         WhatsappLogger.log("${methodName}_Result : $result");
       }
       return result;
-    } on ClientError catch (e) {
+    } on ClientError catch (e, s) {
       throw WhatsappException(
-        message: e.message ?? "",
+        message: '${e.message}, $s',
         exceptionType: WhatsappExceptionType.clientErrorException,
         details: e.details?.toJson().toString(),
       );
@@ -84,12 +84,12 @@ class WpClientDesktop implements WpClientInterface {
   }
 
   @override
-  Future<void> on(String event, Function(dynamic) callback) async {
-    String callbackName = "callback_${event.replaceAll(".", "_")}";
+  Future<void> on(WhatsappEvent event, Function(dynamic) callback) async {
+    String callbackName = "callback_${event.value.replaceAll(".", "_")}";
     await page?.exposeFunction(callbackName, callback);
     await page?.evaluate(
       '''()=>{
-            WPP.on('$event', (data) => {
+            WPP.on('${event.value}', (data) => {
               window.$callbackName(data);
             });
         }''',
@@ -97,10 +97,10 @@ class WpClientDesktop implements WpClientInterface {
   }
 
   @override
-  Future<void> off(String event) async {
+  Future<void> off(WhatsappEvent event) async {
     await page?.evaluate(
       '''()=>{
-            WPP.removeAllListeners('$event');
+            WPP.removeAllListeners('${event.value}');
         }''',
     );
   }

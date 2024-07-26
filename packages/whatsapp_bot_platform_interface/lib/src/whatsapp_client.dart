@@ -31,11 +31,10 @@ class WhatsappClient {
 
   /// To list to any event from WPP
   /// Get event name from [WhatsappEvent]
-  Future<void> on(String event, Function(dynamic) callback) =>
-      wpClient.on(event, callback);
+  Future<void> on(WhatsappEvent event, Function(dynamic) callback) => wpClient.on(event, callback);
 
   /// To remove listener from any event from WPP
-  Future<void> off(String event) => wpClient.off(event);
+  Future<void> off(WhatsappEvent event) => wpClient.off(event);
 
   /// To run a custom function on WPP
   Future executeFunction(
@@ -59,8 +58,7 @@ class WhatsappClient {
   Future<bool> get isReadyToChat => _wppAuth.isMainReady();
 
   /// [connectionEventStream] will give update of Connection Events
-  Stream<ConnectionEvent> get connectionEventStream =>
-      _wppEvents.connectionEventStreamController.stream;
+  Stream<ConnectionEvent> get connectionEventStream => _wppEvents.connectionEventStreamController.stream;
 
   /// [disconnect] will close the browser instance and set values to null
   Future<void> disconnect({

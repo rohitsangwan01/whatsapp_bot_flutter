@@ -43,8 +43,7 @@ class WpClientWeb implements WpClientInterface {
       }
     }
     if (methodName?.isNotEmpty == true) {
-      WhatsappLogger.log(
-          "${methodName}_Result (${result.runtimeType}) : $result");
+      WhatsappLogger.log("${methodName}_Result (${result.runtimeType}) : $result");
     }
     return result;
   }
@@ -83,8 +82,8 @@ class WpClientWeb implements WpClientInterface {
   }
 
   @override
-  Future<void> on(String event, Function(dynamic) callback) async {
-    bot_js.setEvent(event, bot_js.JsCallback((data) {
+  Future<void> on(WhatsappEvent event, Function(dynamic) callback) async {
+    bot_js.setEvent(event.value, bot_js.JsCallback((data) {
       if (data is String) {
         data = jsonDecode(data);
       }
@@ -93,8 +92,8 @@ class WpClientWeb implements WpClientInterface {
   }
 
   @override
-  Future<void> off(String event) async {
-    await evaluateJs('''WPP.removeAllListeners('$event')''');
+  Future<void> off(WhatsappEvent event) async {
+    await evaluateJs('''WPP.removeAllListeners('${event.value}')''');
   }
 
   @override
@@ -107,22 +106,22 @@ class WpClientWeb implements WpClientInterface {
         String event = _isConnected ? "connected" : "disconnected";
         onNewEventFromListener("connectionEvent", event);
       }));
-      on("conn.authenticated", (_) {
+      on(WhatsappEvent.connAuthenticated, (_) {
         onNewEventFromListener("connectionEvent", "authenticated");
       });
-      on("conn.logout", (_) {
+      on(WhatsappEvent.connLogout, (_) {
         onNewEventFromListener("connectionEvent", "logout");
       });
-      on("conn.auth_code_change", (_) {
+      on(WhatsappEvent.connAuthCodeChange, (_) {
         onNewEventFromListener("connectionEvent", "auth_code_change");
       });
-      on("conn.main_loaded", (_) {
+      on(WhatsappEvent.connMainLoaded, (_) {
         onNewEventFromListener("connectionEvent", "main_loaded");
       });
-      on("conn.main_ready", (_) {
+      on(WhatsappEvent.connMainReady, (_) {
         onNewEventFromListener("connectionEvent", "main_ready");
       });
-      on("conn.require_auth", (_) {
+      on(WhatsappEvent.connRequireAuth, (_) {
         onNewEventFromListener("connectionEvent", "require_auth");
       });
     } catch (e) {

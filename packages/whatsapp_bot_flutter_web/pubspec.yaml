@@ -4,6 +4,7 @@ version: 0.0.1
 homepage: https://github.com/rohitsangwan01/whatsapp_bot_flutter
 repository: https://github.com/rohitsangwan01/whatsapp_bot_flutter
 issue_tracker: https://github.com/rohitsangwan01/whatsapp_bot_flutter/issues
+publish_to: none
 
 environment:
   sdk: '>=3.0.1 <4.0.0'
@@ -13,7 +14,8 @@ dependencies:
   flutter:
     sdk: flutter
   js: ^0.6.7  
-  whatsapp_bot_platform_interface: ^1.0.3
+  whatsapp_bot_platform_interface:
+    path: ../whatsapp_bot_platform_interface
 
 dev_dependencies:
   flutter_test:

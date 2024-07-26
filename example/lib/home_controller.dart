@@ -17,9 +17,7 @@ class HomeController extends GetxController {
   var message = TextEditingController();
   var phoneNumber = TextEditingController();
   var browserClientWebSocketUrl = TextEditingController();
-  String? get browserEndPoint => browserClientWebSocketUrl.text.isNotEmpty
-      ? browserClientWebSocketUrl.text
-      : null;
+  String? get browserEndPoint => browserClientWebSocketUrl.text.isNotEmpty ? browserClientWebSocketUrl.text : null;
 
   /// reactive variables from Getx
   RxString error = "".obs;
@@ -65,8 +63,7 @@ class HomeController extends GetxController {
       } else {
         // getting XmlHttpRequest error on web platform , so we have to manually
         // pass the wpp.js file to the client
-        String? wppJsContent =
-            kIsWeb ? await rootBundle.loadString("assets/wpp.js") : null;
+        String? wppJsContent = kIsWeb ? await rootBundle.loadString("assets/wpp.js") : null;
         // Initialize Desktop Client
         client = await WhatsappBotFlutter.connect(
           browserWsEndpoint: browserEndPoint,
@@ -121,7 +118,7 @@ class HomeController extends GetxController {
     });
 
     // listen to MessageEvents
-    client.on(WhatsappEvent.chat_new_message, (data) {
+    client.on(WhatsappEvent.chatNewMessage, (data) {
       List<Message> messages = Message.parse(data);
       if (messages.isEmpty) return;
       Message message = messages.first;
@@ -140,7 +137,7 @@ class HomeController extends GetxController {
     });
 
     // listen to CallEvents
-    client.on(WhatsappEvent.incoming_call, (data) {
+    client.on(WhatsappEvent.callIncomingCall, (data) {
       List<CallEvent> events = CallEvent.parse(data);
       if (events.isEmpty) return;
       CallEvent event = events.first;
@@ -152,7 +149,7 @@ class HomeController extends GetxController {
       );
     });
 
-    client.on(WhatsappEvent.chat_msg_revoke, (data) {
+    client.on(WhatsappEvent.chatMsgRevoke, (data) {
       Get.log("Revoking Event : $data");
     });
   }
@@ -250,8 +247,7 @@ class HomeController extends GetxController {
       default:
         break;
     }
-    FilePickerResult? result =
-        await FilePicker.platform.pickFiles(type: fileType);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: fileType);
     String? path = result?.files.first.path;
     String? name = result?.names.first;
     await _sendFileMessage(path, name, whatsappFileType);
