@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:whatsapp_bot_platform_interface/src/wpp/wpp_conn.dart';
 import 'package:whatsapp_bot_platform_interface/src/wpp/wpp_group.dart';
+import 'package:whatsapp_bot_platform_interface/src/wpp/wpp_status.dart';
 import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.dart';
 
 /// get [WhatsappClient] from `WhatsappBotFlutter.connect()`
@@ -14,6 +15,7 @@ class WhatsappClient {
   late WppContact contact;
   late WppProfile profile;
   late WppGroup group;
+  late WppStatus status;
   late WppConn conn;
   late WppEvents _wppEvents;
   late WppAuth _wppAuth;
@@ -24,6 +26,7 @@ class WhatsappClient {
     profile = WppProfile(wpClient);
     group = WppGroup(wpClient);
     conn = WppConn(wpClient);
+    status = WppStatus(wpClient);
     _wppAuth = WppAuth(wpClient);
     _wppEvents = WppEvents(wpClient);
     _wppEvents.init();

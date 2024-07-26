@@ -173,16 +173,6 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> getStatus(bool mute) async {
-    if (!formKey.currentState!.validate()) return;
-    try {
-      await client?.contact.getStatus(
-        phone: phoneNumber.text,
-      );
-    } catch (e) {
-      Get.log("Error : $e");
-    }
-  }
 
   Future<void> sendButtonMessage() async {
     if (!formKey.currentState!.validate()) return;
