@@ -1,3 +1,10 @@
+## 2.0.0
+
+- Breaking Changes: Update models and set properties to nullable
+- Add WppStatus module
+- add timeout parameter to initialize WPP
+- Fixes and improvements
+
 ## 1.0.4
 
 - Fixes and improvements

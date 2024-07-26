@@ -33,3 +33,4 @@ build/
 /whatsapp_sender
 .flutter-plugins
 .flutter-plugins-dependencies
+.metadata
