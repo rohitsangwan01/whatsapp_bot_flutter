@@ -5,6 +5,13 @@ class WppChat {
   WpClientInterface wpClient;
   WppChat(this.wpClient);
 
+  Future openChatAt({
+    required String phone,
+    required MessageId messageId,
+  }) =>
+      wpClient.evaluateJs(
+          'WPP.chat.openChatAt(${phone.phoneParse}, ${messageId.serialized.jsParse});');
+
   /// [sendMessage] may throw errors if passed an invalid contact
   /// or if this method completed without any issue , then probably message sent successfully
   /// add `replyMessageId` to quote message
@@ -34,39 +41,40 @@ class WppChat {
   /// make sure to send fileType , we can also pass optional mimeType
   /// `replyMessageId` will send a quote message to the given messageId
   /// add `caption` to attach a text with the file
- Future sendFileMessage({
-  required String phone,
-  required WhatsappFileType fileType,
-  required List<int> fileBytes,
-  String? fileName,
-  String? caption,
-  String? mimetype,
-  MessageId? replyMessageId,
-  String? templateTitle,
-  String? templateFooter,
-  bool useTemplate = false,
-  bool isViewOnce = false,
-  bool audioAsPtt = false,
-  List<MessageButtons>? buttons,
-}) async {
-  String base64Image = base64Encode(fileBytes);
-  String mimeType = mimetype ?? getMimeType(fileType, fileName, fileBytes);
-  String fileData = "data:$mimeType;base64,$base64Image";
+  Future sendFileMessage({
+    required String phone,
+    required WhatsappFileType fileType,
+    required List<int> fileBytes,
+    String? fileName,
+    String? caption,
+    String? mimetype,
+    MessageId? replyMessageId,
+    String? templateTitle,
+    String? templateFooter,
+    bool useTemplate = false,
+    bool isViewOnce = false,
+    bool audioAsPtt = false,
+    List<MessageButtons>? buttons,
+  }) async {
+    String base64Image = base64Encode(fileBytes);
+    String mimeType = mimetype ?? getMimeType(fileType, fileName, fileBytes);
+    String fileData = "data:$mimeType;base64,$base64Image";
 
-  String fileTypeName = "image";
-  if (mimeType.split("/").length > 1) {
-    fileTypeName = mimeType.split("/").first;
-  }
+    String fileTypeName = "image";
+    if (mimeType.split("/").length > 1) {
+      fileTypeName = mimeType.split("/").first;
+    }
 
-  // Check for video file type
-  if (fileTypeName == "video") {
-    fileTypeName = "video"; // Set the correct file type for videos
-  }
+    // Check for video file type
+    if (fileTypeName == "video") {
+      fileTypeName = "video"; // Set the correct file type for videos
+    }
 
-  String? replyTextId = replyMessageId?.serialized;
-  String? buttonsText = buttons?.map((e) => e.toJson()).toList().toString();
+    String? replyTextId = replyMessageId?.serialized;
+    String? buttonsText = buttons?.map((e) => e.toJson()).toList().toString();
 
-  String source = '''WPP.chat.sendFileMessage(${phone.phoneParse},${fileData.jsParse},{
+    String source =
+        '''WPP.chat.sendFileMessage(${phone.phoneParse},${fileData.jsParse},{
     type: ${fileTypeName.jsParse},
     isPtt: ${audioAsPtt.jsParse},
     isViewOnce: ${isViewOnce.jsParse},
@@ -79,12 +87,10 @@ class WppChat {
     footer: ${templateFooter.jsParse}
   });''';
 
-  var sendResult = await wpClient.evaluateJs(source);
-  WhatsappLogger.log("SendResult : $sendResult");
-  return sendResult;
-}
-
-  
+    var sendResult = await wpClient.evaluateJs(source);
+    WhatsappLogger.log("SendResult : $sendResult");
+    return sendResult;
+  }
 
   Future sendContactCard({
     required String phone,
@@ -142,15 +148,26 @@ class WppChat {
       await wpClient.evaluateJs('''WPP.chat.canMute(${phone.phoneParse});''',
           methodName: "CanMute");
 
-  ///Mute a chat, you can use  expiration and use unix timestamp (seconds only)
+  /// Mute a chat, you can use  expiration and use unix timestamp (seconds only)
+  /// or duration (in seconds )
   Future mute({
     required String phone,
-    required int expirationUnixTimeStamp,
+    int? duration,
+    int? expirationUnixTimeStamp,
   }) async {
     if (!await canMute(phone: phone)) throw "Cannot Mute $phone";
-    return await wpClient.evaluateJs(
+    if (duration != null) {
+      return wpClient.evaluateJs(
+        '''WPP.chat.mute(${phone.phoneParse},{duration: $duration});''',
+        methodName: "Mute",
+      );
+    } else if (expirationUnixTimeStamp != null) {
+      return wpClient.evaluateJs(
         '''WPP.chat.mute(${phone.phoneParse},{expiration: $expirationUnixTimeStamp});''',
-        methodName: "Mute");
+        methodName: "Mute",
+      );
+    }
+    throw Exception("duration or expiration must be provided");
   }
 
   /// Un mute chat
@@ -191,16 +208,15 @@ class WppChat {
   Future getChats({
     bool onlyUser = false,
     bool onlyGroups = false,
-  }) async {
-    return await wpClient.evaluateJs(
-      '''WPP.chat.list({
+  }) =>
+      wpClient.evaluateJs(
+        '''WPP.chat.list({
             onlyUsers: ${onlyUser.jsParse},
             onlyGroups: ${onlyGroups.jsParse}
          });''',
-      methodName: "GetChats",
-      forceJsonParseResult: true,
-    );
-  }
+        methodName: "GetChats",
+        forceJsonParseResult: true,
+      );
 
   ///Mark a chat as read and send SEEN event
   Future markAsSeen({required String phone}) async {
@@ -211,36 +227,36 @@ class WppChat {
   }
 
   Future markIsComposing({required String phone, int timeout = 5000}) async {
-  await wpClient.evaluateJs(
-    '''WPP.chat.markIsComposing(${phone.phoneParse});''',
-    methodName: "markIsComposing",
-  );
+    await wpClient.evaluateJs(
+      '''WPP.chat.markIsComposing(${phone.phoneParse});''',
+      methodName: "markIsComposing",
+    );
 
-  // Wait for the timeout period.
-  await Future.delayed(Duration(milliseconds: timeout));
+    // Wait for the timeout period.
+    await Future.delayed(Duration(milliseconds: timeout));
 
-  // Mark the chat as paused.
-  await wpClient.evaluateJs(
-    '''WPP.chat.markIsPaused(${phone.phoneParse});''',
-    methodName: "markIsPaused",
-  );
-}
+    // Mark the chat as paused.
+    await wpClient.evaluateJs(
+      '''WPP.chat.markIsPaused(${phone.phoneParse});''',
+      methodName: "markIsPaused",
+    );
+  }
 
-Future markIsRecording({required String phone, int timeout = 5000}) async {
-  await wpClient.evaluateJs(
-    '''WPP.chat.markIsRecording(${phone.phoneParse});''',
-    methodName: "markIsRecording",
-  );
+  Future markIsRecording({required String phone, int timeout = 5000}) async {
+    await wpClient.evaluateJs(
+      '''WPP.chat.markIsRecording(${phone.phoneParse});''',
+      methodName: "markIsRecording",
+    );
 
-  // Wait for the timeout period.
-  await Future.delayed(Duration(milliseconds: timeout));
+    // Wait for the timeout period.
+    await Future.delayed(Duration(milliseconds: timeout));
 
-  // Mark the chat as paused.
-  await wpClient.evaluateJs(
-    '''WPP.chat.markIsPaused(${phone.phoneParse});''',
-    methodName: "markIsPaused",
-  );
-}
+    // Mark the chat as paused.
+    await wpClient.evaluateJs(
+      '''WPP.chat.markIsPaused(${phone.phoneParse});''',
+      methodName: "markIsPaused",
+    );
+  }
 
   ///Mark a chat as unread
   Future markAsUnread({required String phone}) async {
@@ -276,7 +292,7 @@ Future markIsRecording({required String phone, int timeout = 5000}) async {
   Future<Map<String, dynamic>?> downloadMedia({
     required MessageId messageId,
   }) async {
-    String mediaSerialized = messageId.serialized;
+    String? mediaSerialized = messageId.serialized;
     String? base64 = await wpClient.evaluateJs(
       '''WPP.chat.downloadMedia(${mediaSerialized.jsParse}).then(WPP.util.blobToBase64);''',
       methodName: "downloadMedia",
@@ -342,8 +358,4 @@ Future markIsRecording({required String phone, int timeout = 5000}) async {
           });''',
         methodName: "forwardMessage");
   }
-
-
-
-
 }

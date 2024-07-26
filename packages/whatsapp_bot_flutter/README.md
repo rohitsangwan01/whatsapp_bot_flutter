@@ -76,7 +76,7 @@ whatsappClient.connectionEventStream.listen((event) {
 To get new Messages
 
 ```dart
-whatsappClient.on(WhatsappEvent.chat_new_message, (data) {
+whatsappClient.on(WhatsappEvent.chatNewMessage, (data) {
     List<Message> messages = Message.parse(data);
     // replyMessageId  is optional , add this to send a reply message
     whatsappClient.chat.sendTextMessage(

@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_overrides, avoid_print
-
 import 'dart:async';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
@@ -36,7 +34,7 @@ class HomeController extends GetxController {
     WhatsappBotUtils.enableLogs(true);
     if (GetPlatform.isWeb) {
       WhatsappLogger.handleLogs = (log) {
-        print(log.toString());
+        log(log.toString());
       };
     }
     message.text = "Testing Whatsapp Bot";
@@ -74,6 +72,7 @@ class HomeController extends GetxController {
           chromiumDownloadDirectory: "../.local-chromium",
           onConnectionEvent: _onConnectionEvent,
           onQrCode: _onQrCode,
+          headless: false,
         );
       }
 
@@ -121,7 +120,7 @@ class HomeController extends GetxController {
     });
 
     // listen to MessageEvents
-    client.on(WhatsappEvent.chat_new_message, (data) {
+    client.on(WhatsappEvent.chatNewMessage, (data) {
       List<Message> messages = Message.parse(data);
       if (messages.isEmpty) return;
       Message message = messages.first;
@@ -131,7 +130,7 @@ class HomeController extends GetxController {
         // auto reply if message == test
         if (message.body == "test") {
           client.chat.sendTextMessage(
-            phone: message.from,
+            phone: message.from ?? '',
             message: "Hey !",
             replyMessageId: message.id,
           );
@@ -140,19 +139,19 @@ class HomeController extends GetxController {
     });
 
     // listen to CallEvents
-    client.on(WhatsappEvent.incoming_call, (data) {
+    client.on(WhatsappEvent.callIncomingCall, (data) {
       List<CallEvent> events = CallEvent.parse(data);
       if (events.isEmpty) return;
       CallEvent event = events.first;
       callEvents.value = event;
       client.chat.rejectCall(callId: event.id);
       client.chat.sendTextMessage(
-        phone: event.sender,
+        phone: event.sender ?? '',
         message: "Hey, Call rejected by whatsapp bot",
       );
     });
 
-    client.on(WhatsappEvent.chat_msg_revoke, (data) {
+    client.on(WhatsappEvent.chatMsgRevoke, (data) {
       Get.log("Revoking Event : $data");
     });
   }
@@ -168,6 +167,17 @@ class HomeController extends GetxController {
       await client?.chat.sendTextMessage(
         phone: phoneNumber.text,
         message: message.text,
+      );
+    } catch (e) {
+      Get.log("Error : $e");
+    }
+  }
+
+  Future<void> getStatus(bool mute) async {
+    if (!formKey.currentState!.validate()) return;
+    try {
+      await client?.contact.getStatus(
+        phone: phoneNumber.text,
       );
     } catch (e) {
       Get.log("Error : $e");

@@ -1,5 +1,7 @@
 // Thanks to https://github.com/wppconnect-team/wa-js
 
+import 'dart:async';
+
 import 'package:http/http.dart' as http;
 import 'package:whatsapp_bot_platform_interface/whatsapp_bot_platform_interface.dart';
 
@@ -8,6 +10,7 @@ class WppConnect {
   static Future init(
     WpClientInterface wpClient, {
     String? wppJsContent,
+    required Duration waitTimeOut,
   }) async {
     String latestBuildUrl =
         "https://github.com/wppconnect-team/wa-js/releases/latest/download/wppconnect-wa.js";
@@ -17,7 +20,7 @@ class WppConnect {
 
     WhatsappLogger.log("injected Wpp");
 
-    if (!await _waitForWppReady(wpClient, 5)) {
+    if (!await _waitForWppReady(wpClient, waitTimeOut)) {
       throw WhatsappException(
         exceptionType: WhatsappExceptionType.failedToConnect,
         message: "Failed to initialize WPP",
@@ -40,18 +43,17 @@ class WppConnect {
 
   static Future<bool> _waitForWppReady(
     WpClientInterface wpClient,
-    int tryCount,
+    Duration waitTimeOut,
   ) async {
-    int count = 0;
-    while (count < tryCount) {
+    var startTime = DateTime.now();
+    while (DateTime.now().difference(startTime) < waitTimeOut) {
       await Future.delayed(const Duration(seconds: 1));
       var result = await wpClient.evaluateJs(
         '''typeof window.WPP !== 'undefined' && window.WPP.isReady;''',
         tryPromise: false,
       );
       if (result == true) return true;
-      WhatsappLogger.log("Checking WPP, Retry: $count");
-      count++;
+      WhatsappLogger.log("Checking WPP, Retrying..");
     }
     return false;
   }

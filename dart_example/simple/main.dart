@@ -26,9 +26,10 @@ void main(List<String> args) async {
   });
 
   // subscribe to Message Events
-  client?.on(WhatsappEvent.chat_new_message, (data) {
+  client?.on(WhatsappEvent.chatNewMessage, (data) {
     try {
       Message message = Message.fromJson(data);
+      message.from;
       bool? fromMe = message.id?.fromMe;
       if (fromMe == false) onNewMessage(client, message);
     } catch (e) {
@@ -36,11 +37,11 @@ void main(List<String> args) async {
     }
   });
 
-  client?.on(WhatsappEvent.chat_msg_revoke, (data) {
+  client?.on(WhatsappEvent.chatMsgRevoke, (data) {
     print("Revoking Event : $data");
   });
 
-  client?.on(WhatsappEvent.chat_new_reaction, (data) {
+  client?.on(WhatsappEvent.chatNewReaction, (data) {
     print("NewReaction Event : $data");
   });
 }
@@ -48,10 +49,10 @@ void main(List<String> args) async {
 void onNewMessage(WhatsappClient client, Message message) async {
   print("Message Event : ${message.toJson()}");
   try {
-    String msg = message.body;
+    String? msg = message.body;
     if (msg == "hii") {
       client.chat.sendTextMessage(
-        phone: message.from,
+        phone: message.from ?? '',
         message: "Hey !",
         replyMessageId: message.id,
       );

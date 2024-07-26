@@ -47,8 +47,7 @@ class WpClientMobile implements WpClientInterface {
         });
        return await result;  
       """;
-    CallAsyncJavaScriptResult? result =
-        await controller?.callAsyncJavaScript(functionBody: functionBody);
+    CallAsyncJavaScriptResult? result = await controller?.callAsyncJavaScript(functionBody: functionBody);
     if (methodName?.isNotEmpty == true) {
       WhatsappLogger.log("${methodName}_Result : ${result?.value}");
     }
@@ -95,8 +94,8 @@ class WpClientMobile implements WpClientInterface {
   }
 
   @override
-  Future<void> on(String event, Function(dynamic) callback) async {
-    String callbackName = "callback_${event.replaceAll(".", "_")}";
+  Future<void> on(WhatsappEvent event, Function(dynamic) callback) async {
+    String callbackName = "callback_${event.value.replaceAll(".", "_")}";
     await evaluateJs(
       """window.$callbackName = (data) => window.flutter_inappwebview.callHandler('$callbackName',data);""",
       tryPromise: false,
@@ -107,7 +106,7 @@ class WpClientMobile implements WpClientInterface {
     );
     await controller?.evaluateJavascript(
       source: '''
-            WPP.on('$event', (data) => {
+            WPP.on('${event.value}', (data) => {
               window.$callbackName(data);
             });
         ''',
@@ -115,11 +114,11 @@ class WpClientMobile implements WpClientInterface {
   }
 
   @override
-  Future<void> off(String event) async {
-    String callbackName = "callback_${event.replaceAll(".", "_")}";
+  Future<void> off(WhatsappEvent event) async {
+    String callbackName = "callback_${event.value.replaceAll(".", "_")}";
     controller?.removeJavaScriptHandler(handlerName: callbackName);
     await controller?.evaluateJavascript(
-      source: '''WPP.removeAllListeners('$event');''',
+      source: '''WPP.removeAllListeners('${event.value}');''',
     );
   }
 

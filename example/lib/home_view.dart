@@ -82,6 +82,10 @@ class HomeView extends GetView<HomeController> {
                             onPressed: () => controller.getChats(),
                             child: const Text("Get Chats")),
                         const SizedBox(width: 10),
+                        ElevatedButton(
+                            onPressed: () => controller.getStatus(false),
+                            child: const Text("Get Status")),
+                        const SizedBox(width: 10),
                       ],
                     ),
                   ),

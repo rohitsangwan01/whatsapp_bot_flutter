@@ -14,6 +14,10 @@ dependencies:
   flutter_inappwebview: ^6.0.0
   whatsapp_bot_platform_interface: ^1.0.4
 
+dependency_overrides: 
+  whatsapp_bot_platform_interface: 
+    path: ../whatsapp_bot_platform_interface
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

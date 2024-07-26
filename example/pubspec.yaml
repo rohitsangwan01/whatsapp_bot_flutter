@@ -8,7 +8,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  get: ^4.6.5
+  get: ^4.6.6
   flex_color_scheme: ^7.3.1
   file_picker: ^5.2.2
   whatsapp_bot_flutter:
@@ -22,8 +22,6 @@ dependency_overrides:
   whatsapp_bot_platform_interface:
     path: ../packages/whatsapp_bot_platform_interface  
   
-
-
 dev_dependencies:
   flutter_lints: ^2.0.0
   icons_launcher: ^2.0.6

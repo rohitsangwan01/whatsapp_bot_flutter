@@ -41,7 +41,7 @@ void main(List<String> args) async {
   print("My User Id : $userId");
 
   // subscribe to Message Events
-  client?.on(WhatsappEvent.chat_new_message, (data) {
+  client?.on(WhatsappEvent.chatNewMessage, (data) {
     try {
       Message message = Message.fromJson(data);
       bool? fromMe = message.id?.fromMe;
@@ -56,7 +56,7 @@ void onNewMessage(WhatsappClient client, Message message) async {
   print("Message Event : ${message.toJson()}");
   try {
     // String msg = message.body;
-    String type = message.type;
+    String? type = message.type;
     bool isFileMessage = type == "image" || type == "video" || type == "ptt";
     // Download File Message
     if (isFileMessage) {
@@ -71,7 +71,7 @@ void onNewMessage(WhatsappClient client, Message message) async {
     // Reply to Message
     else {
       client.chat.sendTextMessage(
-        phone: message.from,
+        phone: message.from ?? '',
         message: "Hey !",
         replyMessageId: message.id,
       );
