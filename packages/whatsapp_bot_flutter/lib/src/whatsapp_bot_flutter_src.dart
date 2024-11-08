@@ -27,6 +27,7 @@ class WhatsappBotFlutter {
     int qrCodeWaitDurationSeconds = 60,
     List<String>? puppeteerArgs,
     String? linkWithPhoneNumber,
+    Duration? puppeteerNavigationTimeout,
     Function(String code)? onPhoneLinkCode,
     Duration connectionTimeout = const Duration(seconds: 20),
     Duration wppInitTimeout = const Duration(seconds: 15),
@@ -84,7 +85,8 @@ class WhatsappBotFlutter {
 
       await page.setBypassCSP(true);
       await page.setUserAgent(WhatsAppMetadata.userAgent);
-      await page.goto(WhatsAppMetadata.whatsAppURL);
+      await page.goto(WhatsAppMetadata.whatsAppURL,
+          timeout: puppeteerNavigationTimeout);
 
       wpClient = WpClientDesktop(page: page, browser: browser);
 
