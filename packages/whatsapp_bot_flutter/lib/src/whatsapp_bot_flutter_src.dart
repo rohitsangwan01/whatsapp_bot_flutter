@@ -20,6 +20,8 @@ class WhatsappBotFlutter {
   static Future<WhatsappClient?> connect({
     String? sessionDirectory,
     String? wppJsContent,
+    String? wppLibraryUrl,
+    String? wppLibraryVersion,
     String? chromiumDownloadDirectory,
     String? chromeVersion,
     bool? headless = true,
@@ -94,6 +96,8 @@ class WhatsappBotFlutter {
         wpClient,
         wppJsContent: wppJsContent,
         waitTimeOut: wppInitTimeout,
+        wppLibraryUrl: wppLibraryUrl,
+        wppLibraryVersion: wppLibraryVersion,
       );
 
       onConnectionEvent?.call(ConnectionEvent.waitingForLogin);

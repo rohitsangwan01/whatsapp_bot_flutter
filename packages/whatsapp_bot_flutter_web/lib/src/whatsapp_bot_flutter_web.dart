@@ -12,6 +12,9 @@ class WhatsappBotFlutterWeb {
   /// make sure you scan qr code manually for now
   static Future<WhatsappClient?> connect({
     Function(ConnectionEvent)? onConnectionEvent,
+    String? wppJsContent,
+    String? wppLibraryUrl,
+    String? wppLibraryVersion,
     String? linkWithPhoneNumber,
     Function(String code)? onPhoneLinkCode,
     Function(String qrCodeUrl, Uint8List? qrCodeImage)? onQrCode,
@@ -36,7 +39,9 @@ class WhatsappBotFlutterWeb {
       wpClient = WpClientWeb(tabId: tabId);
       await WppConnect.init(
         wpClient,
-        wppJsContent: "",
+        wppJsContent: wppJsContent ?? "",
+        wppLibraryUrl: wppLibraryUrl,
+        wppLibraryVersion: wppLibraryVersion,
         waitTimeOut: wppInitTimeout,
       );
       onConnectionEvent?.call(ConnectionEvent.waitingForLogin);

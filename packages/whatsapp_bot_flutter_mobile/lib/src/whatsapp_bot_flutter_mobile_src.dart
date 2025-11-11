@@ -8,6 +8,9 @@ class WhatsappBotFlutterMobile {
   /// call [connect] to connect with Mobile
   static Future<WhatsappClient?> connect({
     bool saveSession = false,
+    String? wppJsContent,
+    String? wppLibraryUrl,
+    String? wppLibraryVersion,
     int qrCodeWaitDurationSeconds = 60,
     String? linkWithPhoneNumber,
     Function(String code)? onPhoneLinkCode,
@@ -31,6 +34,9 @@ class WhatsappBotFlutterMobile {
       await WppConnect.init(
         wpClient,
         waitTimeOut: wppInitTimeout,
+        wppJsContent: wppJsContent,
+        wppLibraryUrl: wppLibraryUrl,
+        wppLibraryVersion: wppLibraryVersion,
       );
 
       onConnectionEvent?.call(ConnectionEvent.waitingForLogin);

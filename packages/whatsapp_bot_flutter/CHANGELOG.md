@@ -1,3 +1,7 @@
+## 2.1.2
+
+- Bump whatsapp_bot_platform_interface to 2.0.2 and added `wppLibraryUrl` and `wppLibraryVersion` in `connect` method
+
 ## 2.1.1
 
 - Bump whatsapp_bot_platform_interface to 2.0.1

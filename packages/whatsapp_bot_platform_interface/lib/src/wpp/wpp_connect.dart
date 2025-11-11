@@ -10,10 +10,18 @@ class WppConnect {
   static Future init(
     WpClientInterface wpClient, {
     String? wppJsContent,
+    String? wppLibraryUrl,
+    String? wppLibraryVersion,
     required Duration waitTimeOut,
   }) async {
     String latestBuildUrl =
         "https://github.com/wppconnect-team/wa-js/releases/latest/download/wppconnect-wa.js";
+    if (wppLibraryUrl != null) {
+      latestBuildUrl = wppLibraryUrl;
+    } else if (wppLibraryVersion != null) {
+      latestBuildUrl =
+          "https://github.com/wppconnect-team/wa-js/releases/download/v$wppLibraryVersion/wppconnect-wa.js";
+    }
     // Web not able to download from this url, either replace this with another url, or pass the wppJsContent
     String content = wppJsContent ?? await http.read(Uri.parse(latestBuildUrl));
     await wpClient.injectJs(content);

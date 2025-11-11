@@ -1,3 +1,7 @@
+## 2.0.2
+
+- Add `wppJsContent`, `wppLibraryUrl` and `wppLibraryVersion` in `WppConnect.init`
+
 ## 2.0.1
 
 - Add `linkWithPhoneNumber` and `onPhoneLinkCode` to login with phone number
